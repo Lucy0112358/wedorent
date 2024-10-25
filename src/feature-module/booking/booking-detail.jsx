@@ -368,7 +368,7 @@ const BookingDetail = () => {
                               />
                             </div>
                           </div>
-                          <div className="col-md-6">
+                          {/* <div className="col-md-6">
                             <div className="input-block">
                               <label className="form-label">Company</label>
                               <input
@@ -377,8 +377,8 @@ const BookingDetail = () => {
                                 placeholder="Enter Company Name"
                               />
                             </div>
-                          </div>
-                          <div className="col-md-12">
+                          </div> */}
+                          <div className="col-md-6">
                             <div className="input-block">
                               <label className="form-label">
                                 Street Address{" "}
@@ -391,7 +391,7 @@ const BookingDetail = () => {
                               />
                             </div>
                           </div>
-                          <div className="col-md-4">
+                          <div className="col-md-6">
                             <div className="input-block">
                               <label className="form-label">
                                 Country <span className="text-danger"> *</span>
@@ -406,7 +406,7 @@ const BookingDetail = () => {
                               />
                             </div>
                           </div>
-                          <div className="col-md-4">
+                          <div className="col-md-6">
                             <div className="input-block">
                               <label className="form-label">
                                 Enter City{" "}
@@ -419,7 +419,7 @@ const BookingDetail = () => {
                               />
                             </div>
                           </div>
-                          <div className="col-md-4">
+                          {/* <div className="col-md-4">
                             <div className="input-block">
                               <label className="form-label">
                                 Pincode <span className="text-danger"> *</span>
@@ -430,7 +430,7 @@ const BookingDetail = () => {
                                 placeholder="Enter Pincode"
                               />
                             </div>
-                          </div>
+                          </div> */}
                           <div className="col-md-6">
                             <div className="input-block">
                               <label className="form-label">
@@ -457,7 +457,7 @@ const BookingDetail = () => {
                               />
                             </div>
                           </div>
-                          <div className="col-md-12">
+                          {/* <div className="col-md-12">
                             <div className="input-block">
                               <label className="form-label">
                                 Additional Information
@@ -469,7 +469,7 @@ const BookingDetail = () => {
                                 defaultValue={""}
                               />
                             </div>
-                          </div>
+                          </div> */}
                           <div className="col-md-12">
                             <div className="input-block">
                               <label className="form-label">
@@ -510,7 +510,8 @@ const BookingDetail = () => {
                             <div className="input-block m-0">
                               <label className="custom_check d-inline-flex location-check m-0">
                                 <span>
-                                  I have Read and Accept Terms &amp; Conditions
+                                  {/* I have Read and Accept Terms &amp; Conditions */}
+                                  I confirm that the personal data is correct, and I give permission for the processing of personal data. If the provided data does not match with the end user of these services, the company has the right to cancel the order without a refund.
                                 </span>{" "}
                                 <span className="text-danger"> *</span>
                                 <input type="checkbox" name="remeber" />
