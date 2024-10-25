@@ -23,10 +23,10 @@ const HomeOne = () => {
   const [selectedItems, setSelectedItems] = useState(Array(10).fill(false));
   const [date1, setDate1] = useState(null);
   const [date2, setDate2] = useState(null);
-  const onChange = (time: Dayjs, timeString: string) => {
+  const onChange = (time, timeString) => {
     console.log(time, timeString);
   };
-  const handleItemClick = (index: number) => {
+  const handleItemClick = (index) => {
     setSelectedItems((prevSelectedItems) => {
       const updatedSelectedItems = [...prevSelectedItems];
       updatedSelectedItems[index] = !updatedSelectedItems[index];

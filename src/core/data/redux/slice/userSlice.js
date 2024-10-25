@@ -1,8 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getAllUsers } from "../api/userApi";
-import { filterUserByName, userFilter } from "../api/menuApi";
-// import { getUserSites } from "../api/userApi";
-// import { APP_BASE_URL } from "../../config";
 
 const initialState = {
   loading: false,
@@ -30,23 +27,23 @@ export const userSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(getAllUsers.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(getAllUsers.fulfilled, (state, action) => {
-        state.loading = false;
-        userSlice.caseReducers.setUser(state, action);
-      })
-      .addCase(userFilter.fulfilled, (state, action) => {
-        userSlice.caseReducers.setUser(state, action);
-      })
-      .addCase(filterUserByName.fulfilled, (state, action) => {
-        userSlice.caseReducers.setUser(state, action);
-      })
-      .addCase(getAllUsers.rejected, (state, action) => {
-        state.errorMessage = action.payload;
-        state.loading = false;
-      })
+      // .addCase(getAllUsers.pending, (state) => {
+      //   state.loading = true;
+      // })
+      // .addCase(getAllUsers.fulfilled, (state, action) => {
+      //   state.loading = false;
+      //   userSlice.caseReducers.setUser(state, action);
+      // })
+      // .addCase(userFilter.fulfilled, (state, action) => {
+      //   userSlice.caseReducers.setUser(state, action);
+      // })
+      // .addCase(filterUserByName.fulfilled, (state, action) => {
+      //   userSlice.caseReducers.setUser(state, action);
+      // })
+      // .addCase(getAllUsers.rejected, (state, action) => {
+      //   state.errorMessage = action.payload;
+      //   state.loading = false;
+      // })
   },
 });
 

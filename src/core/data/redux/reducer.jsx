@@ -1,8 +1,8 @@
 import initialState from "./initial.values";
 
-const rootReducer: number | string | boolean = (
+const rootReducer = (
   state = initialState,
-  action: number | string | boolean
+  action
 ) => {
   switch (action.type) {
     case "HEADER_DATA":
