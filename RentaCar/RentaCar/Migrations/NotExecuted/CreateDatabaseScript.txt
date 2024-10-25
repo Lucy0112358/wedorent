@@ -1,0 +1,72 @@
+CREATE TABLE Services (
+    Id SERIAL PRIMARY KEY,                -- Auto-incrementing primary key
+    Name VARCHAR(255) NOT NULL,           -- Name of the service, cannot be null
+    Price DECIMAL(10, 2) NOT NULL,        -- Price of the service with two decimal precision
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,   -- Timestamp for creation, defaults to current time
+    ModifiedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP   -- Timestamp for modification, defaults to current time
+);
+
+CREATE TABLE Customer (
+    Id SERIAL PRIMARY KEY,                   -- Auto-incrementing primary key
+    Name VARCHAR(255) NOT NULL,              -- First name of the customer
+    Surname VARCHAR(255) NOT NULL,           -- Surname of the customer
+    Email VARCHAR(255) UNIQUE NOT NULL,      -- Email of the customer, must be unique and not null
+    Phone VARCHAR(20),                       -- Phone number of the customer
+    BirthDay DATE,                           -- Date of birth
+    FrontPage BYTEA,                         -- Front page image or document (e.g., ID front page)
+    BackPage BYTEA,                          -- Back page image or document (e.g., ID back page)
+    LicenceNumber VARCHAR(100),
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP   -- Timestamp for record creation
+);
+
+CREATE TABLE ReservationStatus (
+    Id SERIAL PRIMARY KEY,                        -- Auto-incrementing primary key
+    Name VARCHAR(100) NOT NULL,                   -- Name of the status (e.g., Pending, Confirmed)
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp for record creation
+    ModifiedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Timestamp for the last modification
+);
+
+CREATE TABLE Reservation (
+    Id SERIAL PRIMARY KEY,                      -- Auto-incrementing primary key
+    CustomerId INT NOT NULL,                    -- Foreign key to reference the customer
+    TotalAmount DECIMAL(10, 2) NOT NULL,        -- Total amount for the reservation
+    ReservationStatusId INT NOT NULL,                 -- Foreign key for order status
+    StartDate TIMESTAMP NOT NULL,               -- Reservation start date and time
+    EndDate TIMESTAMP NOT NULL,                 -- Reservation end date and time
+    StartAddress VARCHAR(255) NOT NULL,         -- Start address for the reservation
+    EndAddress VARCHAR(255) NOT NULL,           -- End address for the reservation
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Timestamp for record creation
+    
+    CONSTRAINT fk_customer FOREIGN KEY (CustomerId) REFERENCES Customer (Id) ON DELETE CASCADE, -- Foreign key to Customer
+    CONSTRAINT fk_order_status FOREIGN KEY (ReservationStatusId) REFERENCES ReservationStatus (Id)    -- Foreign key to ReservationStatus
+);
+
+CREATE TABLE ReservationService (
+    Id SERIAL PRIMARY KEY,                          -- Auto-incrementing primary key
+    ReservationId INT NOT NULL,                     -- Foreign key to the Reservation table
+    ServiceId INT NOT NULL,                         -- Foreign key to the Service table
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Timestamp for record creation
+    
+    CONSTRAINT fk_reservation FOREIGN KEY (ReservationId) REFERENCES Reservation (Id) ON DELETE CASCADE,  -- Foreign key to Reservation
+    CONSTRAINT fk_service FOREIGN KEY (ServiceId) REFERENCES Services (Id) ON DELETE CASCADE              -- Foreign key to Services
+);
+
+CREATE TABLE Car (
+    Id SERIAL PRIMARY KEY,                          -- Auto-incrementing primary key
+    Model VARCHAR(255) NOT NULL,                    -- Model of the car
+    Price DECIMAL(10, 2) NOT NULL,                  -- Price of the car
+    Year INT NOT NULL,                              -- Manufacturing year of the car
+    Engine VARCHAR(100),                            -- Engine type (e.g., V6, Electric)
+    Doors INT,                                      -- Number of doors
+    Seats INT,                                      -- Number of seats
+    Color VARCHAR(50),                              -- Color of the car
+    WeddingPrice DECIMAL(10, 2),                    -- Special price for wedding reservations
+    Transfer BOOLEAN DEFAULT FALSE,                 -- Whether the car is available for transfers (True/False)
+    WithDriver BOOLEAN DEFAULT FALSE,               -- Whether the car is available with a driver (True/False)
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP   -- Timestamp for record creation
+);
+
+ALTER TABLE IF EXISTS public.reservation
+    ADD COLUMN "carId" integer NOT NULL,
+    ADD CONSTRAINT fk_car
+    FOREIGN KEY ("carId") REFERENCES public."car"(id) ON DELETE CASCADE;

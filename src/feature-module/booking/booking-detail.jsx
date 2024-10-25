@@ -466,7 +466,7 @@ const BookingDetail = () => {
                                 className="form-control"
                                 placeholder="Enter Additional Information"
                                 rows={5}
-                                defaultValue={""}
+**32                                defaultValue={""}
                               />
                             </div>
                           </div> */}
