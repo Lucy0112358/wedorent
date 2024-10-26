@@ -70,6 +70,6 @@ export const all_routes = {
   // listing routes
   listingGrid: "/listings/listing-grid",
   listingList: "/listings/listing-list",
-  listingDetails: "/listings/listing-details",
+  listingDetails: "/listings/listing-details/:id",
   listingMap: "/listings/listing-map",
 };

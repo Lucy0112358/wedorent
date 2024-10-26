@@ -8,12 +8,13 @@ import 'aos/dist/aos.css';
 import '../src/style/icons/fontawesome/css/all.min.css';
 import '../src/style/icons/fontawesome/css/fontawesome.min.css'
 import { Provider } from 'react-redux';
-import store from './core/data/redux/store.jsx';
+// import store from './core/data/redux/store.jsx';
 import '../src/style/icons/feather/css/iconfont.css'
 import '../src/style/scss/main.scss'
 import './../src/index.css'
 import '../src/style/icons/boxicons/css/boxicons.min.css'
 import { base_path } from "./environment.jsx";
+import { store } from "./core/data/redux/store.js";
 
 
 

@@ -3,6 +3,8 @@ import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import Breadcrumbs from "../common/breadcrumbs";
 import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../router/all_routes";
+import { getBookingData, setBookingData } from "../../core/data/redux/slice/bookingSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const BookingAddon = () => {
   const routes = all_routes;
@@ -14,9 +16,106 @@ const BookingAddon = () => {
   const navigate = useNavigate();
 
 
-  const navigatePath = ()=> {
+  const navigatePath = () => {
     navigate(routes.bookingDetail);
   }
+
+  //Booking part by me
+  const bookingData = useSelector(getBookingData)
+  const dispatch = useDispatch()
+  const services = [
+    {
+      "id": 1,
+      "title": "Car Wash",
+      "description": "Complete exterior and interior car wash ",
+      "iconName": "car-wash-icon.png",
+      "price": 25.99,
+      "createdAt": "2023-10-01T10:30:00",
+      "modifiedAt": "2023-10-01T10:30:00"
+    },
+    {
+      "id": 2,
+      "title": "Oil Change",
+      "description": "Standard oil change with filter replacement",
+      "iconName": "oil-change-icon.png",
+      "price": 49.99,
+      "createdAt": "2023-10-02T09:00:00",
+      "modifiedAt": "2023-10-02T09:00:00"
+    },
+    {
+      "id": 3,
+      "title": "Tire Rotation",
+      "description": "Rotation of all four tires for even wear",
+      "iconName": "tire-rotation-icon.png",
+      "price": 19.99,
+      "createdAt": "2023-10-03T08:45:00",
+      "modifiedAt": "2023-10-03T08:45:00"
+    },
+    {
+      "id": 4,
+      "title": "Battery Check",
+      "description": "Battery test and replacement if needed",
+      "iconName": "battery-check-icon.png",
+      "price": 34.99,
+      "createdAt": "2023-10-04T11:15:00",
+      "modifiedAt": "2023-10-04T11:15:00"
+    }
+  ]
+
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  const handleDetails = (key, value) => {
+    let existAddonInfo = {
+      ...(bookingData.addonInfo || {}),
+      [key]: value
+    };
+    console.log(existAddonInfo, "value")
+    dispatch(setBookingData({ key: 'addonInfo', value: existAddonInfo }))
+  }
+console.log(bookingData, "bookingData")
+  const handleAddService = (e, service) => {
+    // console.log(service, service.id)
+    e.preventDefault();
+    if (!bookingData.serviceList) {
+      handleDetails('serviceList', [service.id])
+      // dispatch(setBookingData({ key: 'serviceList', value: [service.id] }))
+    } else {
+      if (!bookingData.serviceList.includes(service.id)) {
+        let existServices = [...bookingData.serviceList, service.id];
+        handleDetails('serviceList', existServices)
+        // dispatch(setBookingData({ key: 'serviceList', value: existServices }));
+      }
+    }
+   
+    let initialTotal = bookingData?.addonInfo?.total || 0;
+    let total = +(initialTotal + service.price).toFixed(2); 
+    handleDetails('total', total)
+
+    // setTotalAmount((prevTotal) => +(prevTotal + service.price).toFixed(2));
+  }
+
+  const handleRemoveService = (e, service) => {
+    e.preventDefault();
+    if (!bookingData.serviceList) {
+      alert("No services selected")
+      return false;
+    } else {
+      let existServices = bookingData.serviceList.filter((item) => item !== service.id);
+      handleDetails('serviceList', existServices)
+
+      // dispatch(setBookingData({ key: 'serviceList', value: existServices }))
+    }
+    let initialTotal = bookingData?.addonInfo?.total || 0;
+    let total = +(initialTotal + service.price).toFixed(2); 
+    handleDetails('total', total)
+
+    // setTotalAmount((prevTotal) => +(prevTotal - service.price).toFixed(2));
+  };
+
+
+  //End booking part
+
+
 
   return (
     <>
@@ -235,46 +334,48 @@ const BookingAddon = () => {
                           </span>
                           <h5>Add-Ons</h5>
                         </div>
-                        <h6>Total : 15 Add-ons</h6>
+                        <h5>Total service: {bookingData?.addonInfo?.total || 0} ֏</h5>
                       </div>
                       <div className="booking-info-body">
                         <ul className="adons-lists">
-                          <li>
-                            <div className="adons-types">
-                              <div className="d-flex align-items-center adon-name-info">
-                                <span className="adon-icon">
-                                  <i className="bx bx-map-pin" />
-                                </span>
-                                <div className="adon-name">
-                                  <h6>GPS Navigation Systems</h6>
-                                  <Link
-                                    to="#"
-                                    className="d-inline-flex align-items-center adon-info-btn"
-                                  >
-                                    <i className="bx bx-info-circle me-2" />
-                                    More information
-                                    <i className="bx bx-chevron-down ms-2 arrow-icon" />
-                                  </Link>
+                          {
+                            services.map((service) => (
+                              <li>
+                                <div className="adons-types">
+                                  <div className="d-flex align-items-center adon-name-info">
+                                    <div className="adon-name">
+                                      <h6>{service.title}</h6>
+                                    </div>
+                                  </div>
+                                  <span className="adon-price">{service.price} ֏</span>
+                                  {
+                                    !bookingData?.addonInfo?.serviceList?.includes(service.id) ?
+                                      <>
+                                        <button 
+                                          onClick={(e) => handleAddService(e, service)} 
+                                          className="btn add-addon-btn">
+                                          <i className="bx bx-plus-circle me-2" />
+                                          Add
+                                        </button></> :
+                                      <>
+                                        <button 
+                                        onClick={(e) => handleRemoveService(e, service)}
+                                        className="btn btn-secondary remove-adon-btn">
+                                          <i className="bx bx-minus-circle me-2" />
+                                          Remove
+                                        </button>
+                                      </>
+                                  }
                                 </div>
-                              </div>
-                              <span className="adon-price">$25</span>
-                              <Link
-                                to="#"
-                                className="btn btn-secondary remove-adon-btn"
-                              >
-                                <i className="bx bx-minus-circle me-2" />
-                                Remove
-                              </Link>
-                            </div>
-                            <div className="more-adon-info">
-                              <p>
-                                Provide GPS navigation devices as add-ons for
-                                customers who need assistance with directions
-                                and navigation during their rental period.
-                              </p>
-                            </div>
-                          </li>
-                          <li>
+                                <div>
+                                  <p>
+                                    {service.description}
+                                  </p>
+                                </div>
+                              </li>
+                            ))
+                          }
+                          {/* <li>
                             <div className="adons-types">
                               <div className="d-flex align-items-center adon-name-info">
                                 <span className="adon-icon">
@@ -282,14 +383,6 @@ const BookingAddon = () => {
                                 </span>
                                 <div className="adon-name">
                                   <h6>Wi-Fi Hotspot</h6>
-                                  <Link
-                                    to="#"
-                                    className="d-inline-flex align-items-center adon-info-btn"
-                                  >
-                                    <i className="bx bx-info-circle me-2" />
-                                    More information{" "}
-                                    <i className="bx bx-chevron-down ms-2 arrow-icon" />
-                                  </Link>
                                 </div>
                               </div>
                               <span className="adon-price">$25</span>
@@ -308,15 +401,15 @@ const BookingAddon = () => {
                                 and navigation during their rental period.
                               </p>
                             </div>
-                          </li>
-                          <li>
+                          </li> */}
+                          {/* <li>
                             <div className="adons-types">
                               <div className="d-flex align-items-center adon-name-info">
                                 <span className="adon-icon">
-                                  <i className="bx bx-wifi" />
+                                  <i className="bx bx-radar" />
                                 </span>
                                 <div className="adon-name">
-                                  <h6>Child Safety Seats</h6>
+                                  <h6>Additional Accessories</h6>
                                   <Link
                                     to="#"
                                     className="d-inline-flex align-items-center adon-info-btn"
@@ -327,42 +420,7 @@ const BookingAddon = () => {
                                   </Link>
                                 </div>
                               </div>
-                              <span className="adon-price">$50</span>
-                              <Link
-                                to="#"
-                                className="btn btn-secondary remove-adon-btn"
-                              >
-                                <i className="bx bx-minus-circle me-2" />
-                                Remove
-                              </Link>
-                            </div>
-                            <div className="more-adon-info">
-                              <p>
-                                Provide GPS navigation devices as add-ons for
-                                customers who need assistance with directions
-                                and navigation during their rental period.
-                              </p>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="adons-types">
-                              <div className="d-flex align-items-center adon-name-info">
-                                <span className="adon-icon">
-                                  <i className="bx bxs-droplet" />
-                                </span>
-                                <div className="adon-name">
-                                  <h6>Fuel Options</h6>
-                                  <Link
-                                    to="#"
-                                    className="d-inline-flex align-items-center adon-info-btn"
-                                  >
-                                    <i className="bx bx-info-circle me-2" />
-                                    More information{" "}
-                                    <i className="bx bx-chevron-down ms-2 arrow-icon" />
-                                  </Link>
-                                </div>
-                              </div>
-                              <span className="adon-price">$75</span>
+                              <span className="adon-price">$30</span>
                               <Link to="#" className="btn add-addon-btn">
                                 <i className="bx bx-plus-circle me-2" />
                                 Add
@@ -370,197 +428,17 @@ const BookingAddon = () => {
                             </div>
                             <div className="more-adon-info">
                               <p>
-                                Provide GPS navigation devices as add-ons for
-                                customers who need assistance with directions
-                                and navigation during their rental period.
+                                Provide GPS navigation devices as add-ons
+                                for customers who need assistance with
+                                directions and navigation during their
+                                rental period.
                               </p>
                             </div>
-                          </li>
-                          <li className="view-more-adons">
-                            <div
-                              className={`more-adons ${showMore ? "d-block" : "d-none"}`}
-                            >
-                              <ul>
-                                <li>
-                                  <div className="adons-types">
-                                    <div className="d-flex align-items-center adon-name-info">
-                                      <span className="adon-icon">
-                                        <i className="bx bx-collection" />
-                                      </span>
-                                      <div className="adon-name">
-                                        <h6>Toll Passes</h6>
-                                        <Link
-                                          to="#"
-                                          className="d-inline-flex align-items-center adon-info-btn"
-                                        >
-                                          <i className="bx bx-info-circle me-2" />
-                                          More information{" "}
-                                          <i className="bx bx-chevron-down ms-2 arrow-icon" />
-                                        </Link>
-                                      </div>
-                                    </div>
-                                    <span className="adon-price">$125</span>
-                                    <Link to="#" className="btn add-addon-btn">
-                                      <i className="bx bx-plus-circle me-2" />
-                                      Add
-                                    </Link>
-                                  </div>
-                                  <div className="more-adon-info">
-                                    <p>
-                                      Provide GPS navigation devices as add-ons
-                                      for customers who need assistance with
-                                      directions and navigation during their
-                                      rental period.
-                                    </p>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div className="adons-types">
-                                    <div className="d-flex align-items-center adon-name-info">
-                                      <span className="adon-icon">
-                                        <i className="bx bx-broadcast" />
-                                      </span>
-                                      <div className="adon-name">
-                                        <h6>Roadside Assistance</h6>
-                                        <Link
-                                          to="#"
-                                          className="d-inline-flex align-items-center adon-info-btn"
-                                        >
-                                          <i className="bx bx-info-circle me-2" />
-                                          More information{" "}
-                                          <i className="bx bx-chevron-down ms-2 arrow-icon" />
-                                        </Link>
-                                      </div>
-                                    </div>
-                                    <span className="adon-price">$60</span>
-                                    <Link to="#" className="btn add-addon-btn">
-                                      <i className="bx bx-plus-circle me-2" />
-                                      Add
-                                    </Link>
-                                  </div>
-                                  <div className="more-adon-info">
-                                    <p>
-                                      Provide GPS navigation devices as add-ons
-                                      for customers who need assistance with
-                                      directions and navigation during their
-                                      rental period.
-                                    </p>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div className="adons-types">
-                                    <div className="d-flex align-items-center adon-name-info">
-                                      <span className="adon-icon">
-                                        <i className="bx bx-radio" />
-                                      </span>
-                                      <div className="adon-name">
-                                        <h6>Satellite Radio</h6>
-                                        <Link
-                                          to="#"
-                                          className="d-inline-flex align-items-center adon-info-btn"
-                                        >
-                                          <i className="bx bx-info-circle me-2" />
-                                          More information{" "}
-                                          <i className="bx bx-chevron-down ms-2 arrow-icon" />
-                                        </Link>
-                                      </div>
-                                    </div>
-                                    <span className="adon-price">$42</span>
-                                    <Link to="#" className="btn add-addon-btn">
-                                      <i className="bx bx-plus-circle me-2" />
-                                      Add
-                                    </Link>
-                                  </div>
-                                  <div className="more-adon-info">
-                                    <p>
-                                      Provide GPS navigation devices as add-ons
-                                      for customers who need assistance with
-                                      directions and navigation during their
-                                      rental period.
-                                    </p>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div className="adons-types">
-                                    <div className="d-flex align-items-center adon-name-info">
-                                      <span className="adon-icon">
-                                        <i className="bx bx-radar" />
-                                      </span>
-                                      <div className="adon-name">
-                                        <h6>Additional Accessories</h6>
-                                        <Link
-                                          to="#"
-                                          className="d-inline-flex align-items-center adon-info-btn"
-                                        >
-                                          <i className="bx bx-info-circle me-2" />
-                                          More information{" "}
-                                          <i className="bx bx-chevron-down ms-2 arrow-icon" />
-                                        </Link>
-                                      </div>
-                                    </div>
-                                    <span className="adon-price">$30</span>
-                                    <Link to="#" className="btn add-addon-btn">
-                                      <i className="bx bx-plus-circle me-2" />
-                                      Add
-                                    </Link>
-                                  </div>
-                                  <div className="more-adon-info">
-                                    <p>
-                                      Provide GPS navigation devices as add-ons
-                                      for customers who need assistance with
-                                      directions and navigation during their
-                                      rental period.
-                                    </p>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div className="adons-types">
-                                    <div className="d-flex align-items-center adon-name-info">
-                                      <span className="adon-icon">
-                                        <i className="bx bx-rename" />
-                                      </span>
-                                      <div className="adon-name">
-                                        <h6>Express Check-in/Check-out</h6>
-                                        <Link
-                                          to="#"
-                                          className="d-inline-flex align-items-center adon-info-btn"
-                                        >
-                                          <i className="bx bx-info-circle me-2" />
-                                          More information{" "}
-                                          <i className="bx bx-chevron-down ms-2 arrow-icon" />
-                                        </Link>
-                                      </div>
-                                    </div>
-                                    <span className="adon-price">$54</span>
-                                    <Link to="#" className="btn add-addon-btn">
-                                      <i className="bx bx-plus-circle me-2" />
-                                      Add
-                                    </Link>
-                                  </div>
-                                  <div className="more-adon-info">
-                                    <p>
-                                      Provide GPS navigation devices as add-ons
-                                      for customers who need assistance with
-                                      directions and navigation during their
-                                      rental period.
-                                    </p>
-                                  </div>
-                                </li>
-                              </ul>
-                            </div>
-                            <Link
-                              onClick={handleToggle}
-                              to="#"
-                              className="view-adon-btn"
-                            >
-                              <i className="bx bx-plus-circle me-2" />
-                              {showMore ? "Less Add-Ons" : "View More Add-Ons"}
-                            </Link>
-                          </li>
+                          </li> */}
                         </ul>
                       </div>
                     </div>
-                    <div className="booking-information-card">
+                    {/* <div className="booking-information-card">
                       <div className="booking-info-head">
                         <span>
                           <i className="bx bx-user-pin" />
@@ -767,7 +645,7 @@ const BookingAddon = () => {
                           </ul>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="booking-info-btns d-flex justify-content-end">
                       <Link
                         to={routes.bookingCheckout}

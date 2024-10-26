@@ -1325,7 +1325,7 @@ const Listinglist = () => {
                           <div className="blog-list-head d-flex">
                             <div className="blog-list-title">
                               <h3>
-                                <Link to={routes.listingDetails}>
+                                <Link to={routes.listingDetails.replace(':id', 1)}>
                                   Ferrari 458 MM Special
                                 </Link>
                               </h3>

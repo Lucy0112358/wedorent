@@ -27,7 +27,7 @@ const Header = () => {
 
   const { t, i18n } = useTranslation();
   const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng); // Функция для смены языка
+    i18n.changeLanguage(lng);
   };
 
   return (
@@ -500,15 +500,15 @@ const Header = () => {
                 </li> */}
 
                {/* test loales place*/}
-                {/* <li>
-                <h1>{t('welcome')}</h1>
+                 <li>
+                {/* <h1>{t('hello')}</h1> */}
                 </li>
                 <li>
                   <button onClick={() => changeLanguage('en')}>English</button>
                 </li>
                 <li>
                 <button onClick={() => changeLanguage('ru')}>Русский</button>
-                </li> */}
+                </li> 
                {/* End test loales place*/}
                 
                 <li className="login-link">
