@@ -5,6 +5,8 @@ import { Calendar } from "primereact/calendar";
 import { TimePicker } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../router/all_routes";
+import { useDispatch, useSelector } from "react-redux";
+import { getBookingData, setBookingData } from "../../core/data/redux/slice/bookingSlice";
 
 const BookingCheckout = () => {
   const routes = all_routes;
@@ -15,9 +17,40 @@ const BookingCheckout = () => {
     console.log(time, timeString);
   };
 
+  //Get booking dataaa
+  const [isDelivery, setIsDelivery] = useState(false)
+  const bookingData = useSelector(getBookingData)
+  console.log(bookingData, "bookingDatabookingDatabookingData")
+  const dispatch = useDispatch()
+  const handleBookingData = (key, value) => {
+    // console.log(key, value)
+    // dispatch(setBookingData({ key, value }))
+    let existBookingInfo = {
+      ...(bookingData.bookingInfo || {}),
+      [key]: value
+    };
+    dispatch(setBookingData({ key: 'bookingInfo', value: existBookingInfo }))
+
+  }
+
+  const pickerOne = (time, timeString) => {
+    handleBookingData('pickerOne', timeString)
+  };
+
+  const pickerTwo = (time, timeString) => {
+    handleBookingData('pickerTwo', timeString)
+  };
+
+  const handleDelivery = () => {
+
+  }
+
+console.log(bookingData?.rent_type === "delivery", 555555555555)
+  //End Get booking data
+
   const navigate = useNavigate();
 
-  const navigatePath = ()=> {
+  const navigatePath = () => {
     navigate(routes.bookingAddon);
   }
 
@@ -206,7 +239,9 @@ const BookingCheckout = () => {
                               <input
                                 type="radio"
                                 name="rent_type"
+                                checked={bookingData?.bookingInfo?.rent_type === "delivery"}
                                 id="location_delivery"
+                                onChange={(e) => handleBookingData("rent_type", 'delivery')}
                                 defaultChecked
                               />
                               <span className="booking_checkmark">
@@ -219,156 +254,139 @@ const BookingCheckout = () => {
                               <input
                                 type="radio"
                                 name="rent_type"
+                                checked={bookingData?.bookingInfo?.rent_type === "pickup"}
+                                
+                                onChange={(e) => handleBookingData("rent_type", 'pickup')}
                                 id="location_pickup"
                               />
                               <span className="booking_checkmark">
-                                <span className="checked-title">
-                                  Self Pickup
-                                </span>
+                                <span className="checked-title">Self Pickup</span>
                               </span>
                             </label>
                           </li>
                         </ul>
                       </div>
                     </div>
-                    <div className="booking-information-card delivery-location">
-                      <div className="booking-info-head">
-                        <span>
-                          <i className="bx bxs-car-garage" />
-                        </span>
-                        <h5>Location</h5>
-                      </div>
-                      <div className="booking-info-body">
-                        <div className="form-custom">
-                          <label className="form-label">
-                            Delivery Location
-                          </label>
-                          <div className="d-flex align-items-center">
-                            <input
-                              type="text"
-                              className="form-control mb-0"
-                              placeholder="Add Location"
-                            />
-                            <Link
-                              to="#"
-                              className="btn btn-secondary location-btn d-flex align-items-center"
-                            >
-                              <i className="bx bx-current-location me-2" />
-                              Current Location
-                            </Link>
+                    {bookingData?.bookingInfo?.rent_type === "delivery" && (
+                      <>
+                        <div className="booking-information-card delivery-location">
+                          <div className="booking-info-head">
+                            <span>
+                              <i className="bx bxs-car-garage" />
+                            </span>
+                            <h5>Location</h5>
+                          </div>
+                          <div className="booking-info-body">
+                            <div className="form-custom">
+                              <label className="form-label">Delivery Location</label>
+                              <div className="d-flex align-items-center">
+                                <input
+                                  type="text"
+                                  className="form-control mb-0"
+                                  value={bookingData?.bookingInfo?.location}
+                                  onChange={(e) => handleBookingData("location", e.target.value)}
+                                />
+                                <Link
+                                  to="#"
+                                  className="btn btn-secondary location-btn d-flex align-items-center"
+                                >
+                                  <i className="bx bx-current-location me-2" />
+                                  Current Location
+                                </Link>
+                              </div>
+                            </div>
+                            <div className="input-block m-0">
+                              <label className="custom_check d-inline-flex location-check">
+                                <span>Return to same location</span>
+                                <input 
+                                  type="checkbox" 
+                                  name="remember" 
+                                  checked={bookingData?.bookingInfo?.sameLocation}
+                                  onChange={(e) => handleBookingData("sameLocation", e.target.checked)}
+                                />
+                                <span className="checkmark" />
+                              </label>
+                            </div>
+                            <div className="form-custom">
+                              <label className="form-label">Return Location</label>
+                              <div className="d-flex align-items-center">
+                                <input
+                                  type="text"
+                                  className="form-control mb-0"
+                                  onChange={(e) => handleBookingData("returnLocation", e.target.value)}
+                                  value={bookingData?.bookingInfo?.returnLocation}
+                                />
+                                <Link
+                                  to="#"
+                                  className="btn btn-secondary location-btn d-flex align-items-center"
+                                >
+                                  <i className="bx bx-current-location me-2" />
+                                  Current Location
+                                </Link>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <div className="input-block m-0">
-                          <label className="custom_check d-inline-flex location-check">
-                            <span>Return to same location</span>
-                            <input type="checkbox" name="remeber" />
-                            <span className="checkmark" />
-                          </label>
-                        </div>
-                        <div className="form-custom">
-                          <label className="form-label">Return Location</label>
-                          <div className="d-flex align-items-center">
-                            <input
-                              type="text"
-                              className="form-control mb-0"
-                              placeholder="Add Location"
-                            />
-                            <Link
-                              to="#"
-                              className="btn btn-secondary location-btn d-flex align-items-center"
-                            >
-                              <i className="bx bx-current-location me-2" />
-                              Current Location
-                            </Link>
+                      </>
+                    )}
+
+                    {bookingData && bookingData.rent_type === "pickup" && (
+                      <>
+                        <div className="booking-information-card pickup-location">
+                          <div className="booking-info-head">
+                            <span>
+                              <i className="bx bxs-car-garage" />
+                            </span>
+                            <h5>Location</h5>
+                          </div>
+                          <div className="booking-info-body">
+                            <div className="form-custom">
+                              <label className="form-label">Pickup Location</label>
+                              <div className="d-flex align-items-center">
+                                <input
+                                  type="text"
+                                  className="form-control mb-0"
+                                  value={bookingData?.bookingInfo?.location}
+                                  onChange={(e) => handleBookingData("location", e.target.value)}
+                                />
+                              </div>
+                            </div>
+                            <div className="input-block m-0">
+                              <label className="custom_check d-inline-flex location-check">
+                                <span>Return to same location</span>
+                                <input
+                                  type="checkbox" 
+                                  name="remember" 
+                                  checked={bookingData?.bookingInfo?.sameLocation}
+                                  onChange={(e) => handleBookingData("sameLocation", e.target.checked)}
+                                />
+                                <span className="checkmark" />
+                              </label>
+                            </div>
+                            <div className="form-custom">
+                              <label className="form-label">Return Location</label>
+                              <div className="d-flex align-items-center">
+                                <input
+                                  type="text"
+                                  onChange={(e) => handleBookingData("returnLocation", e.target.value)}
+                                  value={bookingData?.bookingInfo?.returnLocation}
+                                  className="form-control mb-0"
+                                />
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className="booking-information-card pickup-location">
-                      <div className="booking-info-head">
-                        <span>
-                          <i className="bx bxs-car-garage" />
-                        </span>
-                        <h5>Location</h5>
-                      </div>
-                      <div className="booking-info-body">
-                        <div className="form-custom">
-                          <label className="form-label">Pickup Location</label>
-                          <div className="d-flex align-items-center">
-                            <input
-                              type="text"
-                              className="form-control mb-0"
-                              defaultValue="Newyork Office - 78, 10th street Laplace USA"
-                            />
-                          </div>
-                        </div>
-                        <div className="input-block m-0">
-                          <label className="custom_check d-inline-flex location-check">
-                            <span>Return to same location</span>
-                            <input type="checkbox" name="remeber" />
-                            <span className="checkmark" />
-                          </label>
-                        </div>
-                        <div className="form-custom">
-                          <label className="form-label">Return Location</label>
-                          <div className="d-flex align-items-center">
-                            <input
-                              type="text"
-                              className="form-control mb-0"
-                              defaultValue="Newyork Office - 78, 10th street Laplace USA"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                      </>
+                    )}
+
                     <div className="booking-information-card booking-type-card">
                       <div className="booking-info-head">
                         <span>
                           <i className="bx bxs-location-plus" />
                         </span>
-                        <h5>Booking type &amp; Time</h5>
+                        <h5> Time</h5>
                       </div>
                       <div className="booking-info-body">
-                        <ul className="booking-radio-btns">
-                          <li>
-                            <label className="booking_custom_check">
-                              <input type="radio" name="booking_type" />
-                              <span className="booking_checkmark">
-                                <span className="checked-title">Hourly</span>
-                              </span>
-                            </label>
-                          </li>
-                          <li>
-                            <label className="booking_custom_check">
-                              <input
-                                type="radio"
-                                name="booking_type"
-                                defaultChecked
-                              />
-                              <span className="booking_checkmark">
-                                <span className="checked-title">
-                                  Day (8 Hrs)
-                                </span>
-                              </span>
-                            </label>
-                          </li>
-                          <li>
-                            <label className="booking_custom_check">
-                              <input type="radio" name="booking_type" />
-                              <span className="booking_checkmark">
-                                <span className="checked-title">Weekly</span>
-                              </span>
-                            </label>
-                          </li>
-                          <li>
-                            <label className="booking_custom_check">
-                              <input type="radio" name="booking_type" />
-                              <span className="booking_checkmark">
-                                <span className="checked-title">Monthly</span>
-                              </span>
-                            </label>
-                          </li>
-                        </ul>
                         <div className="booking-timings">
                           <div className="row">
                             <div className="col-md-6">
@@ -377,8 +395,11 @@ const BookingCheckout = () => {
                                 <div className="group-img">
                                   <Calendar
                                     className="datetimepicker bg-custom"
-                                    value={date1}
-                                    onChange={(e) => setDate1(e.value)}
+                                    // value={date1}
+                                    // onChange={(e) => setDate1(e.value)}
+                                    value={bookingData?.bookingInfo?.pickupDateOne}
+                                    onChange={(e) => handleBookingData("pickupDateOne", e.value)}
+
                                     placeholder="Choose Date"
                                   />
                                   <span className="input-cal-icon">
@@ -394,7 +415,8 @@ const BookingCheckout = () => {
                                   <TimePicker
                                     placeholder="Choose Time"
                                     className="form-control timepicker"
-                                    onChange={onChange}
+                                    value={bookingData?.bookingInfo?.pickerOne}
+                                    onChange={pickerOne}
                                   />
                                   <span className="input-cal-icon">
                                     <i className="bx bx-time" />
@@ -410,8 +432,10 @@ const BookingCheckout = () => {
                                 <div className="group-img">
                                   <Calendar
                                     className="datetimepicker bg-custom"
-                                    value={date2}
-                                    onChange={(e) => setDate2(e.value)}
+                                    // value={date2}
+                                    // onChange={(e) => setDate2(e.value)}
+                                    value={bookingData?.bookingInfo?.pickupDateTwo}
+                                    onChange={(e) => handleBookingData("pickupDateTwo", e.value)}
                                     placeholder="Choose Date"
                                   />
                                   <span className="input-cal-icon">
@@ -426,10 +450,11 @@ const BookingCheckout = () => {
                                   Return Time
                                 </label>
                                 <div className="group-img style-custom">
-                                  <TimePicker 
+                                  <TimePicker
                                     placeholder="Choose Time"
                                     className="form-control timepicker"
-                                    onChange={onChange}
+                                    value={bookingData?.bookingInfo?.pickerTwo}
+                                    onChange={pickerTwo}
                                   />
                                   <span className="input-cal-icon">
                                     <i className="bx bx-time" />
@@ -461,8 +486,8 @@ const BookingCheckout = () => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 

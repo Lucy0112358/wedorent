@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import Breadcrumbs from "../common/breadcrumbs";
 import { Dropdown } from "primereact/dropdown";
 import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../router/all_routes";
+import { useDispatch, useSelector } from "react-redux";
+import { getBookingData, setBookingData } from "../../core/data/redux/slice/bookingSlice";
+import { useTranslation } from "react-i18next";
 
 const BookingDetail = () => {
+  //Billing part
+  useEffect(() => {
+    Aos.init();
+  }, []);
+
+  //End Billing part
+
+
   const routes = all_routes;
 
   const [selectedPersons, setSelectedPersons] = useState(null);
@@ -15,7 +26,51 @@ const BookingDetail = () => {
     { name: "2 Adults, 1 Child" },
     { name: "5 Adults, 2 Child" },
   ];
-  const country = [{ name: "USA" }, { name: "UK" }];
+  //Start Booking part
+
+  //part lang
+  const { t } = useTranslation();
+
+  const dispatch = useDispatch();
+  const bookingData = useSelector(getBookingData);
+  console.log(bookingData, "bookingDatabookingDatabookingData")
+  const handleDetails = (key, value) => {
+    let existBillingInfo = {
+      ...(bookingData.billingInfo || {}),
+      [key]: value
+    };
+    dispatch(setBookingData({ key: 'billingInfo', value: existBillingInfo }))
+  }
+
+  const setSelectedCountryHandle = (value) => {
+    setSelectedCountry(value);
+    handleDetails("selectedCountry", value.name)
+  }
+
+  const [fileNameFront, setFileNameFront] = useState("");
+  const [fileNameBack, setFileNameBack] = useState("");
+
+  const handleFileUploadFront = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFileNameFront(file.name);
+    }
+  };
+
+  const handleFileUploadBack = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFileNameBack(file.name);
+    }
+  };
+  
+
+  //End Booking part
+
+
+
+
+  const country = [{ name: "Armenia" }, { name: "Georgia" }];
   const navigate = useNavigate();
 
   const navigatePath = () => {
@@ -309,9 +364,9 @@ const BookingDetail = () => {
                           <span>
                             <i className="bx bx-add-to-queue" />
                           </span>
-                          <h5>Billing Info</h5>
+                          <h5>{t('billingInfo')}</h5>
                         </div>
-                        <div className="d-flex align-items-center">
+                        {/* <div className="d-flex align-items-center">
                           <h6>Returning customer?</h6>
                           <Link
                             to="#"
@@ -322,7 +377,7 @@ const BookingDetail = () => {
                             <i className="bx bx-user me-2" />
                             Sign In
                           </Link>
-                        </div>
+                        </div> */}
                       </div>
                       <div className="booking-info-body">
                         <div className="row">
@@ -334,6 +389,7 @@ const BookingDetail = () => {
                               </label>
                               <input
                                 type="text"
+                                onChange={(e) => handleDetails('firstName', e.target.value)}
                                 className="form-control"
                                 placeholder="Enter First Name"
                               />
@@ -348,11 +404,12 @@ const BookingDetail = () => {
                               <input
                                 type="text"
                                 className="form-control"
+                                onChange={(e) => handleDetails('lastName', e.target.value)}
                                 placeholder="Enter Last Name"
                               />
                             </div>
                           </div>
-                          <div className="col-md-6">
+                          {/* <div className="col-md-6">
                             <div className="input-block">
                               <label className="form-label">
                                 No of Persons{" "}
@@ -367,7 +424,7 @@ const BookingDetail = () => {
                                 className="w-100"
                               />
                             </div>
-                          </div>
+                          </div> */}
                           {/* <div className="col-md-6">
                             <div className="input-block">
                               <label className="form-label">Company</label>
@@ -387,6 +444,7 @@ const BookingDetail = () => {
                               <input
                                 type="text"
                                 className="form-control"
+                                onChange={(e) => handleDetails('streetAddress', e.target.value)}
                                 placeholder="Enter Address"
                               />
                             </div>
@@ -398,7 +456,7 @@ const BookingDetail = () => {
                               </label>
                               <Dropdown
                                 value={selectedCountry}
-                                onChange={(e) => setSelectedCountry(e.value)}
+                                onChange={(e) => setSelectedCountryHandle(e.value)}
                                 options={country}
                                 optionLabel="name"
                                 placeholder="Country"
@@ -415,6 +473,7 @@ const BookingDetail = () => {
                               <input
                                 type="text"
                                 className="form-control"
+                                onChange={(e) => handleDetails('city', e.target.value)}
                                 placeholder="City"
                               />
                             </div>
@@ -440,6 +499,7 @@ const BookingDetail = () => {
                               <input
                                 type="text"
                                 className="form-control"
+                                onChange={(e) => handleDetails('email', e.target.value)}
                                 placeholder="Enter Email"
                               />
                             </div>
@@ -453,6 +513,7 @@ const BookingDetail = () => {
                               <input
                                 type="text"
                                 className="form-control"
+                                onChange={(e) => handleDetails('phone', e.target.value)}
                                 placeholder="Enter Phone Number"
                               />
                             </div>
@@ -479,6 +540,7 @@ const BookingDetail = () => {
                               <input
                                 type="text"
                                 className="form-control"
+                                onChange={(e) => handleDetails('drivingLicence', e.target.value)}
                                 placeholder="Enter Driving Licence Number"
                               />
                             </div>
@@ -493,17 +555,44 @@ const BookingDetail = () => {
                                 <span className="drag-upload-btn">
                                   <span className="upload-btn">
                                     <i className="bx bx-upload me-2" />
-                                    Upload Photo
+                                    Upload Photo Front
                                   </span>
-                                  or Drag Photo
+                                  or Drag Photo Front
                                 </span>
-                                <input type="file" multiple id="image_sign" />
+                                <input 
+                                  type="file" 
+                                  id="image_sign"  
+                                  accept=".jpeg, .jpg, .png"
+                                  onChange={handleFileUploadFront}
+                                  />
+                                  <div id="frames">
+                                    {fileNameFront && <p>Uploaded file: {fileNameFront}</p>}
+                                  </div>
                                 <div id="frames" />
                               </div>
-                              <p className="img-size-info">
+                              <div className="profile-uploader">
+                                <span className="drag-upload-btn">
+                                  <span className="upload-btn">
+                                    <i className="bx bx-upload me-2" />
+                                    Upload Photo Back
+                                  </span>
+                                  or Drag Photo Back
+                                </span>
+                                <input 
+                                  type="file" 
+                                  id="image_sign"
+                                  accept=".jpeg, .jpg, .png"
+                                  onChange={handleFileUploadBack}
+                                  />
+                                  <div id="frames">
+                                    {fileNameBack && <p>Uploaded file: {fileNameBack}</p>}
+                                  </div>
+                                <div id="frames" />
+                              </div>
+                              {/* <p className="img-size-info">
                                 The maximum photo size is 4MB. Formats: jpeg,
                                 jpg, png.{" "}
-                              </p>
+                              </p> */}
                             </div>
                           </div>
                           <div className="col-md-12">
@@ -514,7 +603,11 @@ const BookingDetail = () => {
                                   I confirm that the personal data is correct, and I give permission for the processing of personal data. If the provided data does not match with the end user of these services, the company has the right to cancel the order without a refund.
                                 </span>{" "}
                                 <span className="text-danger"> *</span>
-                                <input type="checkbox" name="remeber" />
+                                <input
+                                  type="checkbox"
+                                  name="remeber"
+                                  onChange={(e) => handleDetails('confirm', e.target.checked)}
+                                />
                                 <span className="checkmark" />
                               </label>
                             </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Breadcrumbs from "../common/breadcrumbs";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Calendar } from "primereact/calendar";
 
 import Slider from "react-slick";
@@ -11,10 +11,13 @@ import Aos from "aos";
 import { all_routes } from "../router/all_routes";
 import { Dropdown } from "primereact/dropdown";
 import { TimePicker } from "antd";
-import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
+import { useDispatch, useSelector } from "react-redux";
+import { getBookingCar, getBookingData, setBookingData } from "../../core/data/redux/slice/bookingSlice";
+import { useParams } from 'react-router-dom';
+import { getCar } from "../../core/data/redux/api/bookingApi";
 
 const listingDetails = () => {
   const routes = all_routes;
@@ -32,11 +35,56 @@ const listingDetails = () => {
     { name: " Newyork Office - 78, 10th street Laplace USA" },
     { name: "Newyork Office - 12, 5th street USA" },
   ];
-  const onChange = (time: Dayjs, timeString: string) => {
-    console.log(time, timeString);
+
+  //Get booking dataaa
+  const data = useParams();
+  const paramsId = data.id;
+  const navigate = useNavigate();
+  const bookingCar = useSelector(getBookingCar)
+  useEffect(() => {
+    if (paramsId) {
+      dispatch(getCar(paramsId));
+    }else {
+      navigate(routes.listingList);
+    }
+  }, [paramsId]);
+  const bookingData = useSelector(getBookingData)
+  console.log(bookingData, "bookingDatabookingDatabookingData")
+
+  const handleDetails = (key, value) => {
+    let existBookingInfo = {
+      ...(bookingData.bookingInfo || {}),
+      [key]: value
+    };
+    dispatch(setBookingData({ key: 'bookingInfo', value: existBookingInfo }))
+  }
+
+
+
+  const dispatch = useDispatch()
+  const handleBookingData = (key, value) => {
+    console.log(key, value)
+    dispatch(setBookingData({key, value}))
+
+  }
+
+  const pickerOne = (time, timeString) => {
+    handleDetails('pickerOne', time)
   };
+
+  const pickerTwo = (time, timeString) => {
+    handleDetails('pickerTwo', time)
+  };
+
+
+
+  //ENd Get booking dataaa
+
+  // const onChange = (time, timeString) => {
+  //   console.log(time, timeString);
+  // };
   const [selectedItems, setSelectedItems] = useState(Array(10).fill(false));
-  const handleItemClick = (index: number) => {
+  const handleItemClick = (index) => {
     setSelectedItems((prevSelectedItems) => {
       const updatedSelectedItems = [...prevSelectedItems];
       updatedSelectedItems[index] = !updatedSelectedItems[index];
@@ -128,7 +176,7 @@ const listingDetails = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     asNavFor: nav2 || undefined, // Link to the second slider
-    ref: (slider: any) => (sliderRef1.current = slider), // Assign the slider ref
+    ref: (slider) => (sliderRef1.current = slider), // Assign the slider ref
    
 };
 
@@ -141,7 +189,7 @@ const settings2 = {
     slidesToScroll: 1,
     focusOnSelect: true,
     asNavFor: nav1 || undefined,
-    ref: (slider: any) => (sliderRef2.current = slider), // Assign the slider ref
+    ref: (slider) => (sliderRef2.current = slider), // Assign the slider ref
    
 };
   return (
@@ -181,7 +229,7 @@ const settings2 = {
                     </li>
                   </ul>
                   <div className="camaro-info">
-                    <h3>Chevrolet Camaro</h3>
+                    <h3>{bookingCar?.name}fff</h3>
                     <div className="camaro-location">
                       <div className="camaro-location-inner">
                         <i className="bx bx-map" />
@@ -1362,6 +1410,7 @@ const settings2 = {
                             <input
                               type="radio"
                               name="rent_type"
+                              onChange={(e) => handleDetails("rent_type", 'delivery')}
                               defaultChecked=""
                             />
                             <span className="booking_checkmark">
@@ -1373,6 +1422,7 @@ const settings2 = {
                           <label
                             className="booking_custom_check"
                             data-bs-toggle="tab"
+                            onChange={(e) => handleDetails("rent_type", 'pickup')}
                             data-bs-target="#pickup"
                           >
                             <input type="radio" name="rent_type" />
@@ -1395,6 +1445,7 @@ const settings2 = {
                                     <input
                                       type="text"
                                       className="form-control"
+                                      onChange={(e) => handleDetails("location", e.target.value)}
                                       placeholder="45, 4th Avanue  Mark Street USA"
                                     />
                                     <span className="form-icon">
@@ -1408,7 +1459,11 @@ const settings2 = {
                               <div className="input-block">
                                 <label className="custom_check d-inline-flex location-check m-0">
                                   <span>Return to same location</span>
-                                  <input type="checkbox" name="remeber" />
+                                  <input 
+                                    type="checkbox" 
+                                    name="remeber" 
+                                    onChange={(e) => handleDetails("sameLocation", e.target.checked)}
+                                  />
                                   <span className="checkmark" />
                                 </label>
                               </div>
@@ -1421,6 +1476,7 @@ const settings2 = {
                                     <input
                                       type="text"
                                       className="form-control"
+                                      onChange={(e) => handleDetails("returnLocation", e.target.value)}
                                       placeholder="78, 10th street Laplace USA"
                                     />
                                     <span className="form-icon">
@@ -1440,7 +1496,8 @@ const settings2 = {
                                     <div className="form-wrap">
                                       <Calendar
                                         value={date1}
-                                        onChange={(e) => setDate1(e.value)}
+                                        // onChange={(e) => setDate1(e.value)}
+                                        onChange={(e) => handleDetails("pickupDateOne", e.value)}
                                         placeholder="04/11/2023"
                                       />
                                       {/* <input
@@ -1460,7 +1517,7 @@ const settings2 = {
                                       <TimePicker
                                         placeholder="11:00 AM"
                                         className="form-control timepicker"
-                                        onChange={onChange}
+                                        onChange={pickerOne}
                                         defaultValue={dayjs(
                                           "00:00:00",
                                           "HH:mm:ss"
@@ -1484,8 +1541,8 @@ const settings2 = {
                                   <div className="group-img">
                                     <div className="form-wrap">
                                       <Calendar
-                                        value={date2}
-                                        onChange={(e) => setDate2(e.value)}
+                                        // value={date2}
+                                        onChange={(e) => handleDetails("pickupDateTwo", e.value)}
                                         placeholder="04/11/2023"
                                       />
                                       {/* <input
@@ -1505,7 +1562,7 @@ const settings2 = {
                                       <TimePicker
                                         placeholder="11:00 AM"
                                         className="form-control timepicker"
-                                        onChange={onChange}
+                                        onChange={pickerTwo}
                                         defaultValue={dayjs(
                                           "00:00:00",
                                           "HH:mm:ss"
