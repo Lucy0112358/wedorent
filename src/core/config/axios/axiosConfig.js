@@ -5,7 +5,7 @@ const instance = axios.create({
 })
 
 instance.interceptors.request.use((config) => {
-consol.log(process.env.REACT_APP_API_URL, "process.env.REACT_APP_API_URL")
+console.log(process.env.REACT_APP_API_URL, "process.env.REACT_APP_API_URL")
     // const lang = localStorage.getItem('lang') || 'am';
     const token = sessionStorage.getItem('token') || null;
 

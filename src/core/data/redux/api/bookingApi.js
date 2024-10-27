@@ -46,9 +46,9 @@ export const sendBooking = createAsyncThunk(
         const config = {
           data: data,
           method: "post",
-          url: 'cars',
+          url: '/cars',
         };
-        
+        console.log(config, "config")
         const response = await instance(config);
         console.log(response.data, "Car geeeeeeeeeeeeeeeeeeeeeeeeeeeeet")
         return response?.data;
