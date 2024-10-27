@@ -15,7 +15,7 @@ export const bookingSlice = createSlice({
       console.log(action, "BookingSLiceeeeeeeeeee")
       let data = action.payload;
 
-      state.bookingData = { ...state.bookingData, [data.key]: data.value };
+      state.bookingData = data;
     },
     setServiceTotalAdd: (state, action) => {
       state.serviceTotal = +(state.serviceTotal + action.payload).toFixed(2);

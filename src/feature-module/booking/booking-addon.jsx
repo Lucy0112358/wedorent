@@ -67,28 +67,28 @@ const BookingAddon = () => {
 
   const handleDetails = (key, value) => {
     let existAddonInfo = {
-      ...(bookingData.addonInfo || {}),
+      ...bookingData,
       [key]: value
     };
-    console.log(existAddonInfo, "value")
-    dispatch(setBookingData({ key: 'addonInfo', value: existAddonInfo }))
+    
+    dispatch(setBookingData( existAddonInfo ))
   }
 console.log(bookingData, "bookingData")
   const handleAddService = (e, service) => {
     e.preventDefault();
     // let addInfo = {};
     
-    if (!bookingData?.addonInfo?.serviceList) {
+    if (!bookingData?.serviceList) {
       handleDetails('serviceList', [service.id])
       // addInfo.serviceList = [service.id]
     } else {
-      if (!bookingData.addonInfo.serviceList.includes(service.id)) {
-        let existServices = [...bookingData.addonInfo.serviceList, service.id];
+      if (!bookingData.serviceList.includes(service.id)) {
+        let existServices = [...bookingData.serviceList, service.id];
         // addInfo.serviceList = existServices;
         handleDetails('serviceList', existServices)
       }
     }
-    // let initialTotal = bookingData?.addonInfo?.total || 0;
+    // let initialTotal = bookingData?.total || 0;
     // let total = +(initialTotal + service.price).toFixed(2); 
     // addInfo.total = total;
     dispatch(setServiceTotalAdd(service.price))
@@ -99,16 +99,16 @@ console.log(bookingData, "bookingData")
 
   const handleRemoveService = (e, service) => {
     e.preventDefault();
-    if (!bookingData.addonInfo.serviceList) {
+    if (!bookingData.serviceList) {
       alert("No services selected")
       return false;
     } else {
-      let existServices = bookingData.addonInfo.serviceList.filter((item) => item !== service.id);
+      let existServices = bookingData.serviceList.filter((item) => item !== service.id);
       handleDetails('serviceList', existServices)
 
       // dispatch(setBookingData({ key: 'serviceList', value: existServices }))
     }
-    // let initialTotal = bookingData?.addonInfo?.total || 0;
+    // let initialTotal = bookingData?.total || 0;
     // let total = +(initialTotal - service.price).toFixed(2); 
     dispatch(setServiceTotalRemove(service.price))
 
@@ -354,7 +354,7 @@ console.log(bookingData, "bookingData")
                                   </div>
                                   <span className="adon-price">{service.price} ֏</span>
                                   {
-                                    !bookingData?.addonInfo?.serviceList?.includes(service.id) ?
+                                    !bookingData?.serviceList?.includes(service.id) ?
                                       <>
                                         <button 
                                           onClick={(e) => handleAddService(e, service)} 

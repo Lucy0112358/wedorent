@@ -53,10 +53,10 @@ const listingDetails = () => {
 
   const handleDetails = (key, value) => {
     let existBookingInfo = {
-      ...(bookingData.bookingInfo || {}),
+      ...bookingData,
       [key]: value
     };
-    dispatch(setBookingData({ key: 'bookingInfo', value: existBookingInfo }))
+    dispatch(setBookingData( existBookingInfo ))
   }
 
 
