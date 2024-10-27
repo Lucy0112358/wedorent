@@ -25,7 +25,6 @@ const listingDetails = () => {
   const bigImgSliderRef = useRef(null);
   const thumbnailSliderRef = useRef(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const [selectedLocation1, setSelectedLocation1] = useState(null);
   const [date2, setDate2] = useState(null);
   const types = [
     { name: " Newyork Office - 78, 10th street Laplace USA" },
@@ -1404,7 +1403,6 @@ const settings2 = {
                         <li>
                           <label
                             className="booking_custom_check"
-                            data-bs-toggle="tab"
                             data-bs-target="#delivery"
                           >
                             <input
@@ -1421,7 +1419,6 @@ const settings2 = {
                         <li>
                           <label
                             className="booking_custom_check"
-                            data-bs-toggle="tab"
                             onChange={(e) => handleDetails("rent_type", 'pickup')}
                             data-bs-target="#pickup"
                           >
@@ -1567,163 +1564,6 @@ const settings2 = {
                                           "00:00:00",
                                           "HH:mm:ss"
                                         )}
-                                      />
-                                      <span className="form-icon">
-                                        <i className="fa-regular fa-clock" />
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
-                            <li className="column-group-last">
-                              <div className="input-block mb-0">
-                                <div className="search-btn">
-                                  <Link
-                                    to={routes.bookingCheckout}
-                                    className="btn btn-primary check-available w-100"
-                                  >
-                                    Book
-                                  </Link>
-                                  <Link
-                                    to="#"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#enquiry"
-                                    className="btn btn-theme"
-                                  >
-                                    Enquire Us
-                                  </Link>
-                                </div>
-                              </div>
-                            </li>
-                          </ul>
-                        </form>
-                      </div>
-                      <div className="tab-pane fade" id="pickup">
-                        <form className="">
-                          <ul>
-                            <li className="column-group-main">
-                              <div className="input-block">
-                                <label>Delivery Location</label>
-                                <div className="group-img">
-                                  <Dropdown
-                                    value={selectedLocation1}
-                                    onChange={(e) =>
-                                      setSelectedLocation1(e.value)
-                                    }
-                                    options={Location}
-                                    optionLabel="name"
-                                    placeholder="Newyork Office - 78, 10th street Laplace USA"
-                                    className="w-100"
-                                  />
-                                </div>
-                              </div>
-                            </li>
-                            <li className="column-group-main">
-                              <div className="input-block">
-                                <label className="custom_check d-inline-flex location-check m-0">
-                                  <span>Return to same location</span>
-                                  <input type="checkbox" name="remeber" />
-                                  <span className="checkmark" />
-                                </label>
-                              </div>
-                            </li>
-                            <li className="column-group-main">
-                              <div className="input-block">
-                                <label>Delivery Location</label>
-                                <div className="group-img">
-                                  <Dropdown
-                                    value={selectedLocation}
-                                    onChange={(e) =>
-                                      setSelectedLocation(e.value)
-                                    }
-                                    options={types}
-                                    optionLabel="name"
-                                    placeholder="Newyork Office - 78, 10th street Laplace USA"
-                                    className="w-100"
-                                  />
-                                </div>
-                              </div>
-                            </li>
-                            <li className="column-group-main">
-                              <div className="input-block">
-                                <label>Return Location</label>
-                                <div className="group-img">
-                                  <div className="form-wrap">
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      placeholder="78, 10th street Laplace USA"
-                                    />
-                                    <span className="form-icon">
-                                      <i className="fa-solid fa-location-crosshairs" />
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
-                            <li className="column-group-main">
-                              <div className="input-block m-0">
-                                <label>Pickup Date</label>
-                              </div>
-                              <div className="input-block-wrapp sidebar-form">
-                                <div className="input-block  me-lg-2">
-                                  <div className="group-img">
-                                    <div className="form-wrap">
-                                      <input
-                                        type="text"
-                                        className="form-control datetimepicker"
-                                        placeholder="04/11/2023"
-                                      />
-                                      <span className="form-icon">
-                                        <i className="fa-regular fa-calendar-days" />
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="input-block">
-                                  <div className="group-img">
-                                    <div className="form-wrap">
-                                      <input
-                                        type="text"
-                                        className="form-control timepicker"
-                                        placeholder="11:00 AM"
-                                      />
-                                      <span className="form-icon">
-                                        <i className="fa-regular fa-clock" />
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
-                            <li className="column-group-main">
-                              <div className="input-block m-0">
-                                {" "}
-                                <label>Return Date</label>
-                              </div>
-                              <div className="input-block-wrapp sidebar-form">
-                                <div className="input-block me-2">
-                                  <div className="group-img">
-                                    <div className="form-wrap">
-                                      <input
-                                        type="text"
-                                        className="form-control datetimepicker"
-                                        placeholder="04/11/2023"
-                                      />
-                                      <span className="form-icon">
-                                        <i className="fa-regular fa-calendar-days" />
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="input-block">
-                                  <div className="group-img">
-                                    <div className="form-wrap">
-                                      <input
-                                        type="text"
-                                        className="form-control timepicker"
-                                        placeholder="11:00 AM"
                                       />
                                       <span className="form-icon">
                                         <i className="fa-regular fa-clock" />

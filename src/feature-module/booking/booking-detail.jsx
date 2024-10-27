@@ -4,6 +4,7 @@ import Breadcrumbs from "../common/breadcrumbs";
 import { Dropdown } from "primereact/dropdown";
 import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../router/all_routes";
+import Aos from "aos";
 import { useDispatch, useSelector } from "react-redux";
 import { getBookingData, setBookingData } from "../../core/data/redux/slice/bookingSlice";
 import { useTranslation } from "react-i18next";
