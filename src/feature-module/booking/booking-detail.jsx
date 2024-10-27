@@ -8,6 +8,7 @@ import Aos from "aos";
 import { useDispatch, useSelector } from "react-redux";
 import { getBookingData, setBookingData } from "../../core/data/redux/slice/bookingSlice";
 import { useTranslation } from "react-i18next";
+import { sendBooking } from "../../core/data/redux/api/bookingApi";
 
 const BookingDetail = () => {
   //Billing part
@@ -29,9 +30,11 @@ const BookingDetail = () => {
   ];
   //Start Booking part
 
-  //part lang
-  const { t } = useTranslation();
-
+    //part lang
+    const { t } = useTranslation();
+    //end part lang
+  const [frontPhoto, setFrontPhoto] = useState(null);
+  const [backPhoto, setBackPhoto] = useState(null);
   const dispatch = useDispatch();
   const bookingData = useSelector(getBookingData);
   console.log(bookingData, "bookingDatabookingDatabookingData")
@@ -53,8 +56,10 @@ const BookingDetail = () => {
 
   const handleFileUploadFront = (event) => {
     const file = event.target.files[0];
+
     if (file) {
       setFileNameFront(file.name);
+      setFrontPhoto(file)
     }
   };
 
@@ -62,13 +67,21 @@ const BookingDetail = () => {
     const file = event.target.files[0];
     if (file) {
       setFileNameBack(file.name);
+      setBackPhoto(file)
     }
   };
-  
+
+  const handleSendAllBillingInfo = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("frontPhoto", frontPhoto);
+    formData.append("backPhoto", backPhoto);
+    formData.append("allInfo", JSON.stringify(bookingData));
+
+    dispatch(sendBooking(formData))
+  }
 
   //End Booking part
-
-
 
 
   const country = [{ name: "Armenia" }, { name: "Georgia" }];
@@ -560,15 +573,15 @@ const BookingDetail = () => {
                                   </span>
                                   or Drag Photo Front
                                 </span>
-                                <input 
-                                  type="file" 
-                                  id="image_sign"  
+                                <input
+                                  type="file"
+                                  id="image_sign"
                                   accept=".jpeg, .jpg, .png"
                                   onChange={handleFileUploadFront}
-                                  />
-                                  <div id="frames">
-                                    {fileNameFront && <p>Uploaded file: {fileNameFront}</p>}
-                                  </div>
+                                />
+                                <div id="frames">
+                                  {fileNameFront && <p>Uploaded file: {fileNameFront}</p>}
+                                </div>
                                 <div id="frames" />
                               </div>
                               <div className="profile-uploader">
@@ -579,15 +592,15 @@ const BookingDetail = () => {
                                   </span>
                                   or Drag Photo Back
                                 </span>
-                                <input 
-                                  type="file" 
+                                <input
+                                  type="file"
                                   id="image_sign"
                                   accept=".jpeg, .jpg, .png"
                                   onChange={handleFileUploadBack}
-                                  />
-                                  <div id="frames">
-                                    {fileNameBack && <p>Uploaded file: {fileNameBack}</p>}
-                                  </div>
+                                />
+                                <div id="frames">
+                                  {fileNameBack && <p>Uploaded file: {fileNameBack}</p>}
+                                </div>
                                 <div id="frames" />
                               </div>
                               {/* <p className="img-size-info">
@@ -624,7 +637,7 @@ const BookingDetail = () => {
                         Back to Add-ons
                       </Link>
                       <button
-                        onClick={navigatePath}
+                        onClick={handleSendAllBillingInfo}
                         className="btn btn-primary continue-book-btn"
                         type="submit"
                       >
