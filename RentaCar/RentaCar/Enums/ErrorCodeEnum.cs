@@ -7,7 +7,8 @@ namespace RentaCar.Enums
         [Description("The input must not contain HTML.")]
         InputPotentiallyDangerous = 3701,
 
-
+        [Description("Invalid date")]
+        InvalidDate = 3701
 
     }
 }

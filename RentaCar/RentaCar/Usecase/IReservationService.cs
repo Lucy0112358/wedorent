@@ -7,12 +7,12 @@ namespace RentaCar.Usecase
 {
     public interface IReservationService
     {
-        // Don't forget to check the caar availability here by carId and dates
+        // Don't forget to check the car availability here by carId and dates
         public ReservationResult ReserveACar(ReservationRequest request);
 
-        public List<CarResult> AvailableCarsForMentionedDays(CheckoutRequest request);
+        public List<Car> GetCarsForDays(AvailableCarsRequest request);
 
-        public List<Service> GetAllServices();
+        public List<Entity.Services> GetAllServices();
 
     }
 }

@@ -2,9 +2,8 @@
 using Npgsql;
 using System.Data;
 
-namespace RentaCar.Repository
+namespace Domain.Repositories
 {
-
     public class PostgreSqlConnection : IDisposable
     {
         private readonly string _connectionString;

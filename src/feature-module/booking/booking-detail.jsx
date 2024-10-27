@@ -7,6 +7,7 @@ import { all_routes } from "../router/all_routes";
 import { useDispatch, useSelector } from "react-redux";
 import { getBookingData, setBookingData } from "../../core/data/redux/slice/bookingSlice";
 import { useTranslation } from "react-i18next";
+import Aos from "aos";
 
 const BookingDetail = () => {
   //Billing part

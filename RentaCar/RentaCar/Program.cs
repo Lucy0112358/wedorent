@@ -1,39 +1,61 @@
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Mvc;
+using Npgsql;
+using RentaCar.Configuration;
 using RentaCar.Entity;
+using RentaCar.Repository;
+using RentaCar.Usecase;
+using RentaCar.Usecase.Services;
+using System.Data;
 
-
-// https://onedrive.live.com/personal/b64ff452362245e8/_layouts/15/Doc.aspx?sourcedoc=%7B2b31c85b-827d-4834-a490-fff8fac76c75%7D&action=default&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3cvYy9iNjRmZjQ1MjM2MjI0NWU4L0VWdklNU3Q5Z2pSSXBKRF8tUHJIYkhVQjEyTEdqemg1ajJLaEo3d0ZCalY2SGc_ZT15U3dzeXY&slrid=87b65ca1-1067-a000-2020-f94385914318&originalPath=aHR0cHM6Ly8xZHJ2Lm1zL3cvYy9iNjRmZjQ1MjM2MjI0NWU4L0VWdklNU3Q5Z2pSSXBKRF8tUHJIYkhVQjEyTEdqemg1ajJLaEo3d0ZCalY2SGc_cnRpbWU9MWFTeG9GbnozRWc&CID=4286938a-dbdd-4aaf-95db-b0742be5ac7e&_SRM=0:G:54
-namespace RentaCar
+namespace MqttService
 {
     public class Program
     {
-        [Obsolete]
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddFluentValidationAutoValidation();
-            builder.Services.AddFluentValidationClientsideAdapters();
-            //  builder.Services.AddValidatorsFromAssemblyContaining<MyValidator>();
+            // Configure settings
+            builder.Configuration.AddJsonFile("appsettings.json");
 
-            // Optionally, customize how validation failures are handled
-            builder.Services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.InvalidModelStateResponseFactory = context =>
-                {
-                    return new BadRequestObjectResult(context.ModelState);
-                };
-            });
-
+            // Add services to the container.
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            var app = builder.Build();
+            // Register repositories and services
+            builder.Services.AddScoped<BaseRepository>();
+            builder.Services.AddScoped<ReservationRepository>();
+            builder.Services.AddScoped<CarRepository>();
+            builder.Services.AddScoped<ISanitizer, Sanitizer>();
+            builder.Services.AddScoped<ICarService, CarService>();
+            builder.Services.AddScoped<IReservationService, RentaCar.Usecase.Services.ReservationService> ();
+            //      builder.Services.AddScoped<IReservationService, ReservationService>();
 
-            // Configure the HTTP request pipeline.
+            // Register PostgreSQL connection
+            builder.Services.AddTransient<IDbConnection>(sp =>
+            {
+                var configuration = sp.GetRequiredService<IConfiguration>();
+                var connectionString = configuration.GetConnectionString("PostgreSqlConnection");
+                return new NpgsqlConnection(connectionString);
+            });
+
+            builder.Services.AddScoped<NpgsqlConnection>(provider =>
+            {
+                var configuration = provider.GetRequiredService<IConfiguration>();
+                var connectionString = configuration.GetConnectionString("PostgreSqlConnection");
+                return new NpgsqlConnection(connectionString);
+            });
+
+
+
+            var app = builder.Build();
+            app.UseCors(options =>
+                options.WithOrigins("http://localhost:5173")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -41,14 +63,8 @@ namespace RentaCar
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
-
-            app.MapReservationEndpoints();
-
             app.Run();
         }
     }

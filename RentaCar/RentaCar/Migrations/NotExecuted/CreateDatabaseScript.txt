@@ -1,6 +1,8 @@
 CREATE TABLE Services (
     Id SERIAL PRIMARY KEY,                -- Auto-incrementing primary key
-    Name VARCHAR(255) NOT NULL,           -- Name of the service, cannot be null
+    Title VARCHAR(255) NOT NULL,           -- Name of the service, cannot be null
+    Description VARCHAR(255) NOT NULL,           -- Name of the service, cannot be null
+    IconName VARCHAR(255) NOT NULL,           -- Name of the service, cannot be null
     Price DECIMAL(10, 2) NOT NULL,        -- Price of the service with two decimal precision
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,   -- Timestamp for creation, defaults to current time
     ModifiedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP   -- Timestamp for modification, defaults to current time

@@ -40,7 +40,7 @@ const listingDetails = () => {
   const data = useParams();
   const paramsId = data.id;
   const navigate = useNavigate();
-  const bookingCar = useSelector(getBookingCar)
+  const bookingCar = useSelector(getBookingCar);
   useEffect(() => {
     if (paramsId) {
       dispatch(getCar(paramsId));

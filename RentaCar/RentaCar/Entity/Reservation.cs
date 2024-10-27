@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }
+        public int CarId { get; set; }
         public decimal TotalAmount { get; set; }
         public int OrderStatusId { get; set; }
         public DateTime StartDate { get; set; }

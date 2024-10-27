@@ -3,13 +3,14 @@ using RentaCar.Configuration;
 using Npgsql;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
+using Domain.Repositories;
 
 namespace RentaCar.Repository
 {
     public class BaseRepository
     {
-        public readonly string furchaSchema = "public";
-        private readonly NpgsqlConnection furchaContext;
+        public readonly string carSchema = "public";
+        protected readonly NpgsqlConnection carContext;
         private const string _defaultPkColumnName = "Id";
         private const string _createdDate = "CreatedDate";
         private const string _modifiedDate = "ModifiedDate";
@@ -17,7 +18,7 @@ namespace RentaCar.Repository
 
         public BaseRepository(NpgsqlConnection dbConnection, ISanitizer sanitizer)
         {
-            furchaContext = dbConnection;
+            carContext = dbConnection;
             this.sanitizer = sanitizer;
         }
 
@@ -33,7 +34,7 @@ namespace RentaCar.Repository
             // In case the schema is not defined, return the default schema.
             if (tableAttribute == null || string.IsNullOrEmpty(tableAttribute.Schema))
             {
-                return furchaSchema;
+                return carSchema;
             }
 
             return tableAttribute.Schema;
@@ -50,14 +51,14 @@ namespace RentaCar.Repository
         {
             var schema = GetSchema(typeof(T));
             var sql = $@"SELECT * 
-                 FROM ""{schema}"".""{typeof(T).Name}""";
+                 FROM ""{schema}"".{typeof(T).Name}";
 
             if (where.IsNotNullOrEmpty())
             {
                 sql += $" WHERE {where}";
             }
 
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 return sqlConnection.Query<T>(sql: sql, param: whereParam);
             }
@@ -88,7 +89,7 @@ namespace RentaCar.Repository
                 sql += $" WHERE {where}";
             }
 
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 return sqlConnection.Query(sql: sql, map, param: whereParam);
             }
@@ -118,7 +119,7 @@ namespace RentaCar.Repository
                 sql += $" WHERE {where}";
             }
 
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 return sqlConnection.Query<T>(sql: sql, param: whereParam);
             }
@@ -138,7 +139,7 @@ namespace RentaCar.Repository
                  FROM ""{schema}"".""{typeof(T).Name}""
                  WHERE ""Id"" = @Id
                  LIMIT 1";
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 return sqlConnection.Query<T>(sql: sql).FirstOrDefault();
             }
@@ -157,7 +158,7 @@ namespace RentaCar.Repository
                  FROM ""{schema}"".""{typeof(T).Name}""
                  WHERE ""Id"" = {id}
                  LIMIT 1";
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 return sqlConnection.Query<T>(sql: sql).Single();
             }
@@ -170,7 +171,7 @@ namespace RentaCar.Repository
                  FROM ""{schema}"".""{typeof(T).Name}""
                  WHERE ""Id"" = @Id
                  LIMIT 1";
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 return sqlConnection.Query<T>(sql: sql).SingleOrDefault();
             }
@@ -197,7 +198,7 @@ namespace RentaCar.Repository
                 sql += $" WHERE {where}";
             }
 
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 return sqlConnection.Query<T>(sql: sql, param: whereParam).Single();
             }
@@ -228,7 +229,7 @@ namespace RentaCar.Repository
                 sql += $" ORDER BY {orderBy}";
             }
 
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 return sqlConnection.Query<T>(sql: sql, param: whereParam).SingleOrDefault();
             }
@@ -243,7 +244,7 @@ namespace RentaCar.Repository
         /// <returns>A single entity or an exception</returns>
         protected T QuerySingle<T>(string sql, object param = null)
         {
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 return sqlConnection.Query<T>(sql: sql, param: param).Single();
             }
@@ -258,7 +259,7 @@ namespace RentaCar.Repository
         /// <returns>A single entity or null</returns>
         protected T QuerySingleOrDefault<T>(string sql, object param = null)
         {
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 return sqlConnection.Query<T>(sql: sql, param: param).SingleOrDefault();
             }
@@ -272,7 +273,7 @@ namespace RentaCar.Repository
         /// <returns>The retrieved entity or an empty enumerable</returns>
         protected IEnumerable<dynamic> Query(string sql, object param = null, int? commandTimeout = null)
         {
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 return sqlConnection.Query(sql: sql, param: param, commandTimeout: commandTimeout);
             }
@@ -287,7 +288,7 @@ namespace RentaCar.Repository
         /// <returns>The retrieved entity or an empty enumerable</returns>
         protected IEnumerable<T> Query<T>(string sql, object param = null)
         {
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 return sqlConnection.Query<T>(sql: sql, param: param);
             }
@@ -302,7 +303,7 @@ namespace RentaCar.Repository
         /// <returns>The retrieved entity or an empty enumerable</returns>
         protected IEnumerable<T> Query<T, T1>(string sql, Func<T, T1, T> map, object param = null)
         {
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 return sqlConnection.Query(sql: sql, map: map, param: param);
             }
@@ -317,7 +318,7 @@ namespace RentaCar.Repository
         /// <returns>The retrieved entity or an empty enumerable</returns>
         protected IEnumerable<T> Query<T, T1, T2>(string sql, Func<T, T1, T2, T> map, object param = null)
         {
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 return sqlConnection.Query(sql: sql, map: map, param: param);
             }
@@ -332,7 +333,7 @@ namespace RentaCar.Repository
         /// <returns>The retrieved entity or an empty enumerable</returns>
         protected IEnumerable<T> Query<T, T1, T2, T3>(string sql, Func<T, T1, T2, T3, T> map, object param = null)
         {
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 return sqlConnection.Query(sql: sql, map: map, param: param);
             }
@@ -347,7 +348,7 @@ namespace RentaCar.Repository
         /// <returns>The retrieved entity or an empty enumerable</returns>
         protected IEnumerable<T> Query<T, T1, T2, T3, T4>(string sql, Func<T, T1, T2, T3, T4, T> map, object param = null)
         {
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 return sqlConnection.Query(sql: sql, map: map, param: param);
             }
@@ -371,7 +372,7 @@ namespace RentaCar.Repository
                 WHERE T.""Id"" = @Id
                 LIMIT 1";
 
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 var result = sqlConnection.Query<T, T1>(
                     sql: sql,
@@ -407,7 +408,7 @@ namespace RentaCar.Repository
                 LEFT JOIN ""{schema}"".""{typeof(T1).Name}"" T1 ON T.""{foreignKeyColumnName}"" = T1.""Id""
                 WHERE T.""Id"" = ANY(@ids)";
 
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 var result = sqlConnection.Query<T, T1>(
                     sql: sql,
@@ -450,7 +451,7 @@ namespace RentaCar.Repository
                 sql += $" WHERE {where}";
             }
 
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 var result = sqlConnection.Query<T, T1>(
                     sql: sql,
@@ -485,7 +486,7 @@ namespace RentaCar.Repository
         /// </summary>
         protected IEnumerable<T> Insert<T>(IEnumerable<T> objectsToInsert)
         {
-            using (var sqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+            using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {
                 var insertedItems = new List<T>();
 
@@ -568,7 +569,7 @@ namespace RentaCar.Repository
             }
             else
             {
-                using (var internalSqlConnection = new PostgreSqlConnection(furchaContext.ConnectionString))
+                using (var internalSqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
                 {
                     return internalSqlConnection.Query<T>(sql: sql, param: param).Single();
                 }

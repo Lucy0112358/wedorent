@@ -1,9 +1,9 @@
 ﻿namespace RentaCar.DataModels
 {
-    public class CheckoutRequest
+    public class AvailableCarsRequest
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public int CarId { get; set; }
+
     }
 }
