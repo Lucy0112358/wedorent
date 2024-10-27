@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../router/all_routes";
 import { useDispatch, useSelector } from "react-redux";
 import { getBookingData, setBookingData } from "../../core/data/redux/slice/bookingSlice";
+import dayjs from "dayjs";
 
 const BookingCheckout = () => {
   const routes = all_routes;
@@ -23,8 +24,6 @@ const BookingCheckout = () => {
   console.log(bookingData, "bookingDatabookingDatabookingData")
   const dispatch = useDispatch()
   const handleBookingData = (key, value) => {
-    // console.log(key, value)
-    // dispatch(setBookingData({ key, value }))
     let existBookingInfo = {
       ...(bookingData.bookingInfo || {}),
       [key]: value
@@ -286,13 +285,6 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                   value={bookingData?.bookingInfo?.location}
                                   onChange={(e) => handleBookingData("location", e.target.value)}
                                 />
-                                <Link
-                                  to="#"
-                                  className="btn btn-secondary location-btn d-flex align-items-center"
-                                >
-                                  <i className="bx bx-current-location me-2" />
-                                  Current Location
-                                </Link>
                               </div>
                             </div>
                             <div className="input-block m-0">
@@ -316,13 +308,6 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                   onChange={(e) => handleBookingData("returnLocation", e.target.value)}
                                   value={bookingData?.bookingInfo?.returnLocation}
                                 />
-                                <Link
-                                  to="#"
-                                  className="btn btn-secondary location-btn d-flex align-items-center"
-                                >
-                                  <i className="bx bx-current-location me-2" />
-                                  Current Location
-                                </Link>
                               </div>
                             </div>
                           </div>
@@ -330,7 +315,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                       </>
                     )}
 
-                    {bookingData && bookingData.rent_type === "pickup" && (
+                    {bookingData?.bookingInfo?.rent_type === "pickup" && (
                       <>
                         <div className="booking-information-card pickup-location">
                           <div className="booking-info-head">
@@ -415,7 +400,10 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                   <TimePicker
                                     placeholder="Choose Time"
                                     className="form-control timepicker"
-                                    value={bookingData?.bookingInfo?.pickerOne}
+                                    defaultValue={dayjs(
+                                      bookingData?.bookingInfo?.pickerOne || "00:00:00",
+                                      "HH:mm:ss"
+                                    )}
                                     onChange={pickerOne}
                                   />
                                   <span className="input-cal-icon">
@@ -434,7 +422,6 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                     className="datetimepicker bg-custom"
                                     // value={date2}
                                     // onChange={(e) => setDate2(e.value)}
-                                    value={bookingData?.bookingInfo?.pickupDateTwo}
                                     onChange={(e) => handleBookingData("pickupDateTwo", e.value)}
                                     placeholder="Choose Date"
                                   />
@@ -451,10 +438,13 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                 </label>
                                 <div className="group-img style-custom">
                                   <TimePicker
-                                    placeholder="Choose Time"
-                                    className="form-control timepicker"
-                                    value={bookingData?.bookingInfo?.pickerTwo}
-                                    onChange={pickerTwo}
+                                     placeholder="Choose Time"
+                                     className="form-control timepicker"
+                                     defaultValue={dayjs(
+                                      bookingData?.bookingInfo?.pickerTwo || "00:00:00",
+                                      "HH:mm:ss"
+                                    )}
+                                     onChange={pickerTwo}
                                   />
                                   <span className="input-cal-icon">
                                     <i className="bx bx-time" />

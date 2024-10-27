@@ -48,6 +48,7 @@ const listingDetails = () => {
     }
   }, [paramsId]);
   const bookingData = useSelector(getBookingData)
+
   console.log(bookingData, "bookingDatabookingDatabookingData")
 
   const handleDetails = (key, value) => {
@@ -68,11 +69,11 @@ const listingDetails = () => {
   }
 
   const pickerOne = (time, timeString) => {
-    handleDetails('pickerOne', time)
+    handleDetails('pickerOne', timeString)
   };
 
   const pickerTwo = (time, timeString) => {
-    handleDetails('pickerTwo', time)
+    handleDetails('pickerTwo', timeString)
   };
 
 
@@ -1512,7 +1513,7 @@ const settings2 = {
                                   <div className="group-img">
                                     <div className="form-wrap">
                                       <TimePicker
-                                        placeholder="11:00 AM"
+                                        placeholder="Choose Time"
                                         className="form-control timepicker"
                                         onChange={pickerOne}
                                         defaultValue={dayjs(
@@ -1557,7 +1558,7 @@ const settings2 = {
                                   <div className="group-img">
                                     <div className="form-wrap">
                                       <TimePicker
-                                        placeholder="11:00 AM"
+                                        placeholder="Choose Time"
                                         className="form-control timepicker"
                                         onChange={pickerTwo}
                                         defaultValue={dayjs(
