@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RentaCar.ApplicationModels.Domain.Configuration;
+using RentaCar.DataModels;
+using RentaCar.Entity;
 using RentaCar.Repository;
 
 namespace RentaCar.Controllers
@@ -7,10 +10,12 @@ namespace RentaCar.Controllers
     [ApiController]
     public class ReservationController : ControllerBase
     {
-        private readonly ReservationRepository _serviceRepository;
-        public ReservationController(ReservationRepository serviceRepository)
+        private readonly ReservationRepository _reservationRepository;
+        private readonly ReservationService _reservationService;
+        public ReservationController(ReservationRepository serviceRepository, ReservationService reservationService)
         {
-            _serviceRepository = serviceRepository;
+            _reservationRepository = serviceRepository;
+            _reservationService = reservationService;
         }
 
         /// <summary>
@@ -18,19 +23,22 @@ namespace RentaCar.Controllers
         /// </summary>
         /// <returns>A list of all services.</returns>
         [HttpGet("GetAllServices")]
-        public ActionResult<IEnumerable<Entity.Services>> GetAllServices()
+        public ActionResult<ApiResult<IEnumerable<Entity.Services>>> GetAllServices()
         {
-            // Retrieve all services
-            var services = _serviceRepository.GetAllServices();
+            var services = _reservationRepository.GetAllServices();
 
-            // Check if any services were found
             if (services == null || !services.Any())
             {
-                return NotFound("No services found.");
+                return NotFound(ApiResult<IEnumerable<Entity.Services>>.ErrorResult("No services found."));
             }
 
-            // Return the list of services
-            return Ok(services);
+            return Ok(ApiResult<IEnumerable<Entity.Services>>.Success(services));
+        }
+
+        public ActionResult<ApiResult<IEnumerable<Car>>> GetCarsForDays(AvailableCarsRequest request)
+        {
+            var cars = _reservationService.GetCarsForDays(request);
+            return Ok(ApiResult<IEnumerable<Car>>.Success(cars));
         }
     }
 }

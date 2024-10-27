@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RentaCar.ApplicationModels.Domain.Configuration;
 using RentaCar.Entity;
 using RentaCar.Usecase;
 
@@ -15,16 +16,16 @@ namespace RentaCar.Controllers
         }
 
         [HttpGet("Cars")]
-        public ActionResult<IEnumerable<Car>> GetAllCars()
+        public ActionResult<ApiResult<IEnumerable<Car>>> GetAllCars()
         {
             var cars = _carService.GetCars();
 
             if (cars == null || !cars.Any())
             {
-                return NotFound("No cars found.");
+                return NotFound(ApiResult<IEnumerable<Car>>.ErrorResult("No cars found."));
             }
 
-            return Ok(cars);
+            return Ok(ApiResult<IEnumerable<Car>>.Success(cars));
         }
     }
 }
