@@ -3,6 +3,7 @@ using RentaCar.DataModels;
 using RentaCar.Entity;
 using RentaCar.Exceptionss;
 using RentaCar.Repository;
+using System.Transactions;
 
 namespace RentaCar.Usecase.Services
 {
@@ -40,9 +41,37 @@ namespace RentaCar.Usecase.Services
             throw new NotImplementedException();
         }
 
-        public ReservationResult ReserveACar(ReservationRequest request)
+        public bool ReserveACar(ReservationRequest request)
         {
-            throw new NotImplementedException();
+            using (var transactionScope = new TransactionScope())
+            {
+                var customer = new Customer
+                {
+                    Name = request.Name,
+                    Surname = request.Surname,
+                    Email = request.Email,
+                    Phone = request.Phone,
+
+                };
+
+                customer = _reservationRepository.AddCustomer(customer);
+
+                var reservation = new Reservation
+                {
+                    CustomerId = customer.Id,
+                    //  TotalAmount = CalculateTotalAmount(request.Services),
+                    //  ReservationStatusId = GetDefaultReservationStatusId(), // Define this method to get the default status
+                    StartDate = request.StartDate,
+                    EndDate = request.EndDate,
+                    StartAddress = request.StartAddress,
+                    EndAddress = request.EndAddress,
+                    CarId = request.CarId 
+                };
+
+                reservation = _reservationRepository.AddReservation(reservation);
+
+                return true;
+            }
         }
     }
 }

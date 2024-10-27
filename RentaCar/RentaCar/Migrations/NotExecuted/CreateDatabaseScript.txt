@@ -12,7 +12,7 @@ CREATE TABLE Customer (
     Id SERIAL PRIMARY KEY,                   -- Auto-incrementing primary key
     Name VARCHAR(255) NOT NULL,              -- First name of the customer
     Surname VARCHAR(255) NOT NULL,           -- Surname of the customer
-    Email VARCHAR(255) UNIQUE NOT NULL,      -- Email of the customer, must be unique and not null
+    Email VARCHAR(255) NOT NULL,      -- Email of the customer, must be unique and not null
     Phone VARCHAR(20),                       -- Phone number of the customer
     BirthDay DATE,                           -- Date of birth
     FrontPage BYTEA,                         -- Front page image or document (e.g., ID front page)

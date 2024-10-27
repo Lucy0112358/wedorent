@@ -8,7 +8,10 @@ namespace RentaCar.Enums
         InputPotentiallyDangerous = 3701,
 
         [Description("Invalid date")]
-        InvalidDate = 3701
+        InvalidDate = 3702,
 
+        [Description("Something went wrong")]
+        GenericErrorRetry = 3703
+            
     }
 }

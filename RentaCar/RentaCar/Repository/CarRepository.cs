@@ -26,7 +26,10 @@ namespace RentaCar.Repository
             int reservationCount = QuerySingle<int>(sql, new { CarId = carId, StartDate = startDate, EndDate = endDate });
             return reservationCount == 0;
         }
-
+        public Car AddCar(Car car)
+        {
+            return Insert(car);
+        }
 
         public List<Car> Cars()
         {

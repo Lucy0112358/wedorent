@@ -32,5 +32,15 @@ namespace RentaCar.Repository
             return _dbConnection.Query<Reservation>(sql, new { StartDate = startDate, EndDate = endDate });
         }
 
+        public Reservation AddReservation(Reservation reservation)
+        {
+           return Insert(reservation);
+        }
+
+        public Customer AddCustomer(Customer customer)
+        {
+            return Insert(customer);
+        }
+
     }
 }

@@ -8,7 +8,7 @@ namespace RentaCar.Usecase
     public interface IReservationService
     {
         // Don't forget to check the car availability here by carId and dates
-        public ReservationResult ReserveACar(ReservationRequest request);
+        public bool ReserveACar(ReservationRequest request);
 
         public List<Car> GetCarsForDays(AvailableCarsRequest request);
 

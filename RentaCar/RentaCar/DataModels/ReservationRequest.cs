@@ -16,5 +16,7 @@
         public string Email { get; set; }
         public string Phone { get; set; }
         public string DrivingLicence { get; set; }
+
+        public int CarId { get; set; }
     }
 }
