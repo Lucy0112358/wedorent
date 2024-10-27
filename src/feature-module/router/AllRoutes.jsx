@@ -12,6 +12,8 @@ import Header from "../common/header";
 import Footer from "../common/footer";
 import Progress from "../common/progressbar";
 import { all_routes } from "./all_routes";
+import { ToastContainer, toast } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css';
 
 const AllRoutes = () => {
   const routes =all_routes
@@ -38,9 +40,12 @@ const AllRoutes = () => {
       <Footer />
     </>
   );
+  const notify = () => toast("Wow so easy!");
 
   return (
     <>
+      <button onClick={notify}>Notify!!!!!!!!!!!!!!!!!!!!!!!!</button>
+      <ToastContainer />
       <Routes>
         <Route
             path="/"

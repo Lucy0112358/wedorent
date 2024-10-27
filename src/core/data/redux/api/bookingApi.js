@@ -26,7 +26,7 @@ export const getCar = createAsyncThunk(
         console.log(id, "sssssssssssssssssssss")
         const config = {
           method: "get",
-          url: `cars/${id}`,
+          url: `Car/${id}`,
         };
         
         const response = await instance(config);
@@ -46,7 +46,7 @@ export const sendBooking = createAsyncThunk(
         const config = {
           data: data,
           method: "post",
-          url: '/cars',
+          url: '/Reservation/addReservation',
         };
         console.log(config, "config")
         const response = await instance(config);

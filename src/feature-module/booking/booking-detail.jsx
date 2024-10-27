@@ -39,11 +39,13 @@ const BookingDetail = () => {
   const bookingData = useSelector(getBookingData);
   console.log(bookingData, "bookingDatabookingDatabookingData")
   const handleDetails = (key, value) => {
+
     let existBillingInfo = {
-      ...(bookingData.billingInfo || {}),
+      ...bookingData,
       [key]: value
     };
-    dispatch(setBookingData({ key: 'billingInfo', value: existBillingInfo }))
+    
+    dispatch(setBookingData( existBillingInfo ))
   }
 
   const setSelectedCountryHandle = (value) => {
@@ -73,10 +75,12 @@ const BookingDetail = () => {
 
   const handleSendAllBillingInfo = (e) => {
     e.preventDefault();
+    let afterSendBookingInfo = bookingData;
+    
     const formData = new FormData();
     formData.append("frontPhoto", frontPhoto);
     formData.append("backPhoto", backPhoto);
-    formData.append("allInfo", JSON.stringify(bookingData));
+    formData.append("allInfo", JSON.stringify(afterSendBookingInfo));
 
     dispatch(sendBooking(formData))
   }

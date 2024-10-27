@@ -25,10 +25,10 @@ const BookingCheckout = () => {
   const dispatch = useDispatch()
   const handleBookingData = (key, value) => {
     let existBookingInfo = {
-      ...(bookingData.bookingInfo || {}),
+      ...bookingData,
       [key]: value
     };
-    dispatch(setBookingData({ key: 'bookingInfo', value: existBookingInfo }))
+    dispatch(setBookingData( existBookingInfo ))
 
   }
 
@@ -238,7 +238,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                               <input
                                 type="radio"
                                 name="rent_type"
-                                checked={bookingData?.bookingInfo?.rent_type === "delivery"}
+                                checked={bookingData?.rent_type === "delivery"}
                                 id="location_delivery"
                                 onChange={(e) => handleBookingData("rent_type", 'delivery')}
                                 defaultChecked
@@ -253,7 +253,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                               <input
                                 type="radio"
                                 name="rent_type"
-                                checked={bookingData?.bookingInfo?.rent_type === "pickup"}
+                                checked={bookingData?.rent_type === "pickup"}
                                 
                                 onChange={(e) => handleBookingData("rent_type", 'pickup')}
                                 id="location_pickup"
@@ -266,7 +266,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                         </ul>
                       </div>
                     </div>
-                    {bookingData?.bookingInfo?.rent_type === "delivery" && (
+                    {bookingData?.rent_type === "delivery" && (
                       <>
                         <div className="booking-information-card delivery-location">
                           <div className="booking-info-head">
@@ -282,7 +282,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                 <input
                                   type="text"
                                   className="form-control mb-0"
-                                  value={bookingData?.bookingInfo?.location}
+                                  value={bookingData?.location}
                                   onChange={(e) => handleBookingData("location", e.target.value)}
                                 />
                               </div>
@@ -293,7 +293,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                 <input 
                                   type="checkbox" 
                                   name="remember" 
-                                  checked={bookingData?.bookingInfo?.sameLocation}
+                                  checked={bookingData?.sameLocation}
                                   onChange={(e) => handleBookingData("sameLocation", e.target.checked)}
                                 />
                                 <span className="checkmark" />
@@ -306,7 +306,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                   type="text"
                                   className="form-control mb-0"
                                   onChange={(e) => handleBookingData("returnLocation", e.target.value)}
-                                  value={bookingData?.bookingInfo?.returnLocation}
+                                  value={bookingData?.returnLocation}
                                 />
                               </div>
                             </div>
@@ -315,7 +315,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                       </>
                     )}
 
-                    {bookingData?.bookingInfo?.rent_type === "pickup" && (
+                    {bookingData?.rent_type === "pickup" && (
                       <>
                         <div className="booking-information-card pickup-location">
                           <div className="booking-info-head">
@@ -331,7 +331,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                 <input
                                   type="text"
                                   className="form-control mb-0"
-                                  value={bookingData?.bookingInfo?.location}
+                                  value={bookingData?.location}
                                   onChange={(e) => handleBookingData("location", e.target.value)}
                                 />
                               </div>
@@ -342,7 +342,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                 <input
                                   type="checkbox" 
                                   name="remember" 
-                                  checked={bookingData?.bookingInfo?.sameLocation}
+                                  checked={bookingData?.sameLocation}
                                   onChange={(e) => handleBookingData("sameLocation", e.target.checked)}
                                 />
                                 <span className="checkmark" />
@@ -354,7 +354,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                 <input
                                   type="text"
                                   onChange={(e) => handleBookingData("returnLocation", e.target.value)}
-                                  value={bookingData?.bookingInfo?.returnLocation}
+                                  value={bookingData?.returnLocation}
                                   className="form-control mb-0"
                                 />
                               </div>
@@ -380,11 +380,8 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                 <div className="group-img">
                                   <Calendar
                                     className="datetimepicker bg-custom"
-                                    // value={date1}
-                                    // onChange={(e) => setDate1(e.value)}
-                                    value={bookingData?.bookingInfo?.pickupDateOne}
+                                    value={bookingData?.pickupDateOne}
                                     onChange={(e) => handleBookingData("pickupDateOne", e.value)}
-
                                     placeholder="Choose Date"
                                   />
                                   <span className="input-cal-icon">
@@ -401,7 +398,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                     placeholder="Choose Time"
                                     className="form-control timepicker"
                                     defaultValue={dayjs(
-                                      bookingData?.bookingInfo?.pickerOne || "00:00:00",
+                                      bookingData?.pickerOne || "00:00:00",
                                       "HH:mm:ss"
                                     )}
                                     onChange={pickerOne}
@@ -420,8 +417,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                 <div className="group-img">
                                   <Calendar
                                     className="datetimepicker bg-custom"
-                                    // value={date2}
-                                    // onChange={(e) => setDate2(e.value)}
+                                    value={bookingData?.pickupDateTwo}
                                     onChange={(e) => handleBookingData("pickupDateTwo", e.value)}
                                     placeholder="Choose Date"
                                   />
@@ -441,7 +437,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                      placeholder="Choose Time"
                                      className="form-control timepicker"
                                      defaultValue={dayjs(
-                                      bookingData?.bookingInfo?.pickerTwo || "00:00:00",
+                                      bookingData?.pickerTwo || "00:00:00",
                                       "HH:mm:ss"
                                     )}
                                      onChange={pickerTwo}
