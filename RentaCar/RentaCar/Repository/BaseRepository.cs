@@ -155,8 +155,8 @@ namespace RentaCar.Repository
         {
             var schema = GetSchema(typeof(T));
             var sql = $@"SELECT * 
-                 FROM ""{schema}"".""{typeof(T).Name}""
-                 WHERE ""Id"" = {id}
+                 FROM ""{schema}"".{typeof(T).Name}
+                 WHERE Id = {id}
                  LIMIT 1";
             using (var sqlConnection = new PostgreSqlConnection(carContext.ConnectionString))
             {

@@ -1,6 +1,6 @@
 ﻿namespace RentaCar.Entity
 {
-    public class ReservationService
+    public class Reservation_Service
     {
         public int Id { get; set; }
         public int ReservationId { get; set; }

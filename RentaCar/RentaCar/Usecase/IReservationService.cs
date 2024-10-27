@@ -1,5 +1,4 @@
-﻿using RentaCar.ApplicationModels;
-using RentaCar.DataModels;
+﻿using RentaCar.DataModels;
 using RentaCar.Entity;
 
 //https://rentcar1.am/

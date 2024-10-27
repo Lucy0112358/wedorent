@@ -28,8 +28,7 @@ namespace MqttService
             builder.Services.AddScoped<CarRepository>();
             builder.Services.AddScoped<ISanitizer, Sanitizer>();
             builder.Services.AddScoped<ICarService, CarService>();
-            builder.Services.AddScoped<IReservationService, RentaCar.Usecase.Services.ReservationService> ();
-            //      builder.Services.AddScoped<IReservationService, ReservationService>();
+            builder.Services.AddScoped<IReservationService, ReservationService>();
 
             // Register PostgreSQL connection
             builder.Services.AddTransient<IDbConnection>(sp =>
@@ -50,7 +49,7 @@ namespace MqttService
 
             var app = builder.Build();
             app.UseCors(options =>
-                options.WithOrigins("http://localhost:5173")
+                options.WithOrigins("http://localhost:3000")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());

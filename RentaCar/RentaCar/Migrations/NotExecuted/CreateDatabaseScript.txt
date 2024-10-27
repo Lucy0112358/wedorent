@@ -43,7 +43,7 @@ CREATE TABLE Reservation (
     CONSTRAINT fk_order_status FOREIGN KEY (ReservationStatusId) REFERENCES ReservationStatus (Id)    -- Foreign key to ReservationStatus
 );
 
-CREATE TABLE ReservationService (
+CREATE TABLE Reservation_Service (
     Id SERIAL PRIMARY KEY,                          -- Auto-incrementing primary key
     ReservationId INT NOT NULL,                     -- Foreign key to the Reservation table
     ServiceId INT NOT NULL,                         -- Foreign key to the Service table

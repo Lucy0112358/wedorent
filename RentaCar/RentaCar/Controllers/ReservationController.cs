@@ -2,7 +2,10 @@
 using RentaCar.ApplicationModels.Domain.Configuration;
 using RentaCar.DataModels;
 using RentaCar.Entity;
+using RentaCar.Enums;
+using RentaCar.Exceptionss;
 using RentaCar.Repository;
+using RentaCar.Usecase;
 
 namespace RentaCar.Controllers
 {
@@ -11,8 +14,8 @@ namespace RentaCar.Controllers
     public class ReservationController : ControllerBase
     {
         private readonly ReservationRepository _reservationRepository;
-        private readonly ReservationService _reservationService;
-        public ReservationController(ReservationRepository serviceRepository, ReservationService reservationService)
+        private readonly IReservationService _reservationService;
+        public ReservationController(ReservationRepository serviceRepository, IReservationService reservationService)
         {
             _reservationRepository = serviceRepository;
             _reservationService = reservationService;
@@ -35,10 +38,35 @@ namespace RentaCar.Controllers
             return Ok(ApiResult<IEnumerable<Entity.Services>>.Success(services));
         }
 
-        public ActionResult<ApiResult<IEnumerable<Car>>> GetCarsForDays(AvailableCarsRequest request)
+        [HttpGet("GetCarsForDays")]
+        public ActionResult<ApiResult<List<Car>>> GetCarsForDays(AvailableCarsRequest request)
         {
             var cars = _reservationService.GetCarsForDays(request);
-            return Ok(ApiResult<IEnumerable<Car>>.Success(cars));
+            return Ok(ApiResult<List<Car>>.Success(cars));
+        }
+
+        [HttpPost("addReservation")]
+        public ActionResult<ApiResult<bool>> ReserveACar([FromBody] ReservationRequest request)
+        {
+            try
+            {
+                var result = _reservationService.ReserveACar(request);
+
+                if (result)
+                {
+                    return Ok(ApiResult<bool>.Success(true));
+                }
+
+                return BadRequest(ApiResult<bool>.ErrorResult(ErrorCodeEnum.GenericErrorRetry, "Failed to reserve the car."));
+            }
+            catch (BaseException ex)
+            {
+                return BadRequest(ApiResult<bool>.ErrorResult(ex.errorCodeEnum));
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, ApiResult<bool>.ErrorResult(ErrorCodeEnum.GenericErrorRetry, "An unexpected error occurred."));
+            }
         }
     }
 }
