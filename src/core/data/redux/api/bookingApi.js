@@ -38,3 +38,23 @@ export const getCar = createAsyncThunk(
     }
 )
 
+export const sendBooking = createAsyncThunk(
+  'booking/sendBooking',
+  async (data, thunkAPI) => {
+      try {
+        console.log(data, "sssssssssssssssssssss")
+        const config = {
+          data: data,
+          method: "post",
+          url: 'cars',
+        };
+        
+        const response = await instance(config);
+        console.log(response.data, "Car geeeeeeeeeeeeeeeeeeeeeeeeeeeeet")
+        return response?.data;
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error.response.data.error.both);
+      }
+    }
+)
+

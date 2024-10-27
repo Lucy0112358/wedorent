@@ -4,6 +4,7 @@ import { getCar } from "../api/bookingApi";
 const initialState = {
   bookingData: {},
   bookingCar: {},
+  serviceTotal: 0,
 };
 
 export const bookingSlice = createSlice({
@@ -15,6 +16,12 @@ export const bookingSlice = createSlice({
       let data = action.payload;
 
       state.bookingData = { ...state.bookingData, [data.key]: data.value };
+    },
+    setServiceTotalAdd: (state, action) => {
+      state.serviceTotal = +(state.serviceTotal + action.payload).toFixed(2);
+    },
+    setServiceTotalRemove: (state, action) => {
+      state.serviceTotal = +(state.serviceTotal - action.payload).toFixed(2);
     },
    
   },
@@ -28,10 +35,13 @@ export const bookingSlice = createSlice({
 });
 
 export const {
-  setBookingData
+  setBookingData,
+  setServiceTotalAdd,
+  setServiceTotalRemove,
 } = bookingSlice.actions;
 
 export const getBookingData = (state) => state.booking.bookingData;
 export const getBookingCar = (state) => state.booking.bookingCar;
+export const getServiceTotal = (state) => state.booking.serviceTotal;
 
 export default bookingSlice.reducer;

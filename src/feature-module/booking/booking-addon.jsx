@@ -3,7 +3,7 @@ import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import Breadcrumbs from "../common/breadcrumbs";
 import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../router/all_routes";
-import { getBookingData, setBookingData } from "../../core/data/redux/slice/bookingSlice";
+import { getBookingData, getServiceTotal, setBookingData, setServiceTotal, setServiceTotalAdd, setServiceTotalRemove } from "../../core/data/redux/slice/bookingSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const BookingAddon = () => {
@@ -22,6 +22,7 @@ const BookingAddon = () => {
 
   //Booking part by me
   const bookingData = useSelector(getBookingData)
+  const total = useSelector(getServiceTotal)
   const dispatch = useDispatch()
   const services = [
     {
@@ -74,40 +75,44 @@ const BookingAddon = () => {
   }
 console.log(bookingData, "bookingData")
   const handleAddService = (e, service) => {
-    // console.log(service, service.id)
     e.preventDefault();
-    if (!bookingData.serviceList) {
+    // let addInfo = {};
+    
+    if (!bookingData?.addonInfo?.serviceList) {
       handleDetails('serviceList', [service.id])
-      // dispatch(setBookingData({ key: 'serviceList', value: [service.id] }))
+      // addInfo.serviceList = [service.id]
     } else {
-      if (!bookingData.serviceList.includes(service.id)) {
-        let existServices = [...bookingData.serviceList, service.id];
+      if (!bookingData.addonInfo.serviceList.includes(service.id)) {
+        let existServices = [...bookingData.addonInfo.serviceList, service.id];
+        // addInfo.serviceList = existServices;
         handleDetails('serviceList', existServices)
-        // dispatch(setBookingData({ key: 'serviceList', value: existServices }));
       }
     }
-   
-    let initialTotal = bookingData?.addonInfo?.total || 0;
-    let total = +(initialTotal + service.price).toFixed(2); 
-    handleDetails('total', total)
-
-    // setTotalAmount((prevTotal) => +(prevTotal + service.price).toFixed(2));
+    // let initialTotal = bookingData?.addonInfo?.total || 0;
+    // let total = +(initialTotal + service.price).toFixed(2); 
+    // addInfo.total = total;
+    dispatch(setServiceTotalAdd(service.price))
+// debugger;
+    // handleDetails('total', total)
   }
+  console.log(bookingData, "bookingDatabookingData")
 
   const handleRemoveService = (e, service) => {
     e.preventDefault();
-    if (!bookingData.serviceList) {
+    if (!bookingData.addonInfo.serviceList) {
       alert("No services selected")
       return false;
     } else {
-      let existServices = bookingData.serviceList.filter((item) => item !== service.id);
+      let existServices = bookingData.addonInfo.serviceList.filter((item) => item !== service.id);
       handleDetails('serviceList', existServices)
 
       // dispatch(setBookingData({ key: 'serviceList', value: existServices }))
     }
-    let initialTotal = bookingData?.addonInfo?.total || 0;
-    let total = +(initialTotal + service.price).toFixed(2); 
-    handleDetails('total', total)
+    // let initialTotal = bookingData?.addonInfo?.total || 0;
+    // let total = +(initialTotal - service.price).toFixed(2); 
+    dispatch(setServiceTotalRemove(service.price))
+
+    // handleDetails('total', total)
 
     // setTotalAmount((prevTotal) => +(prevTotal - service.price).toFixed(2));
   };
@@ -334,7 +339,7 @@ console.log(bookingData, "bookingData")
                           </span>
                           <h5>Add-Ons</h5>
                         </div>
-                        <h5>Total service: {bookingData?.addonInfo?.total || 0} ֏</h5>
+                        <h5>Total service: {total} ֏</h5>
                       </div>
                       <div className="booking-info-body">
                         <ul className="adons-lists">
