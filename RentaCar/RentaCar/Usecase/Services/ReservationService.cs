@@ -1,6 +1,7 @@
 ﻿using RentaCar.ApplicationModels;
 using RentaCar.DataModels;
 using RentaCar.Entity;
+using RentaCar.Enums;
 using RentaCar.Exceptionss;
 using RentaCar.Repository;
 using System.Transactions;
@@ -43,35 +44,36 @@ namespace RentaCar.Usecase.Services
 
         public bool ReserveACar(ReservationRequest request)
         {
-            using (var transactionScope = new TransactionScope())
-            {
-                var customer = new Customer
-                {
-                    Name = request.Name,
-                    Surname = request.Surname,
-                    Email = request.Email,
-                    Phone = request.Phone,
+           
+                    var customer = new Customer
+                    {
+                        Name = request.FirstName,
+                        Surname = request.LastName,
+                        Email = request.Email,
+                        Phone = request.Phone,
 
-                };
+                    };
 
-                customer = _reservationRepository.AddCustomer(customer);
+                    customer = _reservationRepository.AddCustomer(customer);
 
-                var reservation = new Reservation
-                {
-                    CustomerId = customer.Id,
-                    //  TotalAmount = CalculateTotalAmount(request.Services),
-                    //  ReservationStatusId = GetDefaultReservationStatusId(), // Define this method to get the default status
-                    StartDate = request.StartDate,
-                    EndDate = request.EndDate,
-                    StartAddress = request.StartAddress,
-                    EndAddress = request.EndAddress,
-                    CarId = request.CarId 
-                };
+                    var reservation = new Reservation
+                    {
+                        CustomerId = customer.Id,
+                        //  TotalAmount = CalculateTotalAmount(request.Services),
+                        //  ReservationStatusId = GetDefaultReservationStatusId(), // Define this method to get the default status
+                        StartDate = request.StartDate,
+                        EndDate = request.EndDate,
+                        StartAddress = request.StartAddress,
+                        EndAddress = request.EndAddress,
+                        CarId = 1 // request.CarId
+                    };
 
-                reservation = _reservationRepository.AddReservation(reservation);
+                    reservation = _reservationRepository.AddReservation(reservation);
 
-                return true;
-            }
+                    return true;
+   
+
+            
         }
     }
 }

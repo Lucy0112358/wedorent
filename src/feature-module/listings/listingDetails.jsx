@@ -1495,7 +1495,7 @@ const settings2 = {
                                       <Calendar
                                         value={date1}
                                         // onChange={(e) => setDate1(e.value)}
-                                        onChange={(e) => handleDetails("pickupDateOne", e.value)}
+                                        onChange={(e) => handleDetails("StartDate", e.value)}
                                         placeholder="04/11/2023"
                                       />
                                       {/* <input

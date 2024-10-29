@@ -69,6 +69,6 @@ CREATE TABLE Car (
 );
 
 ALTER TABLE IF EXISTS public.reservation
-    ADD COLUMN "carId" integer NOT NULL,
+    ADD COLUMN carId integer NOT NULL,
     ADD CONSTRAINT fk_car
-    FOREIGN KEY ("carId") REFERENCES public."car"(id) ON DELETE CASCADE;
+    FOREIGN KEY (carId) REFERENCES public."car"(id) ON DELETE CASCADE;

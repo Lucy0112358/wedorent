@@ -12,7 +12,7 @@ namespace RentaCar.Repository
         public readonly string carSchema = "public";
         protected readonly NpgsqlConnection carContext;
         private const string _defaultPkColumnName = "Id";
-        private const string _createdDate = "CreatedDate";
+        private const string _createdDate = "CreatedAt";
         private const string _modifiedDate = "ModifiedDate";
         private readonly ISanitizer sanitizer;
 
@@ -358,7 +358,7 @@ namespace RentaCar.Repository
         /// Fetches a single item with its association using a left join.
         /// </summary>
         /// <param name="id">Id of the <see cref="T"/> entity</param>
-        /// <param name="foreignKeyColumnName">Name of the column mapping to the <see cref="T1"/> entity</param>
+        /// <param name="foreignKeyColumnName">FirstName of the column mapping to the <see cref="T1"/> entity</param>
         /// <param name="param"></param>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="T1"></typeparam>
@@ -396,7 +396,7 @@ namespace RentaCar.Repository
         /// Fetches multiple items with their association using a left join.
         /// </summary>
         /// <param name="ids">Ids of the <see cref="T"/> entities</param>
-        /// <param name="foreignKeyColumnName">Name of the column mapping to the <see cref="T1"/> entity</param>
+        /// <param name="foreignKeyColumnName">FirstName of the column mapping to the <see cref="T1"/> entity</param>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="T1"></typeparam>
         /// <returns>The retrieved entities or an empty enumerable</returns>
@@ -433,7 +433,7 @@ namespace RentaCar.Repository
         /// Fetches multiple items with their association using a left join.
         /// </summary>
         /// <param name="ids">Ids of the <see cref="T"/> entities</param>
-        /// <param name="foreignKeyColumnName">Name of the column mapping to the <see cref="T1"/> entity</param>
+        /// <param name="foreignKeyColumnName">FirstName of the column mapping to the <see cref="T1"/> entity</param>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="T1"></typeparam>
         /// <returns>The retrieved entities or an empty enumerable</returns>
@@ -539,10 +539,9 @@ namespace RentaCar.Repository
                     value = value?.ToString(); // Convert enum to string
                 }
 
-                // Wrap column name in double quotes for case sensitivity
-                var quotedColumnName = $"\"{columnName}\"";
+              
 
-                columns.Add(quotedColumnName);
+                columns.Add(columnName);
                 parameters.Add($"@{columnName}");
                 param.Add($"@{columnName}", value ?? DBNull.Value); // Handle null values
 
@@ -557,7 +556,7 @@ namespace RentaCar.Repository
                 return isEnum ? $"{p}::{schema}.\"{property.PropertyType.Name}\"" : p;
             }));
 
-            var sql = $@"INSERT INTO {schema}.""{entityName}"" ({columnsString}) 
+            var sql = $@"INSERT INTO {schema}.{entityName} ({columnsString}) 
              VALUES({parameterString}) 
              RETURNING *;";
 

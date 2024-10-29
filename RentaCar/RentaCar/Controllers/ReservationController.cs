@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using RentaCar.ApplicationModels.Domain.Configuration;
 using RentaCar.DataModels;
 using RentaCar.Entity;
@@ -6,6 +7,7 @@ using RentaCar.Enums;
 using RentaCar.Exceptionss;
 using RentaCar.Repository;
 using RentaCar.Usecase;
+using System.Dynamic;
 
 namespace RentaCar.Controllers
 {
@@ -44,29 +46,30 @@ namespace RentaCar.Controllers
             var cars = _reservationService.GetCarsForDays(request);
             return Ok(ApiResult<List<Car>>.Success(cars));
         }
+        public class ReservationRequestWithPhotos
+        {
+            public IFormFile? FrontPhoto { get; set; }
+            public IFormFile? BackPhoto { get; set; }
+            public string? AllInfo { get; set; }
+        }
 
         [HttpPost("addReservation")]
-        public ActionResult<ApiResult<bool>> ReserveACar([FromBody] ReservationRequest request)
+        public ActionResult<ApiResult<bool>> ReserveACar([FromForm] ReservationRequestWithPhotos request)
         {
-            try
-            {
-                var result = _reservationService.ReserveACar(request);
-
-                if (result)
+           
+                // Deserialize AllInfo JSON string to ReservationRequest
+                var reservationRequest = JsonConvert.DeserializeObject<ReservationRequest>(request?.AllInfo);
+                // Check for null or proceed with further logic
+                if (reservationRequest == null)
                 {
-                    return Ok(ApiResult<bool>.Success(true));
+                    return BadRequest(ApiResult<bool>.ErrorResult("Invalid AllInfo data."));
                 }
+                _reservationService.ReserveACar(reservationRequest);
 
-                return BadRequest(ApiResult<bool>.ErrorResult(ErrorCodeEnum.GenericErrorRetry, "Failed to reserve the car."));
-            }
-            catch (BaseException ex)
-            {
-                return BadRequest(ApiResult<bool>.ErrorResult(ex.errorCodeEnum));
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, ApiResult<bool>.ErrorResult(ErrorCodeEnum.GenericErrorRetry, "An unexpected error occurred."));
-            }
+                // For testing: simply return a success response
+                return Ok(ApiResult<bool>.Success(true));
+         
         }
+
     }
 }

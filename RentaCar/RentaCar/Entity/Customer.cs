@@ -7,10 +7,10 @@
         public string Surname { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public DateTime? BirthDay { get; set; }  // Nullable for optional fields
-        public byte[] FrontPage { get; set; }    // Assuming byte array for image/document storage
-        public byte[] BackPage { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime? BirthDay { get; set; } = DateTime.Now; // Nullable for optional fields
+        public byte[] FrontPage { get; set; } = [011];  // Assuming byte array for image/document storage
+        public byte[] BackPage { get; set; } = [011];
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 
 }
