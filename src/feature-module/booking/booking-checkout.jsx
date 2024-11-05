@@ -282,7 +282,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                 <input
                                   type="text"
                                   className="form-control mb-0"
-                                  value={bookingData?.location}
+                                  value={bookingData?.StartAddress}
                                   onChange={(e) => handleBookingData("location", e.target.value)}
                                 />
                               </div>
@@ -306,7 +306,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                   type="text"
                                   className="form-control mb-0"
                                   onChange={(e) => handleBookingData("returnLocation", e.target.value)}
-                                  value={bookingData?.returnLocation}
+                                  value={bookingData?.EndAddress}
                                 />
                               </div>
                             </div>
@@ -380,8 +380,8 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                 <div className="group-img">
                                   <Calendar
                                     className="datetimepicker bg-custom"
-                                    value={bookingData?.pickupDateOne}
-                                    onChange={(e) => handleBookingData("pickupDateOne", e.value)}
+                                    value={bookingData?.StartDate}
+                                    onChange={(e) => handleBookingData("StartDate", e.value)}
                                     placeholder="Choose Date"
                                   />
                                   <span className="input-cal-icon">
@@ -417,8 +417,8 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                                 <div className="group-img">
                                   <Calendar
                                     className="datetimepicker bg-custom"
-                                    value={bookingData?.pickupDateTwo}
-                                    onChange={(e) => handleBookingData("pickupDateTwo", e.value)}
+                                    value={bookingData?.EndDate}
+                                    onChange={(e) => handleBookingData("EndDate", e.value)}
                                     placeholder="Choose Date"
                                   />
                                   <span className="input-cal-icon">

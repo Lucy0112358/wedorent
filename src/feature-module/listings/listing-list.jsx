@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Breadcrumbs from "../common/breadcrumbs";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import { Dropdown } from "primereact/dropdown";
@@ -7,19 +7,37 @@ import { TimePicker } from "antd";
 import { Link } from "react-router-dom";
 import Sliders from "rc-slider";
 import "rc-slider/assets/index.css";
-
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { all_routes } from "../router/all_routes";
+import { getAllCars } from "../../core/data/redux/slice/bookingSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getCarsList } from "../../core/data/redux/api/bookingApi";
+import { toast } from "react-toastify";
 
 const Listinglist = () => {
+  //billing part
+  const allCars = useSelector(getAllCars);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCarsList()).then(
+      res => {
+        if(res.meta.requestStatus === 'rejected')
+        {
+          toast(res.error.message);
+        }
+        console.log(res)
+      }
+    );
+  }, [])
+  //end billing part
   const routes = all_routes;
   const [selectedNumber, setSelectedNumber] = useState(null);
   const [selectedSort, setSelectedSort] = useState(null);
   const [date1, setDate1] = useState();
   const [date2, setDate2] = useState();
- 
+
   const [activeHearts, setActiveHearts] = useState({
     heart1: false,
     heart2: false,
@@ -1260,8 +1278,10 @@ const Listinglist = () => {
                 </form>
               </div>
             </div>
+            
             <div className="col-xl-9 col-lg-8 col-sm-12 col-12">
               <div className="row">
+
                 <div className="listview-car">
                   <div className="card">
                     <div className="blog-widget d-flex">
@@ -1326,24 +1346,24 @@ const Listinglist = () => {
                             <div className="blog-list-title">
                               <h3>
                                 <Link to={routes.listingDetails.replace(':id', 1)}>
-                                  Ferrari 458 MM Special
+                                  {allCars.data[0].model}
                                 </Link>
                               </h3>
                               <h6>
-                                Category : <span>Ferrarai</span>
+                                Category : <span>{allCars.data[0].model}</span>
                               </h6>
                             </div>
                             <div className="blog-list-rate">
-                              <div className="list-rating">
+                              {/* <div className="list-rating">
                                 <i className="fas fa-star filled" />
                                 <i className="fas fa-star filled" />
                                 <i className="fas fa-star filled" />
                                 <i className="fas fa-star filled" />
                                 <i className="fas fa-star" />
                                 <span>180 Reviews</span>
-                              </div>
+                              </div> */}
                               <h6>
-                                $160<span>/ Day</span>
+                              {allCars.data[0].price*1000}<span>AMD/ Day</span>
                               </h6>
                             </div>
                           </div>
@@ -1374,7 +1394,7 @@ const Listinglist = () => {
                                     alt="Petrol"
                                   />
                                 </span>
-                                <p>Diesel</p>
+                                <p>{allCars.data[0].engine}</p>
                               </li>
                               <li>
                                 <span>
@@ -1392,7 +1412,7 @@ const Listinglist = () => {
                                     alt="Persons"
                                   />
                                 </span>
-                                <p>5 Persons</p>
+                                <p>{allCars.data[0].seats}</p>
                               </li>
                               <li>
                                 <span>
@@ -1401,26 +1421,26 @@ const Listinglist = () => {
                                     alt={2018}
                                   />
                                 </span>
-                                <p>2022</p>
+                                <p>{allCars.data[0].year}</p>
                               </li>
                             </ul>
                           </div>
                           <div className="blog-list-head list-head-bottom d-flex">
                             <div className="blog-list-title">
                               <div className="title-bottom">
-                                <div className="car-list-icon">
+                                {/* <div className="car-list-icon">
                                   <ImageWithBasePath
                                     src="assets/img/profiles/avatar-14.jpg"
                                     alt="user"
                                   />
-                                </div>
+                                </div> */}
                                 <div className="address-info">
                                   <h6>
                                     <i className="feather icon-map-pin" />
-                                    Amsterdam, Netherland
+                                    Yerevan, Armenia
                                   </h6>
                                 </div>
-                                <div className="list-km">
+                                {/* <div className="list-km">
                                   <span className="km-count">
                                     <ImageWithBasePath
                                       src="assets/img/icons/map-pin.svg"
@@ -1428,7 +1448,7 @@ const Listinglist = () => {
                                     />
                                     3.2m
                                   </span>
-                                </div>
+                                </div> */}
                               </div>
                             </div>
                             <div className="listing-button">
@@ -1451,909 +1471,8 @@ const Listinglist = () => {
                     </div>
                   </div>
                 </div>
-                <div className="listview-car">
-                  <div className="card">
-                    <div className="blog-widget d-flex">
-                      <div className="blog-img">
-                        <Link to={routes.listingDetails}>
-                          <ImageWithBasePath
-                            src="assets/img/car-list-2.jpg"
-                            className="img-fluid"
-                            alt="blog-img"
-                          />
-                        </Link>
-                        <div className="fav-item justify-content-end">
-                          <Link
-                            to="#"
-                            className={`fav-icon ${activeHearts.heart2 ? "selected" : ""}`}
-                            onClick={() => toggleLike("heart2")}
-                          >
-                            <i className="feather icon-heart" />
-                          </Link>
-                        </div>
-                      </div>
-                      <div className="bloglist-content w-100">
-                        <div className="card-body">
-                          <div className="blog-list-head d-flex">
-                            <div className="blog-list-title">
-                              <h3>
-                                <Link to={routes.listingDetails}>
-                                  BMW 640 XI Gran Turismo
-                                </Link>
-                              </h3>
-                              <h6>
-                                Category : <span>BMW</span>
-                              </h6>
-                            </div>
-                            <div className="blog-list-rate">
-                              <div className="list-rating">
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star" />
-                                <span>165 Reviews</span>
-                              </div>
-                              <h6>
-                                $60 <span>/ Day</span>
-                              </h6>
-                            </div>
-                          </div>
-                          <div className="listing-details-group">
-                            <ul>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-05.svg"
-                                    alt="Auto"
-                                  />
-                                </span>
-                                <p>Auto</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-02.svg"
-                                    alt="10 KM"
-                                  />
-                                </span>
-                                <p>13 KM</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-03.svg"
-                                    alt="Petrol"
-                                  />
-                                </span>
-                                <p>Petrol</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-04.svg"
-                                    alt="Power"
-                                  />
-                                </span>
-                                <p>Normal</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-06.svg"
-                                    alt="Persons"
-                                  />
-                                </span>
-                                <p>6 Persons</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-05.svg"
-                                    alt={2018}
-                                  />
-                                </span>
-                                <p>2021</p>
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="blog-list-head list-head-bottom d-flex">
-                            <div className="blog-list-title">
-                              <div className="title-bottom">
-                                <div className="car-list-icon">
-                                  <ImageWithBasePath
-                                    src="assets/img/profiles/avatar-03.jpg"
-                                    alt="user"
-                                  />
-                                </div>
-                                <div className="address-info">
-                                  <h6>
-                                    <i className="feather icon-map-pin" />
-                                    Pattaya, Thailand
-                                  </h6>
-                                </div>
-                                <div className="list-km">
-                                  <span className="km-count">
-                                    <ImageWithBasePath
-                                      src="assets/img/icons/map-pin.svg"
-                                      alt="author"
-                                    />
-                                    3.7m
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="listing-button">
-                              <Link
-                                to={routes.listingDetails}
-                                className="btn btn-order"
-                              >
-                                <span>
-                                  <i className="feather icon-calendar me-2" />
-                                </span>
-                                Rent Now
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="listview-car">
-                  <div className="card">
-                    <div className="blog-widget d-flex">
-                      <div className="blog-img">
-                        <Link to={routes.listingDetails}>
-                          <ImageWithBasePath
-                            src="assets/img/car-list-3.jpg"
-                            className="img-fluid"
-                            alt="blog-img"
-                          />
-                        </Link>
-                        <div className="fav-item justify-content-end">
-                          <Link
-                            to="#"
-                            className={`fav-icon ${activeHearts.heart3 ? "selected" : ""}`}
-                            onClick={() => toggleLike("heart3")}
-                          >
-                            <i className="feather icon-heart" />
-                          </Link>
-                        </div>
-                      </div>
-                      <div className="bloglist-content w-100">
-                        <div className="card-body">
-                          <div className="blog-list-head d-flex">
-                            <div className="blog-list-title">
-                              <h3>
-                                <Link to={routes.listingDetails}>
-                                  Ford Mustang, Blue 2014
-                                </Link>
-                              </h3>
-                              <h6>
-                                Category : <span>Ford</span>
-                              </h6>
-                            </div>
-                            <div className="blog-list-rate">
-                              <div className="list-rating">
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <span>200 Reviews</span>
-                              </div>
-                              <h6>
-                                $150<span>/ Day</span>
-                              </h6>
-                            </div>
-                          </div>
-                          <div className="listing-details-group">
-                            <ul>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-01.svg"
-                                    alt="Auto"
-                                  />
-                                </span>
-                                <p>Auto</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-02.svg"
-                                    alt="10 KM"
-                                  />
-                                </span>
-                                <p>17 KM</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-03.svg"
-                                    alt="Petrol"
-                                  />
-                                </span>
-                                <p>Petrol</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-04.svg"
-                                    alt="Power"
-                                  />
-                                </span>
-                                <p>Power</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-06.svg"
-                                    alt="Persons"
-                                  />
-                                </span>
-                                <p>4 Persons</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-05.svg"
-                                    alt={2018}
-                                  />
-                                </span>
-                                <p>2019</p>
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="blog-list-head list-head-bottom d-flex">
-                            <div className="blog-list-title">
-                              <div className="title-bottom">
-                                <div className="car-list-icon">
-                                  <ImageWithBasePath
-                                    src="assets/img/profiles/avatar-06.jpg"
-                                    alt="user"
-                                  />
-                                </div>
-                                <div className="address-info">
-                                  <h6>
-                                    <i className="feather icon-map-pin" />
-                                    Lasvegas, USA
-                                  </h6>
-                                </div>
-                                <div className="list-km">
-                                  <span className="km-count">
-                                    <ImageWithBasePath
-                                      src="assets/img/icons/map-pin.svg"
-                                      alt="author"
-                                    />
-                                    4.0m
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="listing-button">
-                              <Link
-                                to={routes.listingDetails}
-                                className="btn btn-order"
-                              >
-                                <span>
-                                  <i className="feather icon-calendar me-2" />
-                                </span>
-                                Rent Now
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="feature-text">
-                        <span className="bg-warning">Top Rated</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="listview-car">
-                  <div className="card">
-                    <div className="blog-widget d-flex">
-                      <div className="blog-img">
-                        <Link to={routes.listingDetails}>
-                          <ImageWithBasePath
-                            src="assets/img/car-list-5.jpg"
-                            className="img-fluid"
-                            alt="blog-img"
-                          />
-                        </Link>
-                        <div className="fav-item justify-content-end">
-                          <Link
-                            to="#"
-                            className={`fav-icon ${activeHearts.heart4 ? "selected" : ""}`}
-                            onClick={() => toggleLike("heart4")}
-                          >
-                            <i className="feather icon-heart" />
-                          </Link>
-                        </div>
-                      </div>
-                      <div className="bloglist-content w-100">
-                        <div className="card-body">
-                          <div className="blog-list-head d-flex">
-                            <div className="blog-list-title">
-                              <h3>
-                                <Link to={routes.listingDetails}>
-                                  Audi A3 2019 new
-                                </Link>
-                              </h3>
-                              <h6>
-                                Category : <span>Audi</span>
-                              </h6>
-                            </div>
-                            <div className="blog-list-rate">
-                              <div className="list-rating">
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star" />
-                                <span>150 Reviews</span>
-                              </div>
-                              <h6>
-                                $45<span>/ Day</span>
-                              </h6>
-                            </div>
-                          </div>
-                          <div className="listing-details-group">
-                            <ul>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-01.svg"
-                                    alt="Auto"
-                                  />
-                                </span>
-                                <p>Manual</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-02.svg"
-                                    alt="10 KM"
-                                  />
-                                </span>
-                                <p>10 KM</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-03.svg"
-                                    alt="Petrol"
-                                  />
-                                </span>
-                                <p>Petrol</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-04.svg"
-                                    alt="Power"
-                                  />
-                                </span>
-                                <p>Power</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-06.svg"
-                                    alt="Persons"
-                                  />
-                                </span>
-                                <p>4 Persons</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-05.svg"
-                                    alt={2018}
-                                  />
-                                </span>
-                                <p>2019</p>
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="blog-list-head list-head-bottom d-flex">
-                            <div className="blog-list-title">
-                              <div className="title-bottom">
-                                <div className="car-list-icon">
-                                  <ImageWithBasePath
-                                    src="assets/img/profiles/avatar-03.jpg"
-                                    alt="user"
-                                  />
-                                </div>
-                                <div className="address-info">
-                                  <h6>
-                                    <i className="feather icon-map-pin" />
-                                    Newyork, USA
-                                  </h6>
-                                </div>
-                                <div className="list-km">
-                                  <span className="km-count">
-                                    <ImageWithBasePath
-                                      src="assets/img/icons/map-pin.svg"
-                                      alt="author"
-                                    />
-                                    3.5m
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="listing-button">
-                              <Link
-                                to={routes.listingDetails}
-                                className="btn btn-order"
-                              >
-                                <span>
-                                  <i className="feather icon-calendar me-2" />
-                                </span>
-                                Rent Now
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="listview-car">
-                  <div className="card">
-                    <div className="blog-widget d-flex">
-                      <div className="blog-img">
-                        <Link to={routes.listingDetails}>
-                          <ImageWithBasePath
-                            src="assets/img/car-list-6.jpg"
-                            className="img-fluid"
-                            alt="blog-img"
-                          />
-                        </Link>
-                        <div className="fav-item justify-content-end">
-                          <Link
-                            to="#"
-                            className={`fav-icon ${activeHearts.heart5 ? "selected" : ""}`}
-                            onClick={() => toggleLike("heart5")}
-                          >
-                            <i className="feather icon-heart" />
-                          </Link>
-                        </div>
-                      </div>
-                      <div className="bloglist-content w-100">
-                        <div className="card-body">
-                          <div className="blog-list-head d-flex">
-                            <div className="blog-list-title">
-                              <h3>
-                                <Link to={routes.listingDetails}>
-                                  Ford Mustang 4.0 AT
-                                </Link>
-                              </h3>
-                              <h6>
-                                Category : <span>Ford</span>
-                              </h6>
-                            </div>
-                            <div className="blog-list-rate">
-                              <div className="list-rating">
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star" />
-                                <span>170 Reviews</span>
-                              </div>
-                              <h6>
-                                $90<span>/ Day</span>
-                              </h6>
-                            </div>
-                          </div>
-                          <div className="listing-details-group">
-                            <ul>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-01.svg"
-                                    alt="Auto"
-                                  />
-                                </span>
-                                <p>Auto</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-02.svg"
-                                    alt="10 KM"
-                                  />
-                                </span>
-                                <p>10 KM</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-03.svg"
-                                    alt="Petrol"
-                                  />
-                                </span>
-                                <p>Petrol</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-04.svg"
-                                    alt="Power"
-                                  />
-                                </span>
-                                <p>Power</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-06.svg"
-                                    alt="Persons"
-                                  />
-                                </span>
-                                <p>5 Persons</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-05.svg"
-                                    alt={2018}
-                                  />
-                                </span>
-                                <p>2019</p>
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="blog-list-head list-head-bottom d-flex">
-                            <div className="blog-list-title">
-                              <div className="title-bottom">
-                                <div className="car-list-icon">
-                                  <ImageWithBasePath
-                                    src="assets/img/profiles/avatar-06.jpg"
-                                    alt="user"
-                                  />
-                                </div>
-                                <div className="address-info">
-                                  <h6>
-                                    <i className="feather icon-map-pin" />
-                                    Lasvegas, USA
-                                  </h6>
-                                </div>
-                                <div className="list-km">
-                                  <span className="km-count">
-                                    <ImageWithBasePath
-                                      src="assets/img/icons/map-pin.svg"
-                                      alt="author"
-                                    />
-                                    4.1m
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="listing-button">
-                              <Link
-                                to={routes.listingDetails}
-                                className="btn btn-order"
-                              >
-                                <span>
-                                  <i className="feather icon-calendar me-2" />
-                                </span>
-                                Rent Now
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="feature-text">
-                        <span className="bg-danger">Featured</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="listview-car">
-                  <div className="card">
-                    <div className="blog-widget d-flex">
-                      <div className="blog-img">
-                        <Link to={routes.listingDetails}>
-                          <ImageWithBasePath
-                            src="assets/img/car-list-7.jpg"
-                            className="img-fluid"
-                            alt="blog-img"
-                          />
-                        </Link>
-                        <div className="fav-item justify-content-end">
-                          <Link
-                            to="#"
-                            className={`fav-icon ${activeHearts.heart6 ? "selected" : ""}`}
-                            onClick={() => toggleLike("heart6")}
-                          >
-                            <i className="feather icon-heart" />
-                          </Link>
-                        </div>
-                      </div>
-                      <div className="bloglist-content w-100">
-                        <div className="card-body">
-                          <div className="blog-list-head d-flex">
-                            <div className="blog-list-title">
-                              <h3>
-                                <Link to={routes.listingDetails}>
-                                  Acura Sport Version
-                                </Link>
-                              </h3>
-                              <h6>
-                                Category : <span>Acura</span>
-                              </h6>
-                            </div>
-                            <div className="blog-list-rate">
-                              <div className="list-rating">
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star" />
-                                <span>180 Reviews</span>
-                              </div>
-                              <h6>
-                                $30<span>/ Day</span>
-                              </h6>
-                            </div>
-                          </div>
-                          <div className="listing-details-group">
-                            <ul>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-01.svg"
-                                    alt="Auto"
-                                  />
-                                </span>
-                                <p>Auto</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-02.svg"
-                                    alt="10 KM"
-                                  />
-                                </span>
-                                <p>12 KM</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-03.svg"
-                                    alt="Petrol"
-                                  />
-                                </span>
-                                <p>Diesel</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-04.svg"
-                                    alt="Power"
-                                  />
-                                </span>
-                                <p>Power</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-06.svg"
-                                    alt="Persons"
-                                  />
-                                </span>
-                                <p>5 Persons</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-05.svg"
-                                    alt={2018}
-                                  />
-                                </span>
-                                <p>2019</p>
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="blog-list-head list-head-bottom d-flex">
-                            <div className="blog-list-title">
-                              <div className="title-bottom">
-                                <div className="car-list-icon">
-                                  <ImageWithBasePath
-                                    src="assets/img/profiles/avatar-09.jpg"
-                                    alt="user"
-                                  />
-                                </div>
-                                <div className="address-info">
-                                  <h6>
-                                    <i className="feather icon-map-pin" />
-                                    Newyork, USA
-                                  </h6>
-                                </div>
-                                <div className="list-km">
-                                  <span className="km-count">
-                                    <ImageWithBasePath
-                                      src="assets/img/icons/map-pin.svg"
-                                      alt="author"
-                                    />
-                                    4.2m
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="listing-button">
-                              <Link
-                                to={routes.listingDetails}
-                                className="btn btn-order"
-                              >
-                                <span>
-                                  <i className="feather icon-calendar me-2" />
-                                </span>
-                                Rent Now
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="listview-car">
-                  <div className="card">
-                    <div className="blog-widget d-flex">
-                      <div className="blog-img">
-                        <Link to={routes.listingDetails}>
-                          <ImageWithBasePath
-                            src="assets/img/car-list-4.jpg"
-                            className="img-fluid"
-                            alt="blog-img"
-                          />
-                        </Link>
-                        <div className="fav-item justify-content-end">
-                          <Link
-                            to="#"
-                            className={`fav-icon ${activeHearts.heart7 ? "selected" : ""}`}
-                            onClick={() => toggleLike("heart7")}
-                          >
-                            <i className="feather icon-heart" />
-                          </Link>
-                        </div>
-                      </div>
-                      <div className="bloglist-content w-100">
-                        <div className="card-body">
-                          <div className="blog-list-head d-flex">
-                            <div className="blog-list-title">
-                              <h3>
-                                <Link to={routes.listingDetails}>
-                                  2018 Chevrolet Camaro
-                                </Link>
-                              </h3>
-                              <h6>
-                                Category : <span>Chevrolet</span>
-                              </h6>
-                            </div>
-                            <div className="blog-list-rate">
-                              <div className="list-rating">
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <span>200 Reviews</span>
-                              </div>
-                              <h6>
-                                $36<span>/ Day</span>
-                              </h6>
-                            </div>
-                          </div>
-                          <div className="listing-details-group">
-                            <ul>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-01.svg"
-                                    alt="Auto"
-                                  />
-                                </span>
-                                <p>Manual</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-02.svg"
-                                    alt="10 KM"
-                                  />
-                                </span>
-                                <p>18 KM</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-03.svg"
-                                    alt="Petrol"
-                                  />
-                                </span>
-                                <p>Diesel</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-04.svg"
-                                    alt="Power"
-                                  />
-                                </span>
-                                <p>Power</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-06.svg"
-                                    alt="Persons"
-                                  />
-                                </span>
-                                <p>5 Persons</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-05.svg"
-                                    alt={2018}
-                                  />
-                                </span>
-                                <p>2018</p>
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="blog-list-head list-head-bottom d-flex">
-                            <div className="blog-list-title">
-                              <div className="title-bottom">
-                                <div className="car-list-icon">
-                                  <ImageWithBasePath
-                                    src="assets/img/profiles/avatar-13.jpg"
-                                    alt="user"
-                                  />
-                                </div>
-                                <div className="address-info">
-                                  <h6>
-                                    <i className="feather icon-map-pin" />
-                                    Lasvegas, USA
-                                  </h6>
-                                </div>
-                                <div className="list-km">
-                                  <span className="km-count">
-                                    <ImageWithBasePath
-                                      src="assets/img/icons/map-pin.svg"
-                                      alt="author"
-                                    />
-                                    4.5m
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="listing-button">
-                              <Link
-                                to={routes.listingDetails}
-                                className="btn btn-order"
-                              >
-                                <span>
-                                  <i className="feather icon-calendar me-2" />
-                                </span>
-                                Rent Now
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="feature-text">
-                        <span className="bg-warning">Top Rated</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
+
               </div>
               {/*Pagination*/}
               <div className="blog-pagination">
