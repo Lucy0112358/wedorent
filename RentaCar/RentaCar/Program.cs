@@ -1,6 +1,6 @@
 using Npgsql;
 using RentaCar.Configuration;
-using RentaCar.Entity;
+using RentaCar.Email;
 using RentaCar.Repository;
 using RentaCar.Usecase;
 using RentaCar.Usecase.Services;
@@ -29,6 +29,7 @@ namespace MqttService
             builder.Services.AddScoped<ISanitizer, Sanitizer>();
             builder.Services.AddScoped<ICarService, CarService>();
             builder.Services.AddScoped<IReservationService, ReservationService>();
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
 
             // Register PostgreSQL connection
             builder.Services.AddTransient<IDbConnection>(sp =>
