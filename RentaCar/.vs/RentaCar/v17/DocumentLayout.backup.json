@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|c:\\users\\baghd\\onedrive\\desktop\\wedorent\\rentacar\\rentacar\\controllers\\emailcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|solutionrelative:rentacar\\controllers\\emailcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|c:\\users\\baghd\\onedrive\\desktop\\wedorent\\rentacar\\rentacar\\email\\emailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|solutionrelative:rentacar\\email\\emailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|c:\\users\\baghd\\onedrive\\desktop\\wedorent\\rentacar\\rentacar\\email\\iemailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|solutionrelative:rentacar\\email\\iemailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|c:\\users\\baghd\\onedrive\\desktop\\wedorent\\rentacar\\rentacar\\usecase\\services\\reservationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|solutionrelative:rentacar\\usecase\\services\\reservationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -38,11 +50,48 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
+              "Title": "EmailController.cs",
+              "DocumentMoniker": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Controllers\\EmailController.cs",
+              "RelativeDocumentMoniker": "RentaCar\\Controllers\\EmailController.cs",
+              "ToolTip": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Controllers\\EmailController.cs",
+              "RelativeToolTip": "RentaCar\\Controllers\\EmailController.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAnwCMAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-31T13:14:58.496Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EmailSender.cs",
+              "DocumentMoniker": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Email\\EmailSender.cs",
+              "RelativeDocumentMoniker": "RentaCar\\Email\\EmailSender.cs",
+              "ToolTip": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Email\\EmailSender.cs",
+              "RelativeToolTip": "RentaCar\\Email\\EmailSender.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAUwAsAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-31T13:05:48.197Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IEmailSender.cs",
+              "DocumentMoniker": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Email\\IEmailSender.cs",
+              "RelativeDocumentMoniker": "RentaCar\\Email\\IEmailSender.cs",
+              "ToolTip": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Email\\IEmailSender.cs",
+              "RelativeToolTip": "RentaCar\\Email\\IEmailSender.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAQAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-31T13:05:25.883Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "ReservationRequest.cs",
               "DocumentMoniker": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\DataModels\\ReservationRequest.cs",
               "RelativeDocumentMoniker": "RentaCar\\DataModels\\ReservationRequest.cs",
@@ -54,7 +103,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "BaseRepository.cs",
               "DocumentMoniker": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Repository\\BaseRepository.cs",
               "RelativeDocumentMoniker": "RentaCar\\Repository\\BaseRepository.cs",
@@ -62,12 +111,11 @@
               "RelativeToolTip": "RentaCar\\Repository\\BaseRepository.cs",
               "ViewState": "AgIAAAMCAAAAAAAAAAArwP0BAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-27T16:52:38.353Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-27T16:52:38.353Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "ReservationController.cs",
               "DocumentMoniker": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Controllers\\ReservationController.cs",
               "RelativeDocumentMoniker": "RentaCar\\Controllers\\ReservationController.cs",
@@ -79,20 +127,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "ReservationService.cs",
               "DocumentMoniker": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Usecase\\Services\\ReservationService.cs",
               "RelativeDocumentMoniker": "RentaCar\\Usecase\\Services\\ReservationService.cs",
               "ToolTip": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Usecase\\Services\\ReservationService.cs",
               "RelativeToolTip": "RentaCar\\Usecase\\Services\\ReservationService.cs",
-              "ViewState": "AgIAADYAAAAAAAAAAAArwEMAAAAyAAAAAAAAAA==",
+              "ViewState": "AgIAADYAAAAAAAAAAAArwEgAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-27T16:08:08.091Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-27T16:08:08.091Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "ReservationRepository.cs",
               "DocumentMoniker": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Repository\\ReservationRepository.cs",
               "RelativeDocumentMoniker": "RentaCar\\Repository\\ReservationRepository.cs",
@@ -100,12 +147,11 @@
               "RelativeToolTip": "RentaCar\\Repository\\ReservationRepository.cs",
               "ViewState": "AgIAABwAAAAAAAAAAAArwCMAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-29T05:52:36.433Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-29T05:52:36.433Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "Reservation.cs",
               "DocumentMoniker": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Entity\\Reservation.cs",
               "RelativeDocumentMoniker": "RentaCar\\Entity\\Reservation.cs",
@@ -117,7 +163,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "CreateDatabaseScript.txt",
               "DocumentMoniker": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Migrations\\NotExecuted\\CreateDatabaseScript.txt",
               "RelativeDocumentMoniker": "RentaCar\\Migrations\\NotExecuted\\CreateDatabaseScript.txt",
