@@ -18,6 +18,7 @@
     "bootstrap": "^5.3.3",
     "depcheck": "^1.4.7",
     "feather-icons-react": "^0.7.0",
+    "formik": "^2.4.6",
     "google-map-react": "^2.2.1",
     "i18n": "^0.15.1",
     "i18next": "^23.16.1",
@@ -51,7 +52,8 @@
     "slick-carousel": "^1.8.1",
     "start": "^5.1.0",
     "tsx-to-jsx": "^0.0.4",
-    "yet-another-react-lightbox": "^3.21.2"
+    "yet-another-react-lightbox": "^3.21.2",
+    "yup": "^1.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
