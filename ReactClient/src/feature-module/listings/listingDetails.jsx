@@ -194,9 +194,32 @@ const settings2 = {
 };
   return (
     <div className="main-wrapper">
-      <Breadcrumbs title="Chevrolet Camaro" subtitle="Listings" />
+      {/* <Breadcrumbs title="Chevrolet Camaro" subtitle="Listings" /> */}
+      <div className="breadcrumb-bar">
+        <div className="container">
+          <div className="row align-items-center text-center">
+            <div className="col-md-12 col-12">
+              <h2 className="breadcrumb-title">{bookingCar.data?.model}</h2>
+              <nav aria-label="breadcrumb" className="page-breadcrumb">
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item">
+                    {/* <Link to={routes.homeOne}>Home</Link> */}
+                  </li>
+                  <li className="breadcrumb-item">
+                    {/* <Link to="#">{props.subtitle}</Link> */}
+                  </li>
+                  <li className="breadcrumb-item active" aria-current="page">
+                    {bookingCar.data?.model}
+                  </li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
       <>
         {/* Detail Page Head*/}
+        {bookingCar.data?.model}
         <section className="product-detail-head">
           <div className="container">
             <div className="detail-page-head">
