@@ -11,26 +11,32 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { all_routes } from "../router/all_routes";
-import { getAllCars } from "../../core/data/redux/slice/bookingSlice";
+import { getAllCars, getAllCategories } from "../../core/data/redux/slice/bookingSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { getCarsList } from "../../core/data/redux/api/bookingApi";
+import { getCarsList, getCategories } from "../../core/data/redux/api/bookingApi";
 import { toast } from "react-toastify";
 import EmailModal from "./EmailModal";
 
 const Listinglist = () => {
-  //billing part
   const allCars = useSelector(getAllCars);
+  const allCategories = useSelector(getAllCategories);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getCarsList()).then(
-      res => {
-        if (res.meta.requestStatus === 'rejected') {
-          toast(res.error.message);
-        }
-        console.log(res)
+    Promise.all([
+      dispatch(getCarsList()),
+      dispatch(getCategories())
+    ]).then(([carsRes, categoriesRes]) => {
+      if (carsRes.meta.requestStatus === 'rejected') {
+        toast(carsRes.error.message);
       }
-    );
-  }, [])
+      if (categoriesRes.meta.requestStatus === 'rejected') {
+        toast(categoriesRes.error.message);
+      }
+    });
+  }, [dispatch]);
+  const handleFilter = (id) => {
+    dispatch(getCarsList({ "categoryId": id }))
+  }
 
   //end billing part
   const routes = all_routes;
@@ -114,13 +120,50 @@ const Listinglist = () => {
   return (
     <div className="listing-page">
       <Breadcrumbs title="Car Listings" subtitle="Listings" />
+            {/* Search */}
+            <div className="section-search page-search">
+        <section className="section popular-services popular-explore">
+          <div className="container">
+            <div className="search-box-banner">
+              <div className="listing-tabs-group">
+                <ul className="nav listing-buttons gap-3" data-bs-tabs="tabs" style={{ display: 'flex', flexWrap: 'wrap' }}>
+                  {allCategories.data?.map(category => (
+                    <li
+                      key={category.id}
+                      onClick={() => handleFilter(category.id)}
+                      style={{ marginRight: '10px' }}
+                    >
+                      <Link
+                        className="active"
+                        aria-current="true"
+                        data-bs-toggle="tab"
+                        to="#Carmazda"
+                        style={{ display: 'flex', alignItems: 'center' }}
+                      >
+                        <span>
+                          <ImageWithBasePath
+                            src="assets/img/icons/car-icon-01.svg"
+                            alt="Mazda"
+                          />
+                        </span>
+                        {category.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      {/* /Search */}
       {/* Search */}
-      <div className="section-search page-search">
+      {/* <div className="section-search page-search">
         <div className="container">
           <div className="search-box-banner">
             <form >
               <ul className="align-items-center">
-                {/* <li className="column-group-main">
+                <li className="column-group-main">
                   <div className="input-block">
                     <label>Pickup Location</label>
                     <div className="group-img">
@@ -134,8 +177,8 @@ const Listinglist = () => {
                       </span>
                     </div>
                   </div>
-                </li> */}
-                {/* <li className="column-group-main">
+                </li>
+                <li className="column-group-main">
                   <div className="input-block">
                     <label>Pickup Date</label>
                   </div>
@@ -198,7 +241,7 @@ const Listinglist = () => {
                       </div>
                     </div>
                   </div>
-                </li> */}
+                </li> 
                 <li className="column-group-last">
                   <div className="input-block">
                     <div className="search-btn">
@@ -225,7 +268,7 @@ const Listinglist = () => {
             </form>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* /Search */}
       {/* Sort By */}
       <div className="sort-section">

@@ -31,9 +31,26 @@ namespace RentaCar.Repository
             return Insert(car);
         }
 
-        public List<Car> Cars()
+        public List<Car> Cars(int? categoryId = null)
         {
-            return GetAll<Car>().ToList();
+            var sql = @"
+        SELECT * 
+        FROM Car
+        WHERE (@CategoryId IS NULL OR CategoryId = @CategoryId)";
+
+            return Query<Car>(sql, new { CategoryId = categoryId }).ToList();
         }
+
+        public List<Category> GetAllCategories()
+        {
+            return GetAll<Category>().ToList();
+        }
+
+        public List<CarPricing> GetCarPricing()
+        {
+            return GetAll<CarPricing>().ToList();
+        }
+
+
     }
 }

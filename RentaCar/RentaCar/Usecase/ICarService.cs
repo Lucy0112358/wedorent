@@ -7,8 +7,9 @@ namespace RentaCar.Usecase
     {
         public Car GetCar(int carId);
 
-        public List<Car> GetCars();
+        public List<Car> GetCars(int? categoryId = null);
+        public List<Category> GetAllCategories();
 
-        public List<CarResult> FilterBy(string? model = null, int? wedding = 0, int? driver = 0);
+        public List<Car> FilterBy(string? model = null, int? wedding = 0, int? driver = 0);
     }
 }

@@ -186,45 +186,6 @@ const BookingDetail = () => {
                           </Link>
                         </div>
                       </div>
-                      <div className="booking-vehicle-rates">
-                        <ul>
-                          <li>
-                            <div className="rental-charge">
-                              <h6>
-                                Rental Charges Rate <span> (1 day )</span>
-                              </h6>
-                              <span className="text-danger">
-                                (This does not include fuel)
-                              </span>
-                            </div>
-                            <h5>+ $300</h5>
-                          </li>
-                          <li>
-                            <h6>Door delivery &amp; Pickup</h6>
-                            <h5>+ $60</h5>
-                          </li>
-                          <li>
-                            <h6>Trip Protection Fees</h6>
-                            <h5>+ $25</h5>
-                          </li>
-                          <li>
-                            <h6>Convenience Fees</h6>
-                            <h5>+ $2</h5>
-                          </li>
-                          <li>
-                            <h6>Tax</h6>
-                            <h5>+ $2</h5>
-                          </li>
-                          <li>
-                            <h6>Refundable Deposit</h6>
-                            <h5>+$1200</h5>
-                          </li>
-                          <li className="total-rate">
-                            <h6>Subtotal</h6>
-                            <h5>+$1604</h5>
-                          </li>
-                        </ul>
-                      </div>
                     </div>
                   </div>
                   <div className="booking-sidebar-card">
@@ -295,76 +256,10 @@ const BookingDetail = () => {
                           </li>
                         </ul>
                       </div>
-                      <div className="book-our-drivers">
-                        <h4 className="title-head">Driver</h4>
-                        <ul className="acting-driver-list">
-                          <li className="d-block">
-                            <div className="driver-profile-info">
-                              <span className="driver-profile">
-                                <ImageWithBasePath
-                                  src="assets/img/drivers/driver-02.jpg"
-                                  alt="Img"
-                                />
-                              </span>
-                              <div className="driver-name">
-                                <h5>Ruban</h5>
-                                <ul>
-                                  <li>No of Rides Completed : 32</li>
-                                  <li>Age : 36</li>
-                                </ul>
-                              </div>
-                            </div>
-                            <div className="change-driver">
-                              <Link
-                                to="#"
-                                className="btn btn-secondary d-inline-flex align-items-center"
-                              >
-                                <i className="bx bx-check-circle me-2" />
-                                Change Driver
-                              </Link>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
+
                     </div>
                   </div>
-                  <div className="booking-sidebar-card">
-                    <div className="booking-sidebar-head d-flex justify-content-between align-items-center">
-                      <h5>Coupon</h5>
-                      <Link to="#" className="coupon-view">
-                        View Coupons
-                      </Link>
-                    </div>
-                    <div className="booking-sidebar-body">
-                      <form>
-                        <div className="d-flex align-items-center">
-                          <div className="form-custom flex-fill">
-                            <input
-                              type="text"
-                              className="form-control mb-0"
-                              defaultValue="FIRSTBOOKING"
-                            />
-                            <Link to="#" className="coupon-close">
-                              <span>
-                                <i className="bx bx-x" />
-                              </span>
-                            </Link>
-                          </div>
-                          <button
-                            type="submit"
-                            className="btn btn-secondary d-flex align-items-center apply-coupon-btn disabled ms-2"
-                          >
-                            Apply
-                            <i className="feather icon-arrow-right ms-2" />
-                          </button>
-                        </div>
-                        <span className="coupen-applied-offter">
-                          <i className="bx bxs-offer" />
-                          Saved in this Booking{" "}
-                        </span>
-                      </form>
-                    </div>
-                  </div>
+
                   <div className="total-rate-card">
                     <div className="vehicle-total-price">
                       <h5>Estimated Total</h5>

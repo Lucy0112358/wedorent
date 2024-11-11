@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getCar, getCarsList } from "../api/bookingApi";
+import { getCar, getCarsList, getCategories } from "../api/bookingApi";  // Import the new thunk
 
 const initialState = {
   bookingData: {},
   bookingCar: {},
   serviceTotal: 0,
-  allCars: []
+  allCars: [],
+  categories: []  // New state for categories
 };
 
 export const bookingSlice = createSlice({
@@ -49,6 +50,9 @@ export const bookingSlice = createSlice({
       })
       .addCase(getCarsList.fulfilled, (state, action) => {
         state.allCars = action.payload;
+      })
+      .addCase(getCategories.fulfilled, (state, action) => {
+        state.categories = action.payload;  // Update state with categories
       });
   },
 });
@@ -63,5 +67,6 @@ export const getBookingData = (state) => state.booking.bookingData;
 export const getBookingCar = (state) => state.booking.bookingCar;
 export const getServiceTotal = (state) => state.booking.serviceTotal;
 export const getAllCars = (state) => state.booking.allCars;
+export const getAllCategories = (state) => state.booking.categories;  // Export the categories
 
 export default bookingSlice.reducer;

@@ -214,45 +214,6 @@ console.log(bookingData, "bookingData")
                             </Link>
                           </div>
                         </div>
-                        <div className="booking-vehicle-rates">
-                          <ul>
-                            <li>
-                              <div className="rental-charge">
-                                <h6>
-                                  Rental Charges Rate <span> (1 day )</span>
-                                </h6>
-                                <span className="text-danger">
-                                  (This does not include fuel)
-                                </span>
-                              </div>
-                              <h5>+ $300</h5>
-                            </li>
-                            <li>
-                              <h6>Door delivery &amp; Pickup</h6>
-                              <h5>+ $60</h5>
-                            </li>
-                            <li>
-                              <h6>Trip Protection Fees</h6>
-                              <h5>+ $25</h5>
-                            </li>
-                            <li>
-                              <h6>Convenience Fees</h6>
-                              <h5>+ $2</h5>
-                            </li>
-                            <li>
-                              <h6>Tax</h6>
-                              <h5>+ $2</h5>
-                            </li>
-                            <li>
-                              <h6>Refundable Deposit</h6>
-                              <h5>+$1200</h5>
-                            </li>
-                            <li className="total-rate">
-                              <h6>Subtotal</h6>
-                              <h5>+$1604</h5>
-                            </li>
-                          </ul>
-                        </div>
                       </div>
                     </div>
                     <div className="booking-sidebar-card">
@@ -291,34 +252,8 @@ console.log(bookingData, "bookingData")
                         </ul>
                       </div>
                     </div>
-                    <div className="booking-sidebar-card">
-                      <div className="booking-sidebar-head d-flex justify-content-between align-items-center">
-                        <h5>Coupon</h5>
-                        <Link to="#" className="coupon-view">
-                          View Coupons
-                        </Link>
-                      </div>
-                      <div className="booking-sidebar-body">
-                        <form>
-                          <div className="d-flex align-items-center">
-                            <div className="form-custom flex-fill">
-                              <input
-                                type="text"
-                                className="form-control mb-0"
-                                placeholder="Coupon code"
-                              />
-                            </div>
-                            <button
-                              type="button"
-                              className="btn btn-secondary apply-coupon-btn d-flex align-items-center ms-2"
-                            >
-                              Apply
-                              <i className="feather icon-arrow-right ms-2" />
-                            </button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
+
+
                     <div className="total-rate-card">
                       <div className="vehicle-total-price">
                         <h5>Estimated Total</h5>
