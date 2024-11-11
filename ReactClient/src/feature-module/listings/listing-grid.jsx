@@ -11,25 +11,34 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { all_routes } from "../router/all_routes";
-import { getAllCars } from "../../core/data/redux/slice/bookingSlice";
+import { getAllCars, getAllCategories } from "../../core/data/redux/slice/bookingSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { getCarsList } from "../../core/data/redux/api/bookingApi";
+import { getCarsList, getCategories } from "../../core/data/redux/api/bookingApi";
 import { toast } from "react-toastify";
 import EmailModal from "./EmailModal";
 
 const ListingGrid = () => {
   const allCars = useSelector(getAllCars);
+  const allCategories = useSelector(getAllCategories);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getCarsList()).then(
-      res => {
-        if (res.meta.requestStatus === 'rejected') {
-          toast(res.error.message);
-        }
-        console.log(res)
+    Promise.all([
+      dispatch(getCarsList()),
+      dispatch(getCategories())
+    ]).then(([carsRes, categoriesRes]) => {
+      if (carsRes.meta.requestStatus === 'rejected') {
+        toast(carsRes.error.message);
       }
-    );
-  }, [])
+      if (categoriesRes.meta.requestStatus === 'rejected') {
+        toast(categoriesRes.error.message);
+      }
+    });
+  }, [dispatch]);
+
+  const handleFilter = (id) => {
+    dispatch(getCarsList({ "categoryId": id }))
+  }
+
   const routes = all_routes;
   const [selectedNumber, setSelectedNumber] = useState(null);
   const [selectedSort, setSelectedSort] = useState(null);
@@ -249,9 +258,6 @@ const ListingGrid = () => {
     ],
   };
 
-  const handleFilter = (id) => {
-    dispatch(getCarsList({ "categoryId": id }))
-  }
 
   return (
     <div className="listing-page">
@@ -261,20 +267,21 @@ const ListingGrid = () => {
       <div className="section-search page-search">
         <section className="section popular-services popular-explore">
           <div className="container">
-
-
-
             <div className="search-box-banner">
-              <form >
-                <div className="listing-tabs-group">
-                  <ul className="nav listing-buttons gap-3" data-bs-tabs="tabs">
-                    <li onClick={() => handleFilter(1)}
+              <div className="listing-tabs-group">
+                <ul className="nav listing-buttons gap-3" data-bs-tabs="tabs" style={{ display: 'flex', flexWrap: 'wrap' }}>
+                  {allCategories.data?.map(category => (
+                    <li
+                      key={category.id}
+                      onClick={() => handleFilter(category.id)}
+                      style={{ marginRight: '10px' }}
                     >
                       <Link
                         className="active"
                         aria-current="true"
                         data-bs-toggle="tab"
                         to="#Carmazda"
+                        style={{ display: 'flex', alignItems: 'center' }}
                       >
                         <span>
                           <ImageWithBasePath
@@ -282,12 +289,12 @@ const ListingGrid = () => {
                             alt="Mazda"
                           />
                         </span>
-                        Mazda
+                        {category.name}
                       </Link>
                     </li>
-                  </ul>
-                </div>
-              </form>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </section>
@@ -302,7 +309,7 @@ const ListingGrid = () => {
               <div className="row d-flex align-items-center">
                 <div className="col-xl-4 col-lg-3 col-sm-12 col-12">
                   <div className="count-search">
-                    <p>Showing 1-9 of 154 Cars</p>
+                    <p>Showing {allCars?.data.length} of 154 Cars</p>
                   </div>
                 </div>
                 <div className="col-xl-8 col-lg-9 col-sm-12 col-12">
@@ -336,9 +343,9 @@ const ListingGrid = () => {
           <div className="row">
             <div className="col-lg-12">
               <div className="row">
-  
+
                 {
-                  allCars.data?.map((car, index) => (
+                  allCars.data?.map((car) => (
                     <div className="col-xxl-4 col-lg-6 col-md-6 col-12">
                       <div className="listing-item">
                         <div className="listing-img">
@@ -394,7 +401,7 @@ const ListingGrid = () => {
                                 />
                               </Link>
                               <h3 className="listing-title">
-                                <Link to={routes.listingDetails}>
+                              <Link to={routes.listingDetails.replace(':id', car.id)}>
                                   {car.model}
                                 </Link>
                               </h3>
@@ -486,11 +493,11 @@ const ListingGrid = () => {
                             </div>
                             <div className="listing-price">
                               <h6>
-                                $160 <span>/ Day</span>
+                                {car?.prices[0].price} ֏ <span>/ Day</span>
                               </h6>
                             </div>
                           </div>
-                          {/* <div className="listing-button"  onClick={handleShow}>
+                          {/* <div className="listing-button">
                             <Link
                              // to={routes.listingDetails}
                               className="btn btn-order"
@@ -501,7 +508,7 @@ const ListingGrid = () => {
                               Rent Now
                             </Link>
                           </div> */}
-<EmailModal />
+                          <EmailModal />
                         </div>
                         <div className="feature-text">
                           <span className="bg-danger">Featured</span>

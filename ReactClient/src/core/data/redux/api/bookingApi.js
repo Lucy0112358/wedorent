@@ -77,3 +77,20 @@ export const sendEmail = createAsyncThunk(
     }
   }
 )
+
+export const getCategories = createAsyncThunk(
+  'booking/getCategories',
+  async (_, thunkAPI) => {
+    try {
+      const config = {
+        method: "get",
+        url: '/Car/Categories', 
+      };
+
+      const response = await instance(config);  
+      return response?.data; 
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.error?.both || error.message);  // Handle errors
+    }
+  }
+);

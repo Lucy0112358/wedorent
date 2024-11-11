@@ -40,19 +40,7 @@ const Footer = () => {
                       <ul>
                         <li>
                           <Link to={routes.aboutUs}>Our Company</Link>
-                        </li>
-                        <li>
-                          <Link to="#">Shop Toyota</Link>
-                        </li>
-                        <li>
-                          <Link to="#">Dreamsrentals USA</Link>
-                        </li>
-                        <li>
-                          <Link to="#">Dreamsrentals Worldwide</Link>
-                        </li>
-                        <li>
-                          <Link to="#">Dreamsrental Category</Link>
-                        </li>										
+                        </li>                       								
                       </ul>
                     </div>
                     {/* /Footer Widget */}
@@ -86,21 +74,21 @@ const Footer = () => {
                     <div className="footer-widget footer-menu">
                       <h5 className="footer-title">Quick links</h5>
                       <ul>
-                        <li>
+                        {/* <li>
                           <Link to="#">My Account</Link>
-                        </li>
-                        <li>
+                        </li> */}
+                        {/* <li>
                           <Link to="#">Champaigns</Link>
                         </li>
                         <li>
                           <Link to="#">Dreamsrental Dealers</Link>
-                        </li>
+                        </li> */}
                         <li>
                           <Link to="#">Deals and Incentive</Link>
                         </li>
-                        <li>
+                        {/* <li>
                           <Link to="#">Financial Services</Link>
-                        </li>								
+                        </li>								 */}
                       </ul>
                     </div>
                     {/* /Footer Widget */}
@@ -114,7 +102,13 @@ const Footer = () => {
                     <div className="footer-address">											
                       <span><i className="feather icon-phone-call" /></span>
                       <div className="addr-info">
-                        <Link to="tel:+1(888)7601940">+ 1 (888) 760 1940</Link>
+                        <Link to="tel:+(374)95773003">+ (374) 95 773 003</Link>
+                      </div>
+                    </div>
+                    <div className="footer-address">											
+                      <span><i className="feather icon-phone-call" /></span>
+                      <div className="addr-info">
+                        <Link to="tel:+(374)95773003">+ (374) 44 773 300</Link>
                       </div>
                     </div>
                     <div className="footer-address">
@@ -123,23 +117,23 @@ const Footer = () => {
                         <Link to="mailto:support@example.com">support@example.com</Link>
                       </div>
                     </div>
-                    <div className="update-form">
+                    {/* <div className="update-form">
                       <form action="#">
                         <span><i className="feather icon-mail" /></span> 
                         <input type="email" className="form-control" placeholder="Enter You Email Here" />
                         <button type="submit" className="btn btn-subscribe"><span><i className="feather icon-send" /></span></button>
                       </form>
-                    </div>
+                    </div> */}
                   </div>								
                   <div className="footer-social-widget">
                     <ul className="nav-social">
-                      <li>
+                      {/* <li>
                         <Link to="#"><i className="fa-brands fa-facebook-f fa-facebook fi-icon" /></Link>
-                      </li>
+                      </li> */}
                       <li>
-                        <Link to="#"><i className="fab fa-instagram fi-icon" /></Link>
+                        <Link to="#"><i className="fab fa-instagram fi-icon" /></Link> 
                       </li>
-                      <li>
+                      {/* <li>
                         <Link to="#"><i className="fab fa-behance fi-icon" /></Link>
                       </li>
                       <li>
@@ -147,7 +141,7 @@ const Footer = () => {
                       </li>
                       <li>
                         <Link to="#"><i className="fab fa-linkedin fi-icon" /></Link>
-                      </li>
+                      </li> */}
                     </ul>
                   </div>
                 </div>
@@ -164,7 +158,7 @@ const Footer = () => {
               <div className="row align-items-center">
                 <div className="col-md-6">
                   <div className="copyright-text">
-                    <p>© 2024 Dreams Rent. All Rights Reserved.</p>
+                    <p>© {new Date().getFullYear()} WeDo Rent a car. All Rights Reserved.</p>
                   </div>
                 </div>
                 <div className="col-md-6">
@@ -172,10 +166,10 @@ const Footer = () => {
                   <div className="copyright-menu">
                     <div className="vistors-details">
                       <ul className="d-flex">											
-                        <li><Link to="#"><ImageWithBasePath className="img-fluid" src="assets/img/icons/paypal.svg" alt="Paypal" /></Link></li>											
+                        {/* <li><Link to="#"><ImageWithBasePath className="img-fluid" src="assets/img/icons/paypal.svg" alt="Paypal" /></Link></li>											 */}
                         <li><Link to="#"><ImageWithBasePath className="img-fluid" src="assets/img/icons/visa.svg" alt="Visa" /></Link></li>
                         <li><Link to="#"><ImageWithBasePath className="img-fluid" src="assets/img/icons/master.svg" alt="Master" /></Link></li>
-                        <li><Link to="#"><ImageWithBasePath className="img-fluid" src="assets/img/icons/applegpay.svg" alt="applegpay" /></Link></li>
+                        {/* <li><Link to="#"><ImageWithBasePath className="img-fluid" src="assets/img/icons/applegpay.svg" alt="applegpay" /></Link></li> */}
                       </ul>										   								
                     </div>
                   </div>

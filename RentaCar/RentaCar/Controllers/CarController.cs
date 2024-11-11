@@ -18,9 +18,9 @@ namespace RentaCar.Controllers
         }
 
         [HttpGet("Cars")]
-        public ActionResult<ApiResult<IEnumerable<Car>>> GetAllCars()
+        public ActionResult<ApiResult<IEnumerable<Car>>> GetAllCars([FromQuery] int? categoryId)
         {
-            var cars = _carService.GetCars();
+            var cars = _carService.GetCars(categoryId);
 
             if (cars == null || !cars.Any())
             {
@@ -28,6 +28,19 @@ namespace RentaCar.Controllers
             }
 
             return Ok(ApiResult<IEnumerable<Car>>.Success(cars));
+        }
+
+        [HttpGet("Categories")]
+        public ActionResult<ApiResult<IEnumerable<Category>>> GetAllCategories()
+        {
+            var categories = _carService.GetAllCategories();  // Call service method
+
+            if (categories == null || !categories.Any())
+            {
+                return NotFound(ApiResult<IEnumerable<Category>>.ErrorResult("No categories found."));
+            }
+
+            return Ok(ApiResult<IEnumerable<Category>>.Success(categories));
         }
 
         /// <summary>

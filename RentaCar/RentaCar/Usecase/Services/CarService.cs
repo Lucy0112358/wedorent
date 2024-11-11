@@ -11,7 +11,7 @@ namespace RentaCar.Usecase.Services
     {
         private readonly CarRepository _carRepository;
         public CarService(CarRepository carRepository) { _carRepository = carRepository; }
-        public List<CarResult> FilterBy(string? model = null, int? wedding = 0, int? driver = 0)
+        public List<Car> FilterBy(string? model = null, int? wedding = 0, int? driver = 0)
         {
             throw new NotImplementedException();
         }
@@ -21,9 +21,17 @@ namespace RentaCar.Usecase.Services
             return _carRepository.GetCarById(carId);
         }
 
-        public List<Car> GetCars()
+        public List<Car> GetCars(int? categoryId = null)
         {
-            return _carRepository.Cars();
+            var cars = _carRepository.Cars(categoryId);
+            var allPrices = _carRepository.GetCarPricing();
+
+            foreach (var car in cars)
+            {
+                car.Prices = allPrices.Where(p => p.CarId == car.Id).ToList();
+            }
+
+            return cars;
         }
 
         public bool CheckCarAvailability(CheckoutRequest request)
@@ -35,6 +43,11 @@ namespace RentaCar.Usecase.Services
             }
 
             return _carRepository.IsCarAvailable(request.CarId, request.StartDate, request.EndDate);
+        }
+
+        public List<Category> GetAllCategories()
+        {
+            return _carRepository.GetAllCategories();
         }
 
     }
