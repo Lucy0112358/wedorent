@@ -1,4 +1,5 @@
-﻿using RentaCar.ApplicationModels;
+﻿using AutoMapper;
+using RentaCar.ApplicationModels;
 using RentaCar.DataModels;
 using RentaCar.Entity;
 using RentaCar.Enums;
@@ -10,7 +11,11 @@ namespace RentaCar.Usecase.Services
     public class CarService : ICarService
     {
         private readonly CarRepository _carRepository;
-        public CarService(CarRepository carRepository) { _carRepository = carRepository; }
+        private readonly IMapper _mapper;
+        public CarService(CarRepository carRepository, IMapper mapper) {
+            _carRepository = carRepository;
+            _mapper = mapper;
+        }
         public List<Car> FilterBy(string? model = null, int? wedding = 0, int? driver = 0)
         {
             throw new NotImplementedException();
@@ -18,20 +23,23 @@ namespace RentaCar.Usecase.Services
 
         public Car GetCar(int carId)
         {
-            return _carRepository.GetCarById(carId);
+            var car = _carRepository.GetCarById(carId);
+            car.Prices = _carRepository.GetCarPricing(carId);
+
+            return car;
         }
 
-        public List<Car> GetCars(int? categoryId = null)
+        public List<CarResult> GetCars(int? categoryId = null)
         {
             var cars = _carRepository.Cars(categoryId);
-            var allPrices = _carRepository.GetCarPricing();
+            var allPrices = _carRepository.GetCarPricing();           
 
             foreach (var car in cars)
             {
                 car.Prices = allPrices.Where(p => p.CarId == car.Id).ToList();
             }
 
-            return cars;
+            return _mapper.Map<List<CarResult>>(cars);
         }
 
         public bool CheckCarAvailability(CheckoutRequest request)

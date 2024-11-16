@@ -90,7 +90,7 @@ const UserPayment = () => {
   const [userPayment, setUserPayment] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const filteredData = userPayment.filter((booking) => {
-    const values = Object.values(booking).map((value:any) =>
+    const values = Object.values(booking).map((value) =>
       value.toString().toLowerCase()
     );
     return values.some((value) => value.includes(searchInput.toLowerCase()));
@@ -98,7 +98,7 @@ const UserPayment = () => {
 
   useEffect(() => {
     Aos.init({ duration: 1200, once: true });
-    userPaymentData.getUserPaymentMedium().then((data:any) => setUserPayment(data));
+    userPaymentData.getUserPaymentMedium().then((data) => setUserPayment(data));
   }, []);
   return (
     <>

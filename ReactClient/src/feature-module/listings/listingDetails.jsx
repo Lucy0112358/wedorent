@@ -41,11 +41,15 @@ const listingDetails = () => {
   const bookingCar = useSelector(getBookingCar);
   useEffect(() => {
     if (paramsId) {
-      dispatch(getCar(paramsId));
+      dispatch(getCar(paramsId))
     }else {
       navigate(routes.listingList);
     }
   }, [paramsId]);
+
+  useEffect(()=>{
+    handleDetails("carId", paramsId)
+  }, [bookingCar])
   const bookingData = useSelector(getBookingData)
 
   console.log(bookingData, "bookingDatabookingDatabookingData")
@@ -643,185 +647,15 @@ const settings2 = {
                   </div>
                 </div>
                 <div className="review-sec mt-0">
-                  <div className="review-header">
+                  {/* <div className="review-header">
                     <h4>Check Availability</h4>
-                  </div>
+                  </div> */}
                   <div className="location-content">
-                    <div className="delivery-tab">
-                      <ul className="nav">
-                        <li>
-                          <label
-                            className="booking_custom_check"
-                            data-bs-target="#delivery"
-                          >
-                            <input
-                              type="radio"
-                              name="rent_type"
-                              onChange={(e) => handleDetails("rent_type", 'delivery')}
-                              defaultChecked=""
-                            />
-                            <span className="booking_checkmark">
-                              <span className="checked-title">Delivery</span>
-                            </span>
-                          </label>
-                        </li>
-                        <li>
-                          <label
-                            className="booking_custom_check"
-                            onChange={(e) => handleDetails("rent_type", 'pickup')}
-                            data-bs-target="#pickup"
-                          >
-                            <input type="radio" name="rent_type" />
-                            <span className="booking_checkmark">
-                              <span className="checked-title">Self Pickup</span>
-                            </span>
-                          </label>
-                        </li>
-                      </ul>
-                    </div>
+
                     <div className="tab-content">
                       <div className="tab-pane fade active show" id="delivery">
                         <form className="">
                           <ul>
-                            <li className="column-group-main">
-                              <div className="input-block">
-                                <label>Delivery Location</label>
-                                <div className="group-img">
-                                  <div className="form-wrap">
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      onChange={(e) => handleDetails("location", e.target.value)}
-                                      placeholder="45, 4th Avanue  Mark Street USA"
-                                    />
-                                    <span className="form-icon">
-                                      <i className="fa-solid fa-location-crosshairs" />
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
-                            <li className="column-group-main">
-                              <div className="input-block">
-                                <label className="custom_check d-inline-flex location-check m-0">
-                                  <span>Return to same location</span>
-                                  <input 
-                                    type="checkbox" 
-                                    name="remeber" 
-                                    onChange={(e) => handleDetails("sameLocation", e.target.checked)}
-                                  />
-                                  <span className="checkmark" />
-                                </label>
-                              </div>
-                            </li>
-                            <li className="column-group-main">
-                              <div className="input-block">
-                                <label>Return Location</label>
-                                <div className="group-img">
-                                  <div className="form-wrap">
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      onChange={(e) => handleDetails("returnLocation", e.target.value)}
-                                      placeholder="78, 10th street Laplace USA"
-                                    />
-                                    <span className="form-icon">
-                                      <i className="fa-solid fa-location-crosshairs" />
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
-                            <li className="column-group-main">
-                              <div className="input-block m-0">
-                                <label>Pickup Date</label>
-                              </div>
-                              <div className="input-block-wrapp sidebar-form">
-                                <div className="input-block  me-lg-2">
-                                  <div className="group-img">
-                                    <div className="form-wrap">
-                                      <Calendar
-                                        value={date1}
-                                        // onChange={(e) => setDate1(e.value)}
-                                        onChange={(e) => handleDetails("StartDate", e.value)}
-                                        placeholder="04/11/2023"
-                                      />
-                                      {/* <input
-                                      type="text"
-                                      className="form-control datetimepicker"
-                                      placeholder="04/11/2023"
-                                    /> */}
-                                      <span className="form-icon">
-                                        <i className="fa-regular fa-calendar-days" />
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="input-block">
-                                  <div className="group-img">
-                                    <div className="form-wrap">
-                                      <TimePicker
-                                        placeholder="Choose Time"
-                                        className="form-control timepicker"
-                                        onChange={pickerOne}
-                                        defaultValue={dayjs(
-                                          "00:00:00",
-                                          "HH:mm:ss"
-                                        )}
-                                      />
-                                      <span className="form-icon">
-                                        <i className="fa-regular fa-clock" />
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
-                            <li className="column-group-main">
-                              <div className="input-block m-0">
-                                {" "}
-                                <label>Return Date</label>
-                              </div>
-                              <div className="input-block-wrapp sidebar-form">
-                                <div className="input-block me-lg-2">
-                                  <div className="group-img">
-                                    <div className="form-wrap">
-                                      <Calendar
-                                        // value={date2}
-                                        onChange={(e) => handleDetails("pickupDateTwo", e.value)}
-                                        placeholder="04/11/2023"
-                                      />
-                                      {/* <input
-                                      type="text"
-                                      className="form-control datetimepicker"
-                                      placeholder="04/11/2023"
-                                    /> */}
-                                      <span className="form-icon">
-                                        <i className="fa-regular fa-calendar-days" />
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="input-block">
-                                  <div className="group-img">
-                                    <div className="form-wrap">
-                                      <TimePicker
-                                        placeholder="Choose Time"
-                                        className="form-control timepicker"
-                                        onChange={pickerTwo}
-                                        defaultValue={dayjs(
-                                          "00:00:00",
-                                          "HH:mm:ss"
-                                        )}
-                                      />
-                                      <span className="form-icon">
-                                        <i className="fa-regular fa-clock" />
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
                             <li className="column-group-last">
                               <div className="input-block mb-0">
                                 <div className="search-btn">

@@ -14,6 +14,7 @@
         public int? Doors { get; set; } 
         public int? Seats { get; set; }
         public string Color { get; set; }
+        public string FuelType { get; set; }
         public decimal? WeddingPrice { get; set; } 
         public bool Transfer { get; set; }
         public bool WithDriver { get; set; }

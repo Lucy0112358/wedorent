@@ -490,7 +490,7 @@ const HomeOne = () => {
                           key={48}
                           onClick={() => handleItemClick(48)}
                         >
-                          <span className="featured-text">KIA</span>
+                          <span className="featured-text">{car.brand}</span>
                           <Link
                             to="#"
                             className={`fav-icon ${selectedItems[48] ? "selected" : ""}`}
@@ -508,7 +508,7 @@ const HomeOne = () => {
                             />
                           </Link>
                           <h3 className="listing-title">
-                            <Link to={routes.listingDetails}>Kia Soul 2016</Link>
+                            <Link to={routes.listingDetails}>{car.model}</Link>
                           </h3>
                           <div className="list-rating">
                             <i className="fas fa-star filled" />
@@ -537,7 +537,7 @@ const HomeOne = () => {
                                   alt="22 KM"
                                 />
                               </span>
-                              <p>22 KM</p>
+                              <p>{car.color}</p>
                             </li>
                             <li>
                               <span>
@@ -546,7 +546,7 @@ const HomeOne = () => {
                                   alt="Petrol"
                                 />
                               </span>
-                              <p>Petrol</p>
+                              <p>{car.fuelType}</p>
                             </li>
                           </ul>
                           <ul>
@@ -557,7 +557,7 @@ const HomeOne = () => {
                                   alt="Diesel"
                                 />
                               </span>
-                              <p>Diesel</p>
+                              <p>{car.label}</p>
                             </li>
                             <li>
                               <span>
@@ -566,7 +566,7 @@ const HomeOne = () => {
                                   alt=""
                                 />
                               </span>
-                              <p>2016</p>
+                              <p>{car.year}</p>
                             </li>
                             <li>
                               <span>
@@ -575,7 +575,7 @@ const HomeOne = () => {
                                   alt="Persons"
                                 />
                               </span>
-                              <p>5 Persons</p>
+                              <p>{car.seats} Persons</p>
                             </li>
                           </ul>
                         </div>
@@ -584,11 +584,11 @@ const HomeOne = () => {
                             <span>
                               <i className="feather icon-map-pin" />
                             </span>
-                            Belgium
+                            Yerevan
                           </div>
                           <div className="listing-price">
                             <h6>
-                              $80 <span>/ Day</span>
+                              {car.prices[0].price}֏ <span>/ Day</span>
                             </h6>
                           </div>
                         </div>

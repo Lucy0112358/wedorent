@@ -13,26 +13,12 @@ export const bookingSlice = createSlice({
   name: "booking",
   initialState,
   reducers: {
+    // setCarId:  (state, action) => {
+
+    // },
     setBookingData: (state, action) => {
       console.log(action, "BookingSliceeeeeeeeeee");
       let data = action.payload;
-
-      // Rename returnLocation to EndAddress
-      if (data.returnLocation) {
-        data.EndAddress = data.returnLocation;
-        delete data.returnLocation; // Remove the old key if needed
-      }
-
-      // Rename location to StartAddress
-      if (data.location) {
-        data.StartAddress = data.location;
-        data.pickupDateOne = data.StartDate;
-        data.pickupDateTwo = data.EndDate;
-        
-        delete data.location; // Remove the old key if needed
-        delete data.pickupDateOne; // Remove the old key if needed
-      }
-
       state.bookingData = data;
     },
     setServiceTotalAdd: (state, action) => {

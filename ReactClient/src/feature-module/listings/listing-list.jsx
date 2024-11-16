@@ -278,7 +278,7 @@ const Listinglist = () => {
               <div className="row d-flex align-items-center">
                 <div className="col-xl-4 col-lg-3 col-sm-12 col-12">
                   <div className="count-search">
-                    <p>Showing 1-9 of 154 Cars</p>
+                    <p>Showing {allCars?.data?.length} Cars</p>
                   </div>
                 </div>
                 <div className="col-xl-8 col-lg-9 col-sm-12 col-12">
@@ -415,7 +415,7 @@ const Listinglist = () => {
                                     </Link>
                                   </h3>
                                   <h6>
-                                    Category : <span>{car.model}</span>
+                                    Category : <span>{car.category}</span>
                                   </h6>
                                 </div>
                                 <div className="blog-list-rate">
@@ -428,7 +428,7 @@ const Listinglist = () => {
                               <span>180 Reviews</span>
                             </div> */}
                                   <h6>
-                                    {car.price * 1000}<span>AMD/ Day</span>
+                                   From {car.prices[2].price}<span>֏/ Day</span>
                                   </h6>
                                 </div>
                               </div>
@@ -441,7 +441,7 @@ const Listinglist = () => {
                                         alt="Auto"
                                       />
                                     </span>
-                                    <p>Auto</p>
+                                    <p>{car.engine}</p>
                                   </li>
                                   <li>
                                     <span>
@@ -450,7 +450,7 @@ const Listinglist = () => {
                                         alt="10 KM"
                                       />
                                     </span>
-                                    <p>10 KM</p>
+                                    <p>{car.color}</p>
                                   </li>
                                   <li>
                                     <span>
@@ -468,7 +468,7 @@ const Listinglist = () => {
                                         alt="Power"
                                       />
                                     </span>
-                                    <p>Power</p>
+                                    <p>{car.fuelType}</p>
                                   </li>
                                   <li>
                                     <span>
@@ -531,9 +531,9 @@ const Listinglist = () => {
                               </div>
                             </div>
                           </div>
-                          <div className="feature-text">
+                          {/* <div className="feature-text">
                             <span className="bg-danger">Featured</span>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>

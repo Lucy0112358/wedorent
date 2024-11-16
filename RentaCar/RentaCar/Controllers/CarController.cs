@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RentaCar.ApplicationModels;
 using RentaCar.ApplicationModels.Domain.Configuration;
 using RentaCar.Entity;
 using RentaCar.Enums;
@@ -18,16 +19,16 @@ namespace RentaCar.Controllers
         }
 
         [HttpGet("Cars")]
-        public ActionResult<ApiResult<IEnumerable<Car>>> GetAllCars([FromQuery] int? categoryId)
+        public ActionResult<ApiResult<IEnumerable<CarResult>>> GetAllCars([FromQuery] int? categoryId)
         {
             var cars = _carService.GetCars(categoryId);
 
             if (cars == null || !cars.Any())
             {
-                return NotFound(ApiResult<IEnumerable<Car>>.ErrorResult("No cars found."));
+                return NotFound(ApiResult<IEnumerable<CarResult>>.ErrorResult("No cars found."));
             }
 
-            return Ok(ApiResult<IEnumerable<Car>>.Success(cars));
+            return Ok(ApiResult<IEnumerable<CarResult>>.Success(cars));
         }
 
         [HttpGet("Categories")]

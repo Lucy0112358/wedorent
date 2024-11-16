@@ -309,7 +309,7 @@ const ListingGrid = () => {
               <div className="row d-flex align-items-center">
                 <div className="col-xl-4 col-lg-3 col-sm-12 col-12">
                   <div className="count-search">
-                    <p>Showing {allCars?.data.length} of 154 Cars</p>
+                    <p>Showing {allCars?.data.length} Cars</p>
                   </div>
                 </div>
                 <div className="col-xl-8 col-lg-9 col-sm-12 col-12">
@@ -389,7 +389,7 @@ const ListingGrid = () => {
                               </div>
                             </Slider>
                           </div>
-                          <span className="featured-text">Toyota</span>
+                          <span className="featured-text">{car.brand}</span>
                         </div>
                         <div className="listing-content">
                           <div className="listing-features d-flex align-items-end justify-content-between">
@@ -410,8 +410,8 @@ const ListingGrid = () => {
                                 <i className="fas fa-star filled" />
                                 <i className="fas fa-star filled" />
                                 <i className="fas fa-star filled" />
-                                <i className="fas fa-star" />
-                                <span>(4.0) 138 Reviews</span>
+                                <i className="fas fa-star filled" />
+                                <span>(5.0) </span>
                               </div>
                             </div>
                             <div className="list-km">
@@ -420,7 +420,7 @@ const ListingGrid = () => {
                                   src="assets/img/icons/map-pin.svg"
                                   alt="author"
                                 />
-                                3.2m
+                              {car.category}
                               </span>
                             </div>
                           </div>
@@ -442,7 +442,7 @@ const ListingGrid = () => {
                                     alt="10 KM"
                                   />
                                 </span>
-                                <p>10 KM</p>
+                                <p>{car.color}</p>
                               </li>
                               <li>
                                 <span>
@@ -451,7 +451,7 @@ const ListingGrid = () => {
                                     alt="Petrol"
                                   />
                                 </span>
-                                <p>Petrol</p>
+                                <p>{car.fuelType}</p>
                               </li>
                             </ul>
                             <ul>
@@ -462,7 +462,7 @@ const ListingGrid = () => {
                                     alt="Power"
                                   />
                                 </span>
-                                <p>Power</p>
+                                <p>{car.label}</p>
                               </li>
                               <li>
                                 <span>
@@ -471,7 +471,7 @@ const ListingGrid = () => {
                                     alt='2018'
                                   />
                                 </span>
-                                <p>2018</p>
+                                <p>{car.year}</p>
                               </li>
                               <li>
                                 <span>
@@ -480,7 +480,7 @@ const ListingGrid = () => {
                                     alt="Persons"
                                   />
                                 </span>
-                                <p>5 Persons</p>
+                                <p>{car.seats} Persons</p>
                               </li>
                             </ul>
                           </div>
@@ -489,11 +489,11 @@ const ListingGrid = () => {
                               <span>
                                 <i className="feather icon-map-pin" />
                               </span>
-                              Washington
+                              Yerevan
                             </div>
                             <div className="listing-price">
                               <h6>
-                                {car?.prices[0].price} ֏ <span>/ Day</span>
+                               From {car?.prices[2].price} ֏ <span>/ Day</span>
                               </h6>
                             </div>
                           </div>
@@ -510,9 +510,9 @@ const ListingGrid = () => {
                           </div> */}
                           <EmailModal />
                         </div>
-                        <div className="feature-text">
+                        {/* <div className="feature-text">
                           <span className="bg-danger">Featured</span>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   ))}
