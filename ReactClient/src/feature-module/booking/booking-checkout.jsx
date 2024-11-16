@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import Breadcrumbs from "../common/breadcrumbs";
 import { Calendar } from "primereact/calendar";
@@ -6,30 +6,92 @@ import { TimePicker } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../router/all_routes";
 import { useDispatch, useSelector } from "react-redux";
-import { getBookingData, setBookingData } from "../../core/data/redux/slice/bookingSlice";
+import { getBookingCar, getBookingData, setBookingData } from "../../core/data/redux/slice/bookingSlice";
 import dayjs from "dayjs";
+import { getCar } from "../../core/data/redux/api/bookingApi";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { GoogleMap, useJsApiLoader, StandaloneSearchBox } from "@react-google-maps/api";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const BookingCheckout = () => {
-  const routes = all_routes;
 
-  const [date1, setDate1] = useState();
-  const [date2, setDate2] = useState();
+  const inputRef = useRef(null);
+
+
+  const YEREVAN_BOUNDS = {
+    north: 40.23,
+    south: 40.11,
+    east: 44.6,
+    west: 44.45,
+  };
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+    libraries: ["places"],
+  });
+  const routes = all_routes;
   const onChange = (time, timeString) => {
     console.log(time, timeString);
   };
 
-  //Get booking dataaa
+
+  useEffect(() => {
+    if (bookingData.carId == null) {
+      let storedId = localStorage.getItem('carId');
+      handleBookingData('carId', storedId);
+      handleBookingData('rent_type', "delivery");
+      console.log(storedId)
+      dispatch(getCar(storedId));
+    }
+  }, []);
+
   const [isDelivery, setIsDelivery] = useState(false)
   const bookingData = useSelector(getBookingData)
-  console.log(bookingData, "bookingDatabookingDatabookingData")
-  const dispatch = useDispatch()
+  const bookingCar = useSelector(getBookingCar);
+
+  const dispatch = useDispatch();
+
+  const handleEndAddressChange = (key, value) => {
+
+    let existBookingInfo = {
+      ...bookingData,
+      [key]: value,
+      sameLocation: false
+    };
+
+    dispatch(setBookingData(existBookingInfo))
+  };
+
+  const handleStartAddressChange = (value) => {
+    let existBookingInfo = {
+      ...bookingData,
+      StartAddress: value,
+      sameLocation: false
+    };
+
+    dispatch(setBookingData(existBookingInfo))
+  };
+
   const handleBookingData = (key, value) => {
     let existBookingInfo = {
       ...bookingData,
       [key]: value
     };
-    dispatch(setBookingData( existBookingInfo ))
 
+    dispatch(setBookingData(existBookingInfo))
+  }
+
+  const handleBookingDataDouble = (keyOne, valueOne, keyTwo, valueTwo) => {
+    let existBookingInfo = {
+      ...bookingData,
+      [keyOne]: valueOne,
+      [keyTwo]: valueTwo,
+    };
+
+    dispatch(setBookingData(existBookingInfo))
   }
 
   const pickerOne = (time, timeString) => {
@@ -40,18 +102,40 @@ const BookingCheckout = () => {
     handleBookingData('pickerTwo', timeString)
   };
 
-  const handleDelivery = () => {
-
-  }
-
-console.log(bookingData?.rent_type === "delivery", 555555555555)
-  //End Get booking data
+  const validationSchema = Yup.object({
+    StartAddress: Yup.string().required("Location is required"),
+    EndAddress: Yup.string().required("Return location is required"),
+    StartDate: Yup.date().required("Pickup Date is required"),
+    EndDate: Yup.date().required("Return Date is required"),
+    rent_type: Yup.string().required("Rent Type is required"),
+  });
 
   const navigate = useNavigate();
 
   const navigatePath = () => {
     navigate(routes.bookingAddon);
   }
+
+  const handleSameLocation = (isChecked) => {
+    if (isChecked) {
+      let existBookingInfo = {
+        ...bookingData,
+        EndAddress: bookingData?.StartAddress,
+        sameLocation: true
+      };
+
+      dispatch(setBookingData(existBookingInfo))
+    } else {
+      let existBookingInfo = {
+        ...bookingData,
+        EndAddress: "",
+        sameLocation: false
+      };
+
+      dispatch(setBookingData(existBookingInfo))
+    }
+  };
+
 
   return (
     <div>
@@ -138,8 +222,8 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                             />
                           </span>
                           <div className="care-more-info">
-                            <h5>Chevrolet Camaro</h5>
-                            <p>Miami St, Destin, FL 32550, USA</p>
+                            <h5>{bookingCar?.data?.model}</h5>
+                            <p>{bookingCar?.data?.engine}</p>
                             <Link to={routes.listingDetails}>View Car Details</Link>
                           </div>
                         </div>
@@ -148,7 +232,7 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
                     <div className="total-rate-card">
                       <div className="vehicle-total-price">
                         <h5>Estimated Total</h5>
-                        <span>$3541</span>
+                        <span>{bookingCar?.data?.prices[0]?.price}֏</span>
                       </div>
                     </div>
                   </div>
@@ -156,256 +240,350 @@ console.log(bookingData?.rent_type === "delivery", 555555555555)
               </div>
               <div className="col-lg-8">
                 <div className="booking-information-main">
-                  <form>
-                    <div className="booking-information-card">
-                      <div className="booking-info-head">
-                        <span>
-                          <i className="bx bxs-car-garage" />
-                        </span>
-                        <h5>Rental Type</h5>
-                      </div>
-                      <div className="booking-info-body">
-                        <ul className="booking-radio-btns">
-                          <li>
-                            <label className="booking_custom_check">
-                              <input
-                                type="radio"
-                                name="rent_type"
-                                checked={bookingData?.rent_type === "delivery"}
-                                id="location_delivery"
-                                onChange={(e) => handleBookingData("rent_type", 'delivery')}
-                                defaultChecked
-                              />
-                              <span className="booking_checkmark">
-                                <span className="checked-title">Delivery</span>
+                  <Formik
+                    initialValues={{
+                      StartAddress: bookingData?.StartAddress || "",
+                      EndAddress: bookingData?.EndAddress || "",
+                      StartDate: bookingData?.StartDate || "",
+                      EndDate: bookingData?.EndDate || "",
+                      rent_type: bookingData?.rent_type || "delivery",
+                      sameLocation: bookingData?.sameLocation || false,
+                    }}
+                    validationSchema={validationSchema}
+                    onSubmit={(values) => {
+                      console.log(values);
+                      navigatePath();
+                    }}
+                  >
+                    {({ values, handleChange, isSubmitting, setFieldValue, errors }) => {
+                      console.log("Form errors:", errors);
+                      const handleOnPlacesChanged = () => {
+                        const searchBox = inputRef.current;
+                        if (searchBox) {
+                          const places = searchBox.getPlaces();
+                          if (places && places.length > 0) {
+                            const filteredPlaces = places.filter((place) => {
+                              const location = place.geometry?.location;
+                              if (location) {
+                                const lat = location.lat();
+                                const lng = location.lng();
+                                return (
+                                  lat <= YEREVAN_BOUNDS.north &&
+                                  lat >= YEREVAN_BOUNDS.south &&
+                                  lng <= YEREVAN_BOUNDS.east &&
+                                  lng >= YEREVAN_BOUNDS.west
+                                );
+                              }
+                              return false;
+                            });
+                            console.log(filteredPlaces[0].formatted_address)
+                            handleStartAddressChange(filteredPlaces[0].formatted_address);
+                           setFieldValue('StartAddress', filteredPlaces[0].formatted_address);
+                            if (filteredPlaces.length > 0) {
+                             
+                           
+                              console.log("Filtered Place:", filteredPlaces[0].formatted_address);
+                            } else {
+                              console.warn("No places found within Yerevan");
+                            }
+                          }
+                        }
+                      };
+                      return (
+                        <Form>
+                          <div className="booking-information-card">
+                            <div className="booking-info-head">
+                              <span>
+                                <i className="bx bxs-car-garage" />
                               </span>
-                            </label>
-                          </li>
-                          <li>
-                            <label className="booking_custom_check">
-                              <input
-                                type="radio"
-                                name="rent_type"
-                                checked={bookingData?.rent_type === "pickup"}
-                                
-                                onChange={(e) => handleBookingData("rent_type", 'pickup')}
-                                id="location_pickup"
-                              />
-                              <span className="booking_checkmark">
-                                <span className="checked-title">Self Pickup</span>
+                              <h5>Rental Type</h5>
+                            </div>
+                            <div className="booking-info-body">
+                              <ul className="booking-radio-btns">
+                                <li>
+                                  <label className="booking_custom_check">
+                                    <input
+                                      type="radio"
+                                      name="rent_type"
+                                      checked={bookingData?.rent_type === "delivery"}
+                                      id="location_delivery"
+                                      onChange={(e) => handleBookingData("rent_type", 'delivery')}
+                                      defaultChecked
+                                    />
+                                    <span className="booking_checkmark">
+                                      <span className="checked-title">Delivery</span>
+                                    </span>
+                                  </label>
+                                </li>
+                                <li>
+                                  <label className="booking_custom_check">
+                                    <input
+                                      type="radio"
+                                      name="rent_type"
+                                      disabled
+                                      checked={bookingData?.rent_type === "pickup"}
+                                      onChange={(e) => handleBookingData("rent_type", 'pickup')}
+                                      id="location_pickup"
+                                    />
+                                    <span className="booking_checkmark">
+                                      <span className="checked-title">Self Pickup</span>
+                                    </span>
+                                  </label>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          {bookingData?.rent_type === "delivery" && (
+                            <>
+                              <div className="booking-information-card delivery-location">
+                                <div className="booking-info-head">
+                                  <span>
+                                    <i className="bx bxs-car-garage" />
+                                  </span>
+                                  <h5>Location</h5>
+                                </div>
+                                <div className="booking-info-body">
+                                  <div className="form-custom">
+                                    <label className="form-label">Delivery Location</label>
+                                    <div className="d-flex align-items-center">
+                                      {isLoaded &&
+                                        <StandaloneSearchBox
+                                          onLoad={(ref) => (inputRef.current = ref)}
+                                          onPlacesChanged={() => {
+                                            handleOnPlacesChanged();
+                                          }}
+                                          options={{
+                                            bounds: YEREVAN_BOUNDS,
+                                            strictBounds: true,
+                                            componentRestrictions: { country: "am" },
+                                          }}
+                                        >
+                                          <input
+                                            type="text"
+                                            className="form-control mb-0"
+                                           
+                                          />
+                                        </StandaloneSearchBox>
+                                      }
+
+                                    </div>
+                                    {errors.StartAddress && <p style={{ color: 'red' }}>{errors.StartAddress}</p>}
+
+                                  </div>
+                                  <div className="input-block m-0">
+                                    <label className="custom_check d-inline-flex location-check">
+                                      <span>Return to same location</span>
+                                      <input
+                                        type="checkbox"
+                                        name="sameLocation"
+                                        checked={bookingData?.sameLocation || false}
+                                        onChange={(e) => handleSameLocation(e.target.checked)}
+                                      />
+
+                                      <span className="checkmark" />
+                                    </label>
+                                  </div>
+                                  <div className="form-custom">
+                                    <label className="form-label">Return Location</label>
+                                    <div className="d-flex align-items-center">
+                                      <Field
+                                        type="text"
+                                        className="form-control mb-0"
+                                        value={bookingData?.EndAddress}
+                                        onChange={(e) => {
+                                          handleEndAddressChange('EndAddress', e.target.value);
+                                          setFieldValue('EndAddress', e.target.value);
+                                        }}
+                                      />
+                                    </div>
+                                    {errors.EndAddress && <p style={{ color: 'red' }}>{errors.EndAddress}</p>}
+                                  </div>
+                                </div>
+                              </div>
+                            </>
+                          )}
+
+                          {bookingData?.rent_type === "pickup" && (
+                            <>
+                              <div className="booking-information-card pickup-location">
+                                <div className="booking-info-head">
+                                  <span>
+                                    <i className="bx bxs-car-garage" />
+                                  </span>
+                                  <h5>Location</h5>
+                                </div>
+                                <div className="booking-info-body">
+                                  <div className="form-custom">
+                                    <label className="form-label">Pickup Location</label>
+                                    <div className="d-flex align-items-center">
+                                      <input
+                                        type="text"
+                                        className="form-control mb-0"
+                                        value={bookingData?.StartAddress}
+                                        onChange={(e) => handleBookingData("StartAddress", e.target.value)}
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="input-block m-0">
+                                    <label className="custom_check d-inline-flex location-check">
+                                      <span>Return to same location</span>
+                                      <input
+                                        type="checkbox"
+                                        name="remember"
+                                        checked={bookingData?.sameLocation}
+                                        onChange={(e) => handleBookingData("sameLocation", e.target.checked)}
+                                      />
+                                      <span className="checkmark" />
+                                    </label>
+                                  </div>
+                                  <div className="form-custom">
+                                    <label className="form-label">Return Location</label>
+                                    <div className="d-flex align-items-center">
+                                      <input
+                                        type="text"
+                                        onChange={(e) => handleBookingData("EndAddress", e.target.value)}
+                                        value={bookingData?.EndAddress}
+                                        className="form-control mb-0"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </>
+                          )}
+
+                          <div className="booking-information-card booking-type-card">
+                            <div className="booking-info-head">
+                              <span>
+                                <i className="bx bxs-location-plus" />
                               </span>
-                            </label>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    {bookingData?.rent_type === "delivery" && (
-                      <>
-                        <div className="booking-information-card delivery-location">
-                          <div className="booking-info-head">
-                            <span>
-                              <i className="bx bxs-car-garage" />
-                            </span>
-                            <h5>Location</h5>
-                          </div>
-                          <div className="booking-info-body">
-                            <div className="form-custom">
-                              <label className="form-label">Delivery Location</label>
-                              <div className="d-flex align-items-center">
-                                <input
-                                  type="text"
-                                  className="form-control mb-0"
-                                  value={bookingData?.StartAddress}
-                                  onChange={(e) => handleBookingData("location", e.target.value)}
-                                />
-                              </div>
+                              <h5> Time</h5>
                             </div>
-                            <div className="input-block m-0">
-                              <label className="custom_check d-inline-flex location-check">
-                                <span>Return to same location</span>
-                                <input 
-                                  type="checkbox" 
-                                  name="remember" 
-                                  checked={bookingData?.sameLocation}
-                                  onChange={(e) => handleBookingData("sameLocation", e.target.checked)}
-                                />
-                                <span className="checkmark" />
-                              </label>
-                            </div>
-                            <div className="form-custom">
-                              <label className="form-label">Return Location</label>
-                              <div className="d-flex align-items-center">
-                                <input
-                                  type="text"
-                                  className="form-control mb-0"
-                                  onChange={(e) => handleBookingData("returnLocation", e.target.value)}
-                                  value={bookingData?.EndAddress}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    )}
+                            <div className="booking-info-body">
+                              <div className="booking-timings">
+                                <div className="row">
+                                  <div className="col-md-6">
+                                    <div className="input-block date-widget">
+                                      <label className="form-label">Start Date</label>
+                                      <div className="group-img">
+                                        <Calendar
 
-                    {bookingData?.rent_type === "pickup" && (
-                      <>
-                        <div className="booking-information-card pickup-location">
-                          <div className="booking-info-head">
-                            <span>
-                              <i className="bx bxs-car-garage" />
-                            </span>
-                            <h5>Location</h5>
-                          </div>
-                          <div className="booking-info-body">
-                            <div className="form-custom">
-                              <label className="form-label">Pickup Location</label>
-                              <div className="d-flex align-items-center">
-                                <input
-                                  type="text"
-                                  className="form-control mb-0"
-                                  value={bookingData?.location}
-                                  onChange={(e) => handleBookingData("location", e.target.value)}
-                                />
-                              </div>
-                            </div>
-                            <div className="input-block m-0">
-                              <label className="custom_check d-inline-flex location-check">
-                                <span>Return to same location</span>
-                                <input
-                                  type="checkbox" 
-                                  name="remember" 
-                                  checked={bookingData?.sameLocation}
-                                  onChange={(e) => handleBookingData("sameLocation", e.target.checked)}
-                                />
-                                <span className="checkmark" />
-                              </label>
-                            </div>
-                            <div className="form-custom">
-                              <label className="form-label">Return Location</label>
-                              <div className="d-flex align-items-center">
-                                <input
-                                  type="text"
-                                  onChange={(e) => handleBookingData("returnLocation", e.target.value)}
-                                  value={bookingData?.returnLocation}
-                                  className="form-control mb-0"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    )}
+                                          minDate={new Date()}
+                                          className="datetimepicker bg-custom"
+                                          value={bookingData?.StartDate}
+                                          onChange={(e) => {
+                                            handleBookingData('StartDate', e.target.value);
+                                            setFieldValue('StartDate', e.target.value);
+                                          }}
+                                          placeholder="Choose Date"
+                                        />
 
-                    <div className="booking-information-card booking-type-card">
-                      <div className="booking-info-head">
-                        <span>
-                          <i className="bx bxs-location-plus" />
-                        </span>
-                        <h5> Time</h5>
-                      </div>
-                      <div className="booking-info-body">
-                        <div className="booking-timings">
-                          <div className="row">
-                            <div className="col-md-6">
-                              <div className="input-block date-widget">
-                                <label className="form-label">Start Date</label>
-                                <div className="group-img">
-                                  <Calendar
-                                    className="datetimepicker bg-custom"
-                                    value={bookingData?.StartDate}
-                                    onChange={(e) => handleBookingData("StartDate", e.value)}
-                                    placeholder="Choose Date"
-                                  />
-                                  <span className="input-cal-icon">
-                                    <i className="bx bx-calendar" />
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-md-6">
-                              <div className="input-block time-widge">
-                                <label className="form-label">Start Time</label>
-                                <div className="group-img style-custom">
-                                  <TimePicker
-                                    placeholder="Choose Time"
-                                    className="form-control timepicker"
-                                    defaultValue={dayjs(
-                                      bookingData?.pickerOne || "00:00:00",
-                                      "HH:mm:ss"
-                                    )}
-                                    onChange={pickerOne}
-                                  />
-                                  <span className="input-cal-icon">
-                                    <i className="bx bx-time" />
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-md-6">
-                              <div className="input-block date-widget">
-                                <label className="form-label">
-                                  Return Date
-                                </label>
-                                <div className="group-img">
-                                  <Calendar
-                                    className="datetimepicker bg-custom"
-                                    value={bookingData?.EndDate}
-                                    onChange={(e) => handleBookingData("EndDate", e.value)}
-                                    placeholder="Choose Date"
-                                  />
-                                  <span className="input-cal-icon">
-                                    <i className="bx bx-calendar" />
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-md-6">
-                              <div className="input-block time-widge">
-                                <label className="form-label">
-                                  Return Time
-                                </label>
-                                <div className="group-img style-custom">
-                                  <TimePicker
-                                     placeholder="Choose Time"
-                                     className="form-control timepicker"
-                                     defaultValue={dayjs(
-                                      bookingData?.pickerTwo || "00:00:00",
-                                      "HH:mm:ss"
-                                    )}
-                                     onChange={pickerTwo}
-                                  />
-                                  <span className="input-cal-icon">
-                                    <i className="bx bx-time" />
-                                  </span>
+
+                                        <span className="input-cal-icon">
+                                          <i className="bx bx-calendar" />
+                                        </span>
+
+                                      </div>
+                                      {errors.StartDate && <p style={{ color: 'red' }}>{errors.StartDate}</p>}
+                                    </div>
+                                  </div>
+                                  <div className="col-md-6">
+                                    <div className="input-block time-widge">
+                                      <label className="form-label">Start Time</label>
+                                      <div className="group-img style-custom">
+                                        <TimePicker
+                                          placeholder="Choose Time"
+                                          className="form-control timepicker"
+                                          defaultValue={dayjs(
+                                            bookingData?.pickerOne || "00:00:00",
+                                            "HH:mm:ss"
+                                          )}
+                                          onChange={pickerOne}
+                                        />
+                                        <span className="input-cal-icon">
+                                          <i className="bx bx-time" />
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="col-md-6">
+                                    <div className="input-block date-widget">
+                                      <label className="form-label">
+                                        Return Date
+                                      </label>
+                                      <div className="group-img">
+                                        <Calendar
+                                          minDate={new Date()}
+                                          className="datetimepicker bg-custom"
+                                          value={bookingData?.EndDate}
+                                          onChange={(e) => {
+                                            handleBookingData('EndDate', e.target.value);
+                                            setFieldValue('EndDate', e.target.value);
+                                          }}
+                                          placeholder="Choose Date"
+                                        />
+                                        <span className="input-cal-icon">
+                                          <i className="bx bx-calendar" />
+                                        </span>
+                                      </div>
+                                      {errors.EndDate && <p style={{ color: 'red' }}>{errors.EndDate}</p>}
+
+                                    </div>
+                                  </div>
+                                  <div className="col-md-6">
+                                    <div className="input-block time-widge">
+                                      <label className="form-label">
+                                        Return Time
+                                      </label>
+                                      <div className="group-img style-custom">
+                                        <TimePicker
+                                          placeholder="Choose Time"
+                                          className="form-control timepicker"
+                                          defaultValue={dayjs(
+                                            bookingData?.pickerTwo || "00:00:00",
+                                            "HH:mm:ss"
+                                          )}
+                                          onChange={pickerTwo}
+                                        />
+                                        <span className="input-cal-icon">
+                                          <i className="bx bx-time" />
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="booking-info-btns d-flex justify-content-end">
-                      <Link
-                        to={routes.listingDetails}
-                        className="btn btn-secondary"
-                      >
-                        Back to Car details
-                      </Link>
-                      <button onClick={navigatePath}
-                        className="btn btn-primary continue-book-btn"
-                        type="button"
-                      >
-                        Continue Booking
-                      </button>
-                    </div>
-                  </form>
+
+
+                          <div className="booking-info-btns d-flex justify-content-end">
+                            <Link
+                              to={routes.listingDetails}
+                              className="btn btn-secondary"
+                            >
+                              Back to Car details
+                            </Link>
+                            <button
+                              className="btn btn-primary continue-book-btn"
+                              type="submit"
+                            >
+                              Continue Booking
+                            </button>
+                          </div>
+
+                        </Form>
+                      );
+                    }}
+
+                  </Formik>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div >
+      <ToastContainer />
     </div >
   );
 };

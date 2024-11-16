@@ -6,7 +6,9 @@
 .fa {
   font-family: var(--fa-style-family, "Font Awesome 6 Free");
   font-weight: var(--fa-style, 900); }
-
+  gmp-map {
+    height: 100%;
+  }
 .fa,
 .fa-classic,
 .fa-sharp,

@@ -1,4 +1,5 @@
-﻿using RentaCar.DataModels;
+﻿using RentaCar.ApplicationModels;
+using RentaCar.DataModels;
 using RentaCar.Entity;
 
 //https://rentcar1.am/
@@ -12,6 +13,7 @@ namespace RentaCar.Usecase
         public List<Car> GetCarsForDays(AvailableCarsRequest request);
 
         public List<Entity.Services> GetAllServices();
+        public List<ReservationResult> GetBookingTableInfo();
 
     }
 }

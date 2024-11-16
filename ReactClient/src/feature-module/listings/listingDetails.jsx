@@ -14,11 +14,13 @@ import dayjs from "dayjs";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getBookingCar, getBookingData, setBookingData } from "../../core/data/redux/slice/bookingSlice";
+import { getCarsList, getCategories  } from "../../core/data/redux/api/bookingApi";
+import { getBookingCar,getAllCars, getBookingData, setBookingData } from "../../core/data/redux/slice/bookingSlice";
 import { useParams } from 'react-router-dom';
 import { getCar } from "../../core/data/redux/api/bookingApi";
 
 const listingDetails = () => {
+  const allCars = useSelector(getAllCars);
   const routes = all_routes;
   const [date1, setDate1] = useState(null);
   const bigImgSliderRef = useRef(null);
@@ -33,23 +35,42 @@ const listingDetails = () => {
     { name: " Newyork Office - 78, 10th street Laplace USA" },
     { name: "Newyork Office - 12, 5th street USA" },
   ];
-
+  const dispatch = useDispatch()
   //Get booking dataaa
   const data = useParams();
   const paramsId = data.id;
   const navigate = useNavigate();
   const bookingCar = useSelector(getBookingCar);
+
   useEffect(() => {
+    Promise.all([
+      dispatch(getCarsList()),
+      dispatch(getCategories())
+    ]).then(([carsRes, categoriesRes]) => {
+      if (carsRes.meta.requestStatus === 'rejected') {
+        toast(carsRes.error.message);
+      }
+      if (categoriesRes.meta.requestStatus === 'rejected') {
+        toast(categoriesRes.error.message);
+      }
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(setBookingData())
     if (paramsId) {
       dispatch(getCar(paramsId));
+      localStorage.setItem('carId', paramsId);
     }else {
       navigate(routes.listingList);
     }
   }, [paramsId]);
-  const bookingData = useSelector(getBookingData)
 
-  console.log(bookingData, "bookingDatabookingDatabookingData")
-  console.log(bookingCar.data, 'bookingCarbookingCar')
+  useEffect(()=>{
+    handleDetails("carId", paramsId)
+  }, [bookingCar])
+  
+  const bookingData = useSelector(getBookingData)
 
   const handleDetails = (key, value) => {
     let existBookingInfo = {
@@ -61,7 +82,7 @@ const listingDetails = () => {
 
 
 
-  const dispatch = useDispatch()
+
   const handleBookingData = (key, value) => {
     console.log(key, value)
     dispatch(setBookingData({key, value}))
@@ -76,19 +97,14 @@ const listingDetails = () => {
     handleDetails('pickerTwo', timeString)
   };
 
-  //ENd Get booking dataaa
-
-  // const onChange = (time, timeString) => {
-  //   console.log(time, timeString);
-  // };
   const [selectedItems, setSelectedItems] = useState(Array(10).fill(false));
-  const handleItemClick = (index) => {
-    setSelectedItems((prevSelectedItems) => {
-      const updatedSelectedItems = [...prevSelectedItems];
-      updatedSelectedItems[index] = !updatedSelectedItems[index];
-      return updatedSelectedItems;
-    });
-  };
+  // const handleItemClick = (index) => {
+  //   setSelectedItems((prevSelectedItems) => {
+  //     const updatedSelectedItems = [...prevSelectedItems];
+  //     updatedSelectedItems[index] = !updatedSelectedItems[index];
+  //     return updatedSelectedItems;
+  //   });
+  // };
   const [open, setOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const images = [
@@ -305,7 +321,7 @@ const settings2 = {
                           />
                         </div>
                         <div className="service-info">
-                          <p>GPS Navigation Systems</p>
+                          <p>Full insurance</p>
                         </div>
                       </div>
                       <div className="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
@@ -344,34 +360,12 @@ const settings2 = {
                       <div className="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
                         <div className="service-img">
                           <ImageWithBasePath
-                            src="assets/img/icons/service-05.svg"
-                            alt="Icon"
-                          />
-                        </div>
-                        <div className="service-info">
-                          <p>Roadside Assistance</p>
-                        </div>
-                      </div>
-                      <div className="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
-                        <div className="service-img">
-                          <ImageWithBasePath
-                            src="assets/img/icons/service-06.svg"
-                            alt="Icon"
-                          />
-                        </div>
-                        <div className="service-info">
-                          <p>Satellite Radio</p>
-                        </div>
-                      </div>
-                      <div className="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
-                        <div className="service-img">
-                          <ImageWithBasePath
                             src="assets/img/icons/service-07.svg"
                             alt="Icon"
                           />
                         </div>
                         <div className="service-info">
-                          <p>Additional Accessories</p>
+                          <p>Child booster</p>
                         </div>
                       </div>
                       <div className="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
@@ -382,7 +376,7 @@ const settings2 = {
                           />
                         </div>
                         <div className="service-info">
-                          <p>Express Check-in/out</p>
+                          <p>Free delivery in Yerevan</p>
                         </div>
                       </div>
                     </div>
@@ -405,8 +399,8 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>Body </span>
-                            <h6> Sedan</h6>
+                            <span>Brand </span>
+                            <h6> {bookingCar?.data?.brand}</h6>
                           </div>
                         </div>
                         <div className="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
@@ -417,8 +411,8 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>Make </span>
-                            <h6> Nisssan</h6>
+                            <span>Model </span>
+                            <h6> {bookingCar?.data?.model}</h6>
                           </div>
                         </div>
                         <div className="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
@@ -429,8 +423,8 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>Transmission </span>
-                            <h6> Automatic</h6>
+                            <span>Label </span>
+                            <h6> {bookingCar?.data?.label}</h6>
                           </div>
                         </div>
                         <div className="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
@@ -442,7 +436,7 @@ const settings2 = {
                           </div>
                           <div className="featues-info">
                             <span>Fuel Type </span>
-                            <h6> Diesel</h6>
+                            <h6> {bookingCar?.data?.fuelType}</h6>
                           </div>
                         </div>
                         <div className="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
@@ -453,20 +447,8 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>Mileage </span>
-                            <h6>16 Km</h6>
-                          </div>
-                        </div>
-                        <div className="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
-                          <div className="feature-img">
-                            <ImageWithBasePath
-                              src="assets/img/specification/specification-icon-6.svg"
-                              alt="Icon"
-                            />
-                          </div>
-                          <div className="featues-info">
-                            <span>Drivetrian </span>
-                            <h6>Front Wheel</h6>
+                            <span>Tag </span>
+                            <h6>{bookingCar?.data?.tag}</h6>
                           </div>
                         </div>
                         <div className="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
@@ -489,8 +471,8 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>AC </span>
-                            <h6> Air Condition</h6>
+                            <span>Transmission </span>
+                            <h6> {bookingCar?.data?.engine}</h6>
                           </div>
                         </div>
                         <div className="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
@@ -501,8 +483,8 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>VIN </span>
-                            <h6> 45456444</h6>
+                            <span>Color </span>
+                            <h6> {bookingCar?.data?.color}</h6>
                           </div>
                         </div>
                         <div className="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
@@ -514,7 +496,7 @@ const settings2 = {
                           </div>
                           <div className="featues-info">
                             <span>Door </span>
-                            <h6> 4 Doors</h6>
+                            <h6> {bookingCar?.data?.doors}</h6>
                           </div>
                         </div>
                         <div className="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
@@ -525,22 +507,11 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>Brake </span>
-                            <h6> ABS</h6>
+                            <span>Seats </span>
+                            <h6> {bookingCar?.data?.seats}</h6>
                           </div>
                         </div>
-                        <div className="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
-                          <div className="feature-img">
-                            <ImageWithBasePath
-                              src="assets/img/specification/specification-icon-12.svg"
-                              alt="Icon"
-                            />
-                          </div>
-                          <div className="featues-info">
-                            <span>Engine (Hp) </span>
-                            <h6> 3,000</h6>
-                          </div>
-                        </div>
+
                       </div>
                     </div>
                   </div>
@@ -601,20 +572,17 @@ const settings2 = {
                       <div className="policy-info">
                         <h6>Cancellation Charges</h6>
                         <p>
-                          Cancellation charges will be applied as per the policy
+                          Cancellation charges will be applied 
                         </p>
                       </div>
-                      <Link to={routes. privacyPolicy}>Know More</Link>
                     </div>
                     <div className="policy-item">
                       <div className="policy-info">
                         <h6>Policy</h6>
                         <p>
-                          I hereby agree to the terms and conditions of the
-                          Lease Agreement with Host
+Delievery in Yerevan is free, but if you want the car in other cities, additional charges apply, contact us for more 
                         </p>
                       </div>
-                      <Link to={routes.privacyPolicy}>View Details</Link>
                     </div>
                   </div>
                 </div>
@@ -630,10 +598,13 @@ const settings2 = {
                     <h4>Pricing Details</h4>
                   </div>
                   <div className="price-list">
-                    <div className="price-item">
-                      <p>Per day (8 Hours)</p>
-                      <h6>$300</h6>
+                    {bookingCar?.data?.prices.map(priceList => {
+                     return <div className="price-item">
+                      <p>From {priceList.minDays} to {priceList.maxDays} days per day</p>
+                      <h6>{priceList.price}֏</h6>
                     </div>
+                    })}
+                    
                     <div className="message-btn">
                     <Link to="https://wa.me/+37444773300" className="chat-link">
                       <i className="fa-brands fa-whatsapp" />
@@ -643,185 +614,15 @@ const settings2 = {
                   </div>
                 </div>
                 <div className="review-sec mt-0">
-                  <div className="review-header">
+                  {/* <div className="review-header">
                     <h4>Check Availability</h4>
-                  </div>
+                  </div> */}
                   <div className="location-content">
-                    <div className="delivery-tab">
-                      <ul className="nav">
-                        <li>
-                          <label
-                            className="booking_custom_check"
-                            data-bs-target="#delivery"
-                          >
-                            <input
-                              type="radio"
-                              name="rent_type"
-                              onChange={(e) => handleDetails("rent_type", 'delivery')}
-                              defaultChecked=""
-                            />
-                            <span className="booking_checkmark">
-                              <span className="checked-title">Delivery</span>
-                            </span>
-                          </label>
-                        </li>
-                        <li>
-                          <label
-                            className="booking_custom_check"
-                            onChange={(e) => handleDetails("rent_type", 'pickup')}
-                            data-bs-target="#pickup"
-                          >
-                            <input type="radio" name="rent_type" />
-                            <span className="booking_checkmark">
-                              <span className="checked-title">Self Pickup</span>
-                            </span>
-                          </label>
-                        </li>
-                      </ul>
-                    </div>
+
                     <div className="tab-content">
                       <div className="tab-pane fade active show" id="delivery">
                         <form className="">
                           <ul>
-                            <li className="column-group-main">
-                              <div className="input-block">
-                                <label>Delivery Location</label>
-                                <div className="group-img">
-                                  <div className="form-wrap">
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      onChange={(e) => handleDetails("location", e.target.value)}
-                                      placeholder="45, 4th Avanue  Mark Street USA"
-                                    />
-                                    <span className="form-icon">
-                                      <i className="fa-solid fa-location-crosshairs" />
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
-                            <li className="column-group-main">
-                              <div className="input-block">
-                                <label className="custom_check d-inline-flex location-check m-0">
-                                  <span>Return to same location</span>
-                                  <input 
-                                    type="checkbox" 
-                                    name="remeber" 
-                                    onChange={(e) => handleDetails("sameLocation", e.target.checked)}
-                                  />
-                                  <span className="checkmark" />
-                                </label>
-                              </div>
-                            </li>
-                            <li className="column-group-main">
-                              <div className="input-block">
-                                <label>Return Location</label>
-                                <div className="group-img">
-                                  <div className="form-wrap">
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      onChange={(e) => handleDetails("returnLocation", e.target.value)}
-                                      placeholder="78, 10th street Laplace USA"
-                                    />
-                                    <span className="form-icon">
-                                      <i className="fa-solid fa-location-crosshairs" />
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
-                            <li className="column-group-main">
-                              <div className="input-block m-0">
-                                <label>Pickup Date</label>
-                              </div>
-                              <div className="input-block-wrapp sidebar-form">
-                                <div className="input-block  me-lg-2">
-                                  <div className="group-img">
-                                    <div className="form-wrap">
-                                      <Calendar
-                                        value={date1}
-                                        // onChange={(e) => setDate1(e.value)}
-                                        onChange={(e) => handleDetails("StartDate", e.value)}
-                                        placeholder="04/11/2023"
-                                      />
-                                      {/* <input
-                                      type="text"
-                                      className="form-control datetimepicker"
-                                      placeholder="04/11/2023"
-                                    /> */}
-                                      <span className="form-icon">
-                                        <i className="fa-regular fa-calendar-days" />
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="input-block">
-                                  <div className="group-img">
-                                    <div className="form-wrap">
-                                      <TimePicker
-                                        placeholder="Choose Time"
-                                        className="form-control timepicker"
-                                        onChange={pickerOne}
-                                        defaultValue={dayjs(
-                                          "00:00:00",
-                                          "HH:mm:ss"
-                                        )}
-                                      />
-                                      <span className="form-icon">
-                                        <i className="fa-regular fa-clock" />
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
-                            <li className="column-group-main">
-                              <div className="input-block m-0">
-                                {" "}
-                                <label>Return Date</label>
-                              </div>
-                              <div className="input-block-wrapp sidebar-form">
-                                <div className="input-block me-lg-2">
-                                  <div className="group-img">
-                                    <div className="form-wrap">
-                                      <Calendar
-                                        // value={date2}
-                                        onChange={(e) => handleDetails("pickupDateTwo", e.value)}
-                                        placeholder="04/11/2023"
-                                      />
-                                      {/* <input
-                                      type="text"
-                                      className="form-control datetimepicker"
-                                      placeholder="04/11/2023"
-                                    /> */}
-                                      <span className="form-icon">
-                                        <i className="fa-regular fa-calendar-days" />
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="input-block">
-                                  <div className="group-img">
-                                    <div className="form-wrap">
-                                      <TimePicker
-                                        placeholder="Choose Time"
-                                        className="form-control timepicker"
-                                        onChange={pickerTwo}
-                                        defaultValue={dayjs(
-                                          "00:00:00",
-                                          "HH:mm:ss"
-                                        )}
-                                      />
-                                      <span className="form-icon">
-                                        <i className="fa-regular fa-clock" />
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
                             <li className="column-group-last">
                               <div className="input-block mb-0">
                                 <div className="search-btn">
@@ -896,7 +697,8 @@ const settings2 = {
                 </div>
                 <div className="rental-deal-slider details-car owl-carousel">
                   <Slider {...settings}>
-                    <div className="rental-car-item">
+                    {allCars?.data?.length > 0 && allCars?.data.map(car => {
+                      return   <div className="rental-car-item">
                       <div className="listing-item pb-0">
                         <div className="listing-img">
                           <Link to={routes.listingDetails}>
@@ -911,16 +713,9 @@ const settings2 = {
                             key={2}
                             onClick={() => handleItemClick(2)}
                           >
-                            <Link
-                              to="#"
-                              className={`fav-icon ${
-                                selectedItems[2] ? "selected" : ""
-                              }`}
-                            >
-                              <i className="feather icon-heart" />
-                            </Link>
+
                           </div>
-                          <span className="featured-text">Audi</span>
+                          <span className="featured-text">{car.tag}</span>
                         </div>
                         <div className="listing-content">
                           <div className="listing-features d-flex align-items-end justify-content-between">
@@ -936,7 +731,7 @@ const settings2 = {
                               </Link>
                               <h3 className="listing-title">
                                 <Link to={routes.listingDetails}>
-                                  Audi A3 2019 new
+                                 {car.model}
                                 </Link>
                               </h3>
                               <div className="list-rating">
@@ -944,8 +739,7 @@ const settings2 = {
                                 <i className="fas fa-star filled" />
                                 <i className="fas fa-star filled" />
                                 <i className="fas fa-star filled" />
-                                <i className="fas fa-star" />
-                                <span>(4.0) 150 Reviews</span>
+                                <i className="fas fa-star filled" />
                               </div>
                             </div>
                             <div className="list-km">
@@ -954,7 +748,7 @@ const settings2 = {
                                   src="assets/img/icons/map-pin.svg"
                                   alt="author"
                                 />
-                                3.5m
+                              {car.category}
                               </span>
                             </div>
                           </div>
@@ -967,7 +761,7 @@ const settings2 = {
                                     alt="Manual"
                                   />
                                 </span>
-                                <p>Manual</p>
+                                <p>{car.engine}</p>
                               </li>
                               <li>
                                 <span>
@@ -976,7 +770,7 @@ const settings2 = {
                                     alt="10 KM"
                                   />
                                 </span>
-                                <p>10 KM</p>
+                                <p>{car.doors}</p>
                               </li>
                               <li>
                                 <span>
@@ -985,7 +779,7 @@ const settings2 = {
                                     alt="Petrol"
                                   />
                                 </span>
-                                <p>Petrol</p>
+                                <p>{car.fuelType}</p>
                               </li>
                             </ul>
                             <ul>
@@ -996,7 +790,7 @@ const settings2 = {
                                     alt="Power"
                                   />
                                 </span>
-                                <p>Power</p>
+                                <p>{car.brand}</p>
                               </li>
                               <li>
                                 <span>
@@ -1005,7 +799,7 @@ const settings2 = {
                                     alt={2019}
                                   />
                                 </span>
-                                <p>2019</p>
+                                <p>{car.year}</p>
                               </li>
                               <li>
                                 <span>
@@ -1014,7 +808,7 @@ const settings2 = {
                                     alt="Persons"
                                   />
                                 </span>
-                                <p>4 Persons</p>
+                                <p>{car.seats} Persons</p>
                               </li>
                             </ul>
                           </div>
@@ -1023,11 +817,11 @@ const settings2 = {
                               <span>
                                 <i className="feather-map-pin" />
                               </span>
-                              Newyork, USA
+                              Yerevan, Armenia
                             </div>
                             <div className="listing-price">
                               <h6>
-                                $45 <span>/ Day</span>
+                               From {car?.prices[0].price} <span>/ Day</span>
                               </h6>
                             </div>
                           </div>
@@ -1041,602 +835,20 @@ const settings2 = {
                               </span>
                               Rent Now
                             </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="rental-car-item">
-                      <div className="listing-item pb-0">
-                        <Link to={routes.listingDetails}>
-                          <ImageWithBasePath
-                            src="assets/img/cars/car-01.jpg"
-                            className="img-fluid"
-                            alt="Toyota"
-                          />
-                        </Link>
-                        <div className="listing-content">
-                          <div className="listing-features d-flex align-items-end justify-content-between">
-                            <div className="list-rating">
-                              <Link
-                                to="#"
-                                className="author-img"
-                              >
-                                <ImageWithBasePath
-                                  src="assets/img/profiles/avatar-04.jpg"
-                                  alt="author"
-                                />
-                              </Link>
-                              <h3 className="listing-title">
-                                <Link to={routes.listingDetails}>
-                                  Toyota Camry SE 350
-                                </Link>
-                              </h3>
-                              <div className="list-rating">
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star" />
-                                <span>(4.0) 138 Reviews</span>
-                              </div>
-                            </div>
-                            <div className="list-km">
-                              <span className="km-count">
-                                <ImageWithBasePath
-                                  src="assets/img/icons/map-pin.svg"
-                                  alt="author"
-                                />
-                                3.2m
-                              </span>
-                            </div>
-                          </div>
-                          <div className="listing-details-group">
-                            <ul>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-01.svg"
-                                    alt="Auto"
-                                  />
-                                </span>
-                                <p>Auto</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-02.svg"
-                                    alt="10 KM"
-                                  />
-                                </span>
-                                <p>10 KM</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-03.svg"
-                                    alt="Petrol"
-                                  />
-                                </span>
-                                <p>Petrol</p>
-                              </li>
-                            </ul>
-                            <ul>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-04.svg"
-                                    alt="Power"
-                                  />
-                                </span>
-                                <p>Power</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-05.svg"
-                                    alt={2018}
-                                  />
-                                </span>
-                                <p>2018</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-06.svg"
-                                    alt="Persons"
-                                  />
-                                </span>
-                                <p>5 Persons</p>
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="listing-location-details">
-                            <div className="listing-price">
-                              <span>
-                                <i className="feather-map-pin" />
-                              </span>
-                              Washington
-                            </div>
-                            <div className="listing-price">
-                              <h6>
-                                $160 <span>/ Day</span>
-                              </h6>
-                            </div>
-                          </div>
-                          <div className="listing-button">
-                            <Link
-                              to={routes.listingDetails}
-                              className="btn btn-order"
-                            >
-                              <span>
-                                <i className="feather-calendar me-2" />
-                              </span>
-                              Rent Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="feature-text">
+                            {/* <div className="feature-text">
                           <span className="bg-danger">Featured</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="rental-car-item">
-                      <div className="listing-item pb-0">
-                        <div className="listing-img">
-                          <Link to={routes.listingDetails}>
-                            <ImageWithBasePath
-                              src="assets/img/cars/car-04.jpg"
-                              className="img-fluid"
-                              alt="Audi"
-                            />
-                          </Link>
-                          <div
-                            className="fav-item justify-content-end"
-                            key={3}
-                            onClick={() => handleItemClick(3)}
-                          >
-                            <Link
-                              to="#"
-                              className={`fav-icon ${
-                                selectedItems[3] ? "selected" : ""
-                              }`}
-                            >
-                              <i className="feather icon-heart" />
-                            </Link>
-                          </div>
-                          <span className="featured-text">Ferrai</span>
-                        </div>
-                        <div className="listing-content">
-                          <div className="listing-features d-flex align-items-end justify-content-between">
-                            <div className="list-rating">
-                              <Link
-                                to="#"
-                                className="author-img"
-                              >
-                                <ImageWithBasePath
-                                  src="assets/img/profiles/avatar-04.jpg"
-                                  alt="author"
-                                />
-                              </Link>
-                              <h3 className="listing-title">
-                                <Link to={routes.listingDetails}>
-                                  Ferrari 458 MM Speciale
-                                </Link>
-                              </h3>
-                              <div className="list-rating">
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star" />
-                                <span>(4.0) 160 Reviews</span>
-                              </div>
-                            </div>
-                            <div className="list-km">
-                              <span className="km-count">
-                                <ImageWithBasePath
-                                  src="assets/img/icons/map-pin.svg"
-                                  alt="author"
-                                />
-                                3.5m
-                              </span>
-                            </div>
-                          </div>
-                          <div className="listing-details-group">
-                            <ul>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-05.svg"
-                                    alt="Manual"
-                                  />
-                                </span>
-                                <p>Manual</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-02.svg"
-                                    alt="14 KM"
-                                  />
-                                </span>
-                                <p>14 KM</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-03.svg"
-                                    alt="Diesel"
-                                  />
-                                </span>
-                                <p>Diesel</p>
-                              </li>
-                            </ul>
-                            <ul>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-04.svg"
-                                    alt="Basic"
-                                  />
-                                </span>
-                                <p>Basic</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-05.svg"
-                                    alt={2022}
-                                  />
-                                </span>
-                                <p>2022</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-06.svg"
-                                    alt="Persons"
-                                  />
-                                </span>
-                                <p>5 Persons</p>
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="listing-location-details">
-                            <div className="listing-price">
-                              <span>
-                                <i className="feather-map-pin" />
-                              </span>
-                              Newyork, USA
-                            </div>
-                            <div className="listing-price">
-                              <h6>
-                                $160 <span>/ Day</span>
-                              </h6>
-                            </div>
-                          </div>
-                          <div className="listing-button">
-                            <Link
-                              to={routes.listingDetails}
-                              className="btn btn-order"
-                            >
-                              <span>
-                                <i className="feather-calendar me-2" />
-                              </span>
-                              Rent Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="feature-text">
-                          <span className="bg-danger">Featured</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="rental-car-item">
-                      <div className="listing-item pb-0">
-                        <div className="listing-img">
-                          <Link to={routes.listingDetails}>
-                            <ImageWithBasePath
-                              src="assets/img/cars/car-05.jpg"
-                              className="img-fluid"
-                              alt="Audi"
-                            />
-                          </Link>
-                          <div
-                            className="fav-item justify-content-end"
-                            key={4}
-                            onClick={() => handleItemClick(4)}
-                          >
-                            <Link
-                              to="#"
-                              className={`fav-icon ${
-                                selectedItems[4] ? "selected" : ""
-                              }`}
-                            >
-                              <i className="feather icon-heart" />
-                            </Link>
-                          </div>
-                          <span className="featured-text">Chevrolet</span>
-                        </div>
-                        <div className="listing-content">
-                          <div className="listing-features d-flex align-items-end justify-content-between">
-                            <div className="list-rating">
-                              <Link
-                                to="#"
-                                className="author-img"
-                              >
-                                <ImageWithBasePath
-                                  src="assets/img/profiles/avatar-05.jpg"
-                                  alt="author"
-                                />
-                              </Link>
-                              <h3 className="listing-title">
-                                <Link to={routes.listingDetails}>
-                                  2018 Chevrolet Camaro
-                                </Link>
-                              </h3>
-                              <div className="list-rating">
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <span>(5.0) 200 Reviews</span>
-                              </div>
-                            </div>
-                            <div className="list-km">
-                              <span className="km-count">
-                                <ImageWithBasePath
-                                  src="assets/img/icons/map-pin.svg"
-                                  alt="author"
-                                />
-                                4.5m
-                              </span>
-                            </div>
-                          </div>
-                          <div className="listing-details-group">
-                            <ul>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-05.svg"
-                                    alt="Manual"
-                                  />
-                                </span>
-                                <p>Manual</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-02.svg"
-                                    alt="18 KM"
-                                  />
-                                </span>
-                                <p>18 KM</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-03.svg"
-                                    alt="Diesel"
-                                  />
-                                </span>
-                                <p>Diesel</p>
-                              </li>
-                            </ul>
-                            <ul>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-04.svg"
-                                    alt="Power"
-                                  />
-                                </span>
-                                <p>Power</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-05.svg"
-                                    alt={2018}
-                                  />
-                                </span>
-                                <p>2018</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-06.svg"
-                                    alt="Persons"
-                                  />
-                                </span>
-                                <p>4 Persons</p>
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="listing-location-details">
-                            <div className="listing-price">
-                              <span>
-                                <i className="feather-map-pin" />
-                              </span>
-                              Germany
-                            </div>
-                            <div className="listing-price">
-                              <h6>
-                                $36 <span>/ Day</span>
-                              </h6>
-                            </div>
-                          </div>
-                          <div className="listing-button">
-                            <Link
-                              to={routes.listingDetails}
-                              className="btn btn-order"
-                            >
-                              <span>
-                                <i className="feather-calendar me-2" />
-                              </span>
-                              Rent Now
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="feature-text">
+                        </div> */}
+                                                {/* <div className="feature-text">
                           <span className="bg-warning">Top Rated</span>
+                        </div> */}
+                          </div>
                         </div>
                       </div>
                     </div>
+                    })}
 
-                    <div className="rental-car-item">
-                      <div className="listing-item">
-                        <div className="listing-img">
-                          <Link to={routes.listingDetails}>
-                            <ImageWithBasePath
-                              src="assets/img/cars/car-06.jpg"
-                              className="img-fluid"
-                              alt="Audi"
-                            />
-                          </Link>
-                          <div
-                            className="fav-item justify-content-end"
-                            key={5}
-                            onClick={() => handleItemClick(5)}
-                          >
-                            <Link
-                              to="#"
-                              className={`fav-icon ${
-                                selectedItems[5] ? "selected" : ""
-                              }`}
-                            >
-                              <i className="feather icon-heart" />
-                            </Link>
-                          </div>
-                          <span className="featured-text">Acura</span>
-                        </div>
-                        <div className="listing-content">
-                          <div className="listing-features d-flex align-items-end justify-content-between">
-                            <div className="list-rating">
-                              <Link
-                                to="#"
-                                className="author-img"
-                              >
-                                <ImageWithBasePath
-                                  src="assets/img/profiles/avatar-06.jpg"
-                                  alt="author"
-                                />
-                              </Link>
-                              <h3 className="listing-title">
-                                <Link to={routes.listingDetails}>
-                                  Acura Sport Version
-                                </Link>
-                              </h3>
-                              <div className="list-rating">
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star filled" />
-                                <i className="fas fa-star" />
-                                <span>(4.0) 125 Reviews</span>
-                              </div>
-                            </div>
-                            <div className="list-km">
-                              <span className="km-count">
-                                <ImageWithBasePath
-                                  src="assets/img/icons/map-pin.svg"
-                                  alt="author"
-                                />
-                                3.2m
-                              </span>
-                            </div>
-                          </div>
-                          <div className="listing-details-group">
-                            <ul>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-01.svg"
-                                    alt="Auto"
-                                  />
-                                </span>
-                                <p>Auto</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-02.svg"
-                                    alt="12 KM"
-                                  />
-                                </span>
-                                <p>12 KM</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-03.svg"
-                                    alt="Diesel"
-                                  />
-                                </span>
-                                <p>Diesel</p>
-                              </li>
-                            </ul>
-                            <ul>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-04.svg"
-                                    alt="Power"
-                                  />
-                                </span>
-                                <p>Power</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-05.svg"
-                                    alt={2013}
-                                  />
-                                </span>
-                                <p>2013</p>
-                              </li>
-                              <li>
-                                <span>
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/car-parts-06.svg"
-                                    alt="Persons"
-                                  />
-                                </span>
-                                <p>5 Persons</p>
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="listing-location-details">
-                            <div className="listing-price">
-                              <span>
-                                <i className="feather-map-pin" />
-                              </span>
-                              Newyork, USA
-                            </div>
-                            <div className="listing-price">
-                              <h6>
-                                $30 <span>/ Day</span>
-                              </h6>
-                            </div>
-                          </div>
-                          <div className="listing-button">
-                            <Link
-                              to={routes.listingDetails}
-                              className="btn btn-order"
-                            >
-                              <span>
-                                <i className="feather-calendar me-2" />
-                              </span>
-                              Rent Now
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+
+              
                   </Slider>
                 </div>
               </div>
@@ -1707,7 +919,7 @@ const settings2 = {
                         className="rememberme"
                       />
                       <span className="checkmark" />
-                      Baby Seat - <span className="ms-2">$10</span>
+                      Baby Seat - <span className="ms-2">10000֏</span>
                     </label>
                   </div>
                 </div>

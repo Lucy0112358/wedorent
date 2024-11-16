@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using RentaCar.ApplicationModels;
 using RentaCar.ApplicationModels.Domain.Configuration;
 using RentaCar.DataModels;
 using RentaCar.Entity;
-using RentaCar.Enums;
-using RentaCar.Exceptionss;
 using RentaCar.Repository;
 using RentaCar.Usecase;
-using System.Dynamic;
 
 namespace RentaCar.Controllers
 {
@@ -53,6 +51,24 @@ namespace RentaCar.Controllers
             public string? AllInfo { get; set; }
         }
 
+        /// <summary>
+        /// Retrieves reservation table information.
+        /// </summary>
+        /// <returns>A list of reservation results.</returns>
+        [HttpGet("GetBookingTableInfo")]
+        public ActionResult<ApiResult<List<ReservationResult>>> GetBookingTableInfo()
+        {
+            var results = _reservationService.GetBookingTableInfo();
+
+            if (results == null || !results.Any())
+            {
+                return NotFound(ApiResult<List<ReservationResult>>.ErrorResult("No reservations found."));
+            }
+
+            return Ok(ApiResult<List<ReservationResult>>.Success(results));
+        }
+
+
         [HttpPost("addReservation")]
         public ActionResult<ApiResult<bool>> ReserveACar([FromForm] ReservationRequestWithPhotos request)
         {
@@ -62,7 +78,7 @@ namespace RentaCar.Controllers
                 // Check for null or proceed with further logic
                 if (reservationRequest == null)
                 {
-                    return BadRequest(ApiResult<bool>.ErrorResult("Invalid AllInfo data."));
+                    return BadRequest(ApiResult<bool>.ErrorResult("Car could not be reserved"));
                 }
                 _reservationService.ReserveACar(reservationRequest);
 

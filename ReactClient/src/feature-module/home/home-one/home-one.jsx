@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Calendar } from "primereact/calendar";
-import CountUp from "react-countup";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -18,9 +17,49 @@ import { getAllCategories, getAllCars } from "../../../core/data/redux/slice/boo
 import { useDispatch, useSelector } from "react-redux";
 import { getCarsList, getCategories } from "../../../core/data/redux/api/bookingApi";
 import { toast } from "react-toastify";
-
+import { GoogleMap, useJsApiLoader, StandaloneSearchBox } from "@react-google-maps/api";
 
 const HomeOne = () => {
+  const inputRef = useRef(null);
+  const handleOnPlacesChanged = () => {
+    const searchBox = inputRef.current;
+    if (searchBox) {
+      const places = searchBox.getPlaces();
+      if (places && places.length > 0) {
+        const filteredPlaces = places.filter((place) => {
+          const location = place.geometry?.location;
+          if (location) {
+            const lat = location.lat();
+            const lng = location.lng();
+            return (
+              lat <= YEREVAN_BOUNDS.north &&
+              lat >= YEREVAN_BOUNDS.south &&
+              lng <= YEREVAN_BOUNDS.east &&
+              lng >= YEREVAN_BOUNDS.west
+            );
+          }
+          return false;
+        });
+
+        if (filteredPlaces.length > 0) {
+          console.log("Filtered Place:", filteredPlaces[0]);
+        } else {
+          console.warn("No places found within Yerevan");
+        }
+      }
+    }
+  };
+  const YEREVAN_BOUNDS = {
+    north: 40.23,
+    south: 40.11,
+    east: 44.6,
+    west: 44.45,
+  };
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+    libraries: ["places"],
+  });
   const allCars = useSelector(getAllCars);
   const allCategories = useSelector(getAllCategories);
   console.log(allCars);
@@ -39,7 +78,7 @@ const HomeOne = () => {
       }
     });
   }, [dispatch]);
-
+  let navigate = useNavigate();
   const handleFilter = (id) => {
     dispatch(getCarsList({ "categoryId": id }))
   }
@@ -95,6 +134,7 @@ const HomeOne = () => {
     ],
 
   };
+
   const imgslideroption = {
     dots: true,
     nav: true,
@@ -181,28 +221,28 @@ const HomeOne = () => {
     <>
       <Header />
       {/* Banner */}
-      <section className="banner-section banner-slider">
+      <section
+        className="banner-section banner-slider"
+        style={{
+          backgroundImage: "url('https://images.wallpaperscraft.com/image/single/mclaren_mp412c_orange_94581_1280x960.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "right",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <div className="container">
           <div className="home-banner">
             <div className="row align-items-center">
-              <div className="col-lg-6" data-aos="fade-down">
-                <p className="explore-text">
-                  {" "}
-                  <span>
-                    <i className="fa-solid fa-thumbs-up me-2"></i>
-                  </span>
-                  100% Trusted car rental platform in the World
-                </p>
+              <div className="col-lg-6" data-aos="fade-down" >
                 <h1>
                   <span>Find Your Best</span> <br />
                   Dream Car for Rental
                 </h1>
-                <p>
-                  Experience the ultimate in comfort, performance, and
-                  sophistication with our luxury car rentals. From sleek sedans
-                  and stylish coupes to spacious SUVs and elegant convertibles,
-                  we offer a range of premium vehicles to suit your preferences
-                  and lifestyle.
+                <p >
+                  Experience the ultimate in comfort, performance, and sophistication
+                  with our luxury car rentals. From sleek sedans and stylish coupes to
+                  spacious SUVs <br></br> and elegant convertibles, we offer a range of premium <br></br>
+                  vehicles to suit your preferences and lifestyle.
                 </p>
                 <div className="view-all">
                   <Link
@@ -216,19 +256,20 @@ const HomeOne = () => {
                   </Link>
                 </div>
               </div>
-              <div className="col-lg-6" data-aos="fade-down">
-                <div className="banner-imgs">
-                  <ImageWithBasePath
-                    src="assets/img/car-right.png"
-                    className="img-fluid aos"
-                    alt="bannerimage"
-                  />
-                </div>
-              </div>
+              {/* <div className="col-lg-6" data-aos="fade-down">
+          <div className="banner-imgs">
+            <ImageWithBasePath
+              src="assets/img/car-right.png"
+              className="img-fluid aos"
+              alt="bannerimage"
+            />
+          </div>
+        </div> */}
             </div>
           </div>
         </div>
       </section>
+
       {/* /Banner */}
       {/* Search */}
       <div className="section-search">
@@ -240,14 +281,33 @@ const HomeOne = () => {
                   <div className="input-block">
                     <label>Pickup Location</label>
                     <div className="group-img">
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Enter City, Airport, or Address"
-                      />
-                      <span>
-                        <i className="feather icon-map-pin" />
-                      </span>
+                      {isLoaded &&
+                        <StandaloneSearchBox
+                          onLoad={(ref) => (inputRef.current = ref)}
+                          onPlacesChanged={handleOnPlacesChanged}
+                          options={{
+                            bounds: YEREVAN_BOUNDS,
+                            strictBounds: true,
+                            componentRestrictions: { country: "am" },
+                          }}
+                        >
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter City, Airport, or Address"
+                            style={{
+                              boxSizing: "border-box",
+                              border: "1px solid transparent",
+                              width: "100%",
+                              height: "40px",
+                              padding: "12px",
+                              borderRadius: "4px",
+                            }}
+                          />
+                        </StandaloneSearchBox>
+                      }
+
+
                     </div>
                   </div>
                 </li>
@@ -319,7 +379,7 @@ const HomeOne = () => {
                 <li className="column-group-last">
                   <div className="input-block">
                     <div className="search-btn">
-                      <button className="btn search-button" type="submit">
+                      <button className="btn search-button" type="submit" onClick={() => navigate(routes.listingGrid)}>
                         {" "}
                         <i className="fa fa-search" aria-hidden="true" />
                         Search
@@ -367,7 +427,7 @@ const HomeOne = () => {
                     />
                   </div>
                   <div className="services-content">
-                    <h3>1. Choose Date & Locations</h3>
+                    <h3>1. Pick the date and time</h3>
                     <p>
                       Determine the date & location for your car rental.
                       Consider factors such as your travel itinerary,
@@ -390,7 +450,7 @@ const HomeOne = () => {
                     />
                   </div>
                   <div className="services-content">
-                    <h3>2. Pick-Up Locations</h3>
+                    <h3>2. Check availability of the car</h3>
                     <p>
                       Check the availability of your desired vehicle type for
                       your chosen dates and location. Ensure that the rental
@@ -412,7 +472,7 @@ const HomeOne = () => {
                     />
                   </div>
                   <div className="services-content">
-                    <h3>3. Book your Car</h3>
+                    <h3>3. Pay the crypto (only with us), cash or card</h3>
                     <p>
                       Once you`&lsquo;`ve found car rental option, proceed to
                       make a reservation. Provide the required information,
@@ -432,16 +492,13 @@ const HomeOne = () => {
         <div className="container">
           {/* Heading title*/}
           <div className="section-heading" data-aos="fade-down">
-            <h2>Explore Most Popular Cars</h2>
-            <p>
-              Lorem Ipsum has been the industry standard dummy text ever since
-              the 1500s,
-            </p>
+            <h2>Explore Our Cars</h2>
+
           </div>
           {/* /Heading title */}
           <div className="row justify-content-center">
             <div className="col-lg-12" data-aos="fade-down">
-              <div className="listing-tabs-group">
+              {/* <div className="listing-tabs-group">
                 <ul className="nav listing-buttons gap-3" data-bs-tabs="tabs">
                   {allCategories?.data?.map(category => (
                     <li
@@ -468,7 +525,7 @@ const HomeOne = () => {
                   ))}
 
                 </ul>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="tab-content">
@@ -490,7 +547,7 @@ const HomeOne = () => {
                           key={48}
                           onClick={() => handleItemClick(48)}
                         >
-                          <span className="featured-text">KIA</span>
+                          <span className="featured-text">{car.brand}</span>
                           <Link
                             to="#"
                             className={`fav-icon ${selectedItems[48] ? "selected" : ""}`}
@@ -508,7 +565,7 @@ const HomeOne = () => {
                             />
                           </Link>
                           <h3 className="listing-title">
-                            <Link to={routes.listingDetails}>Kia Soul 2016</Link>
+                            <Link to={routes.listingDetails}>{car.model}</Link>
                           </h3>
                           <div className="list-rating">
                             <i className="fas fa-star filled" />
@@ -537,7 +594,7 @@ const HomeOne = () => {
                                   alt="22 KM"
                                 />
                               </span>
-                              <p>22 KM</p>
+                              <p>{car.color}</p>
                             </li>
                             <li>
                               <span>
@@ -546,7 +603,7 @@ const HomeOne = () => {
                                   alt="Petrol"
                                 />
                               </span>
-                              <p>Petrol</p>
+                              <p>{car.fuelType}</p>
                             </li>
                           </ul>
                           <ul>
@@ -557,7 +614,7 @@ const HomeOne = () => {
                                   alt="Diesel"
                                 />
                               </span>
-                              <p>Diesel</p>
+                              <p>{car.label}</p>
                             </li>
                             <li>
                               <span>
@@ -566,7 +623,7 @@ const HomeOne = () => {
                                   alt=""
                                 />
                               </span>
-                              <p>2016</p>
+                              <p>{car.year}</p>
                             </li>
                             <li>
                               <span>
@@ -575,7 +632,7 @@ const HomeOne = () => {
                                   alt="Persons"
                                 />
                               </span>
-                              <p>5 Persons</p>
+                              <p>{car.seats} Persons</p>
                             </li>
                           </ul>
                         </div>
@@ -584,11 +641,11 @@ const HomeOne = () => {
                             <span>
                               <i className="feather icon-map-pin" />
                             </span>
-                            Belgium
+                            Yerevan
                           </div>
                           <div className="listing-price">
                             <h6>
-                              $80 <span>/ Day</span>
+                              {car.prices[0].price}֏ <span>/ Day</span>
                             </h6>
                           </div>
                         </div>
@@ -613,206 +670,16 @@ const HomeOne = () => {
         </div>
       </section>
       {/* /Popular Services */}
-      {/* Popular Cartypes */}
-      <section className="section popular-car-type">
-        <div className="container">
-          {/* Heading title*/}
-          <div className="section-heading" data-aos="fade-down">
-            <h2>Most Popular Cartypes</h2>
-            <p>
-              Most popular worldwide Car Category due to their reliability, affordability, and features.
-            </p>
-          </div>
-          {/* /Heading title */}
-          <div className="row">
-            <div className="popular-slider-group ">
-              <div className="popular-cartype-slider">
-                <Slider {...settings} className="service-slider">
-                  {allCategories?.data?.map(c => (
-                    <div className="listing-owl-item">
-                      <div className="listing-owl-group">
-                        <div className="listing-owl-img">
-                          <ImageWithBasePath
-                            src="assets/img/cars/mp-vehicle-01.png"
-                            className="img-fluid"
-                            alt="Popular Cartypes"
-                          />
-                        </div>
-                        <h6>{c.name}</h6>
-                        <p>35 Cars</p>
-                      </div>
-                    </div>
-                  ))}
-                </Slider>
-              </div>
-            </div>
-          </div>
-          {/* View More */}
-          <div className="view-all text-center" data-aos="fade-down">
-            <Link
-              to={routes.listingGrid}
-              className="btn btn-view d-inline-flex align-items-center"
-            >
-              View all Cars{" "}
-              <span>
-                <i className="feather icon-arrow-right ms-2" />
-              </span>
-            </Link>
-          </div>
-          {/* View More */}
-        </div>
-      </section>
-      {/* /Popular Cartypes */}
-      {/* Facts By The Numbers */}
-      <section className="section facts-number">
-        <div className="facts-left">
-          <ImageWithBasePath
-            src="assets/img/bg/facts-left.png"
-            className="img-fluid"
-            alt="facts left"
-          />
-        </div>
-        <div className="facts-right">
-          <ImageWithBasePath
-            src="assets/img/bg/facts-right.png"
-            className="img-fluid"
-            alt="facts right"
-          />
-        </div>
-        <div className="container">
-          {/* Heading title*/}
-          <div className="section-heading" data-aos="fade-down">
-            <h2 className="title text-white">Facts By The Numbers</h2>
-            <p className="description text-white">
-              Here are some dreamsrent interesting facts presented by the numbers
-            </p>
-          </div>
-          {/* /Heading title */}
-          <div className="counter-group">
-            <div className="row">
-              <div
-                className="col-lg-3 col-md-6 col-12 d-flex"
-                data-aos="fade-down"
-              >
-                <div className="count-group flex-fill">
-                  <div className="customer-count d-flex align-items-center">
-                    <div className="count-img">
-                      <ImageWithBasePath
-                        src="assets/img/icons/bx-heart.svg"
-                        alt=""
-                      />
-                    </div>
-                    <div className="count-content">
-                      <h4>
-                        <CountUp
-                          className="counterUp"
-                          end={16000}
-                          duration={3}
-                          separator=","
-                        />
-                        K<br />
-                      </h4>
-                      <p> Happy Customer </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="col-lg-3 col-md-6 col-12 d-flex"
-                data-aos="fade-down"
-              >
-                <div className="count-group flex-fill">
-                  <div className="customer-count d-flex align-items-center">
-                    <div className="count-img">
-                      <ImageWithBasePath
-                        src="assets/img/icons/bx-car.svg"
-                        alt=""
-                      />
-                    </div>
-                    <div className="count-content">
-                      <h4>
-                        <CountUp
-                          className="counterUp"
-                          end={2547}
-                          duration={3}
-                          separator=","
-                        />
-                        +<br />
-                      </h4>
-                      <p>Count of Cars</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="col-lg-3 col-md-6 col-12 d-flex"
-                data-aos="fade-down"
-              >
-                <div className="count-group flex-fill">
-                  <div className="customer-count d-flex align-items-center">
-                    <div className="count-img">
-                      <ImageWithBasePath
-                        src="assets/img/icons/bx-headphone.svg"
-                        alt=""
-                      />
-                    </div>
-                    <div className="count-content">
-                      <h4>
-                        <CountUp
-                          className="counterUp"
-                          end={625}
-                          duration={3}
-                          separator=","
-                        />
-                        K+
-                        <br />
-                      </h4>
-                      <p>Car Center Solutions</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="col-lg-3 col-md-6 col-12 d-flex"
-                data-aos="fade-down"
-              >
-                <div className="count-group flex-fill">
-                  <div className="customer-count d-flex align-items-center">
-                    <div className="count-img">
-                      <ImageWithBasePath
-                        src="assets/img/icons/bx-history.svg"
-                        alt=""
-                      />
-                    </div>
-                    <div className="count-content">
-                      <h4>
-                        <CountUp
-                          className="counterUp"
-                          end={200}
-                          duration={3}
-                          separator=","
-                        />
-                        K+
-                        <br />
-                      </h4>
-                      <p>Total Kilometer</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      {/* /Facts By The Numbers */}
+
+
       {/* Rental deals */}
       <section className="section popular-services">
         <div className="container">
           {/* Heading title*/}
           <div className="section-heading" data-aos="fade-down">
-            <h2>Recommended Car Rental deals</h2>
+            <h2>Recommended Tours</h2>
             <p>
-              Here are some versatile options that cater to different needs
+              Here are some fun tours
             </p>
           </div>
           {/* /Heading title */}
@@ -820,119 +687,119 @@ const HomeOne = () => {
             <div className="popular-slider-group">
               <div className=" rental-deal-slider ">
                 <Slider {...rentalslideroption} className="rental-slider">
-                {allCars?.data?.map(car => (
-                 <div className="rental-car-item">
-                 <div className="listing-item mb-0">
-                   <div className="listing-img">
-                     <Link to={routes.listingDetails}>
-                       <img
-                         src="assets/img/cars/rental-car-04.jpg"
-                         className="img-fluid"
-                         alt="Toyota"
-                       />
-                     </Link>
-                     <div className="fav-item justify-content-end" key={58}
-                       onClick={() => handleItemClick(58)}>
-                       <Link to="#" className={`fav-icon ${selectedItems[58] ? 'selected' : ''
-                         }`}>
-                         <i className="feather  icon-heart" />
-                       </Link>
-                     </div>
-                   </div>
-                   <div className="listing-content">
-                     <div className="listing-features">
-                       <div className="fav-item-rental">
-                         <span className="featured-text">$250/day</span>
-                       </div>
-                       <div className="list-rating">
-                         <i className="fas fa-star filled" />
-                         <i className="fas fa-star filled" />
-                         <i className="fas fa-star filled" />
-                         <i className="fas fa-star filled" />
-                         <i className="fas fa-star filled" />
-                         <span>(4.5)</span>
-                       </div>
-                       <h3 className="listing-title">
-                         <Link to={routes.listingDetails}>{car.model}</Link>
-                       </h3>
-                     </div>
-                     <div className="listing-details-group">
-                       <ul>
-                         <li>
-                           <span>
-                             <img
-                               src="assets/img/icons/car-parts-01.svg"
-                               alt="Auto"
-                             />
-                           </span>
-                           <p>Auto</p>
-                         </li>
-                         <li>
-                           <span>
-                             <img
-                               src="assets/img/icons/car-parts-02.svg"
-                               alt="10 KM"
-                             />
-                           </span>
-                           <p>28 KM</p>
-                         </li>
-                         <li>
-                           <span>
-                             <img
-                               src="assets/img/icons/car-parts-03.svg"
-                               alt="Petrol"
-                             />
-                           </span>
-                           <p>Petrol</p>
-                         </li>
-                       </ul>
-                       <ul>
-                         <li>
-                           <span>
-                             <img
-                               src="assets/img/icons/car-parts-04.svg"
-                               alt="Power"
-                             />
-                           </span>
-                           <p>Power</p>
-                         </li>
-                         <li>
-                           <span>
-                             <img
-                               src="assets/img/icons/car-parts-07.svg"
-                               alt={2018}
-                             />
-                           </span>
-                           <p>AC</p>
-                         </li>
-                         <li>
-                           <span>
-                             <img
-                               src="assets/img/icons/car-parts-06.svg"
-                               alt="Persons"
-                             />
-                           </span>
-                           <p>5 Persons</p>
-                         </li>
-                       </ul>
-                     </div>
-                     <div className="listing-button">
-                       <Link
-                         to={routes.listingDetails}
-                         className="btn btn-order"
-                       >
-                         <span>
-                           <i className="feather icon-calendar me-2" />
-                         </span>
-                         Rent Now
-                       </Link>
-                     </div>
-                   </div>
-                 </div>
-               </div>
+                  {allCars?.data?.map(car => (
+                    <div className="rental-car-item">
+                      <div className="listing-item mb-0">
+                        <div className="listing-img">
+                          <Link to={routes.listingDetails}>
+                            <img
+                              src="assets/img/cars/rental-car-04.jpg"
+                              className="img-fluid"
+                              alt="Toyota"
+                            />
+                          </Link>
+                          <div className="fav-item justify-content-end" key={58}
+                            onClick={() => handleItemClick(58)}>
+                            <Link to="#" className={`fav-icon ${selectedItems[58] ? 'selected' : ''
+                              }`}>
+                              <i className="feather  icon-heart" />
+                            </Link>
+                          </div>
+                        </div>
+                        <div className="listing-content">
+                          <div className="listing-features">
+                            <div className="fav-item-rental">
+                              <span className="featured-text">$250/day</span>
+                            </div>
+                            <div className="list-rating">
+                              <i className="fas fa-star filled" />
+                              <i className="fas fa-star filled" />
+                              <i className="fas fa-star filled" />
+                              <i className="fas fa-star filled" />
+                              <i className="fas fa-star filled" />
+                              <span>(4.5)</span>
+                            </div>
+                            <h3 className="listing-title">
+                              <Link to={routes.listingDetails}>{car.model}</Link>
+                            </h3>
+                          </div>
+                          <div className="listing-details-group">
+                            <ul>
+                              <li>
+                                <span>
+                                  <img
+                                    src="assets/img/icons/car-parts-01.svg"
+                                    alt="Auto"
+                                  />
+                                </span>
+                                <p>Auto</p>
+                              </li>
+                              <li>
+                                <span>
+                                  <img
+                                    src="assets/img/icons/car-parts-02.svg"
+                                    alt="10 KM"
+                                  />
+                                </span>
+                                <p>28 KM</p>
+                              </li>
+                              <li>
+                                <span>
+                                  <img
+                                    src="assets/img/icons/car-parts-03.svg"
+                                    alt="Petrol"
+                                  />
+                                </span>
+                                <p>Petrol</p>
+                              </li>
+                            </ul>
+                            <ul>
+                              <li>
+                                <span>
+                                  <img
+                                    src="assets/img/icons/car-parts-04.svg"
+                                    alt="Power"
+                                  />
+                                </span>
+                                <p>Power</p>
+                              </li>
+                              <li>
+                                <span>
+                                  <img
+                                    src="assets/img/icons/car-parts-07.svg"
+                                    alt={2018}
+                                  />
+                                </span>
+                                <p>AC</p>
+                              </li>
+                              <li>
+                                <span>
+                                  <img
+                                    src="assets/img/icons/car-parts-06.svg"
+                                    alt="Persons"
+                                  />
+                                </span>
+                                <p>5 Persons</p>
+                              </li>
+                            </ul>
+                          </div>
+                          <div className="listing-button">
+                            <Link
+                              to={routes.listingDetails}
+                              className="btn btn-order"
+                            >
+                              <span>
+                                <i className="feather icon-calendar me-2" />
+                              </span>
+                              Rent Now
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
                   ))}
-                 
+
                 </Slider>
               </div>
             </div>

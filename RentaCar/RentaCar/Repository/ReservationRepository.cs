@@ -22,6 +22,16 @@ namespace RentaCar.Repository
             return GetAll<Services>().ToList();
         }
 
+        public IEnumerable<Reservation> GetAllReservations()
+        {
+            return GetAll<Reservation>().ToList();
+        }
+
+        public IEnumerable<Customer> GetAllCustomers()
+        {
+            return GetAll<Customer>().ToList();
+        }
+
         public IEnumerable<Reservation> GetReservationsForDateRange(DateTime startDate, DateTime endDate)
         {
             var sql = @"

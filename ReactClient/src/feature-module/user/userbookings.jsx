@@ -1,75 +1,128 @@
 import React, { useEffect, useState } from "react";
 import Aos from "aos";
+import { useNavigate } from "react-router-dom";
 import Breadcrumbs from "../common/breadcrumbs";
 import DashboardMenu from "./common/dashboard-menu";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import { Link } from "react-router-dom";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import {  userBookingsData } from "../../core/data/json/user_bookings";
 import { all_routes } from "../router/all_routes";
+import axios from "axios";
+import Cookies from "js-cookie";
+
 
 const UserBookings = () => {
   const routes = all_routes;
   const [userBookings, setUserBookings] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  console.log(userBookings,'userBookingsuserBookings');
+  const navigate = useNavigate();
   const filteredData = userBookings.filter((booking) => {
-    const values = Object.values(booking).map((value:any) =>
-      value.toString().toLowerCase()
+    const values = Object.values(booking).map((value) => 
+      value === null ? "" : value.toString().toLowerCase()
     );
     return values.some((value) => value.includes(searchInput.toLowerCase()));
   });
   useEffect(() => {
+    const loggedIn = Cookies.get("isLoggedIn") === "true";
+    if(!loggedIn || loggedIn == null){
+      navigate(routes.login);
+    }
+  }, []);
+
+  useEffect(() => {
     Aos.init({ duration: 1200, once: true });
-    userBookingsData
-      .getUserBookingsMedium()
-      .then((data) => setUserBookings(data));
+    const fetchBookings = async () => {
+      try {
+        const response = await axios.get(
+          process.env.REACT_APP_API_URL + "/Reservation/GetBookingTableInfo"
+        );
+        setUserBookings(response.data.data || []); // Ensure data is always an array
+        console.error(response.data.data );
+
+      } catch (error) {
+        console.error("Error fetching booking data:", error);
+      }
+    };
+
+    fetchBookings();
   }, []);
   
-  const carName = (res:any) => {
+  const carName = (res) => {
     return (
       <div className="table-avatar">
         <Link to="#" className="avatar avatar-lg flex-shrink-0">
           <ImageWithBasePath
             className="avatar-img"
-            src={res.img}
+            src="assets/img/car-list-4.jpg"
             alt="Booking"
           />
         </Link>
         <div className="table-head-name flex-grow-1">
-          <Link to="#">{res.carName}</Link>
-          <p>{res.deliveryStatus}</p>
+          <Link to="#">{res.carModel}</Link>
+          <p>{res.carBrand}</p>
         </div>
       </div>
     );
   };
-  const delivery = (res:any) => {
+  const delivery = (res) => {
     return (
       <p>
         {res.pickupDeliveryLocation1}
-        <span className="d-block">{res.pickupDeliveryLocation2}</span>
+        <span className="d-block">{res.startAddress} {res.startDate.split("T").join(" ")}</span>
+        <span className="d-block">{res.endAddress} {res.endDate.split("T").join(" ")}</span>
       </p>
     );
   };
-
-  const BookingId = (res:any) => {
+  const DrivingLicense = (res) => {
+    return (
+      <p>
+        {res.drivingLicence}
+        <span className="d-block">{res.licenceNumber} </span>
+      </p>
+    );
+  };
+  
+  const BookingId = (res) => {
+    console.log(JSON.stringify(res));
+    
     return (
       <Link to="#" data-bs-toggle="modal"
       data-bs-target="#upcoming_booking" className="bookbyid">
 
-        {res.bookingId}
+        {res.id}
       </Link>
       
     );
   };
-  const location = (res:any) => {
+  const BookedOn = (res) => {
     return (
       <p>
         {res.dropoffLocation1}
-        <span className="d-block">{res.dropoffLocation2}</span>
+        <span className="d-block">{res.createdAt.split("T").join(" ")}</span>
       </p>
     );
   };
+  const TotalAmount = (res) => {
+    return (
+      <p>
+        {res.dropoffLocation1}
+        <span className="d-block">{res.totalAmount}</span>
+      </p>
+    );
+  };
+  
+  const Customer = (res) => {
+    return (
+      <p>
+        {res.Name}
+        <span className="d-block">  {res.phone}</span>
+        <span className="d-block"> {res.name} {res.surname} </span>
+      </p>
+    );
+  };
+
   const checkbox = () => {
     return (
       <label className="custom_check w-100">
@@ -78,13 +131,13 @@ const UserBookings = () => {
       </label>
     );
   };
-  const status = (res:any) => {
+  const status = (res) => {
     return (
       <span
         className={`${
           res.status == "Upcoming"
             ? "badge badge-light-secondary"
-            : res.status == "Inprogress"
+            : res.status == "Confirmed"
               ? "badge badge-light-warning"
               : res.status == "Cancelled"
                 ? "badge badge-light-danger"
@@ -141,8 +194,8 @@ const UserBookings = () => {
  
   return (
     <>
-      <Breadcrumbs title="User Bookings" subtitle="User Bookings" />
-      <DashboardMenu />
+      {/* <Breadcrumbs title="User Bookings" subtitle="User Bookings" />
+      <DashboardMenu /> */}
 
       <div className="content">
         <div className="container">
@@ -287,10 +340,10 @@ const UserBookings = () => {
                     <DataTable
                       className="table datatable"
                       value={filteredData}
-                      paginator
-                      rows={10}
-                      rowsPerPageOptions={[10, 25, 50]}
-                      currentPageReportTemplate="{first}"
+                       paginator
+                       rows={10}
+                       rowsPerPageOptions={[10, 25, 50]}
+                       currentPageReportTemplate="{first}"
                     >
                       <Column body={checkbox} header={checkbox}></Column>
                       <Column field="bookingId" header="Booking ID" body={BookingId}></Column>
@@ -299,19 +352,19 @@ const UserBookings = () => {
                         header="Car Name"
                         body={carName}
                       ></Column>
-                      <Column field="rentalType" header="Rental Type"></Column>
+                      <Column field="rentalType" header="Customer info" body={Customer}></Column>
                       <Column
                         field="deliveryStatus"
-                        header="Pickup / Delivery Location"
+                        header="Pickup / Dropoff"
                         body={delivery}
                       ></Column>
                       <Column
                         field="location"
-                        header="Dropoff Location"
-                        body={location}
+                        header="Driving license"
+                        body={DrivingLicense}
                       ></Column>
-                      <Column field="bookedOn" header="Booked On"></Column>
-                      <Column field="total" header="Total"></Column>
+                      <Column field="bookedOn" header="Booked On"  body={BookedOn}></Column>
+                      <Column field="total" header="Total" body={TotalAmount}></Column>
                       <Column
                         field="status"
                         header="Status"

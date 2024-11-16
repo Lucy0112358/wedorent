@@ -21,7 +21,7 @@ namespace RentaCar.Controllers
         [HttpPost]
         public async void Post([FromBody] EmailRequest emailRequest)
         {
-            var receiver = "lusinehsahakian@gmail.com";
+            var receiver = "wedorentacar@gmail.com";
 
             await _emailService.SendEmailAsync(receiver, emailRequest.Name, emailRequest.Phone);
 

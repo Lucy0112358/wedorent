@@ -708,3 +708,4 @@ C:\Users\baghd\OneDrive\Desktop\wedorent\RentaCar\RentaCar\obj\Debug\net8.0\refi
 C:\Users\baghd\OneDrive\Desktop\wedorent\RentaCar\RentaCar\obj\Debug\net8.0\RentaCar.pdb
 C:\Users\baghd\OneDrive\Desktop\wedorent\RentaCar\RentaCar\obj\Debug\net8.0\RentaCar.genruntimeconfig.cache
 C:\Users\baghd\OneDrive\Desktop\wedorent\RentaCar\RentaCar\obj\Debug\net8.0\ref\RentaCar.dll
+C:\Users\baghd\OneDrive\Desktop\wedorent\RentaCar\RentaCar\bin\Debug\net8.0\AutoMapper.dll
