@@ -35,8 +35,11 @@ namespace MqttService
 
             builder.Services.AddAutoMapper(typeof(CarProfile).Assembly);
 <<<<<<< HEAD
+<<<<<<< HEAD
             builder.Services.AddAutoMapper(typeof(ReservationProfile).Assembly);
 
+=======
+>>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
 =======
 >>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
             // Register PostgreSQL connection
