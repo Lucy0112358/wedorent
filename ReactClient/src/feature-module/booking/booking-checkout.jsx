@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useRef } from "react";
+=======
+import React, { useState, useEffect } from "react";
+>>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import Breadcrumbs from "../common/breadcrumbs";
 import { Calendar } from "primereact/calendar";
@@ -11,6 +15,7 @@ import dayjs from "dayjs";
 import { getCar } from "../../core/data/redux/api/bookingApi";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+<<<<<<< HEAD
 import { GoogleMap, useJsApiLoader, StandaloneSearchBox } from "@react-google-maps/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,11 +37,16 @@ const BookingCheckout = () => {
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries: ["places"],
   });
+=======
+
+const BookingCheckout = () => {
+>>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
   const routes = all_routes;
   const onChange = (time, timeString) => {
     console.log(time, timeString);
   };
 
+<<<<<<< HEAD
 
   useEffect(() => {
     if (bookingData.carId == null) {
@@ -45,6 +55,14 @@ const BookingCheckout = () => {
       handleBookingData('rent_type', "delivery");
       console.log(storedId)
       dispatch(getCar(storedId));
+=======
+  useEffect(() => {
+    if (bookingData.carId == null) {
+      //    bookingData.carId = getfrom LS
+      handleBookingData('carId', 1);
+      handleBookingData('rent_type', "delivery");
+      dispatch(getCar(1));
+>>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
     }
   }, []);
 
@@ -257,6 +275,7 @@ const BookingCheckout = () => {
                   >
                     {({ values, handleChange, isSubmitting, setFieldValue, errors }) => {
                       console.log("Form errors:", errors);
+<<<<<<< HEAD
                       const handleOnPlacesChanged = () => {
                         const searchBox = inputRef.current;
                         if (searchBox) {
@@ -289,6 +308,8 @@ const BookingCheckout = () => {
                           }
                         }
                       };
+=======
+>>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
                       return (
                         <Form>
                           <div className="booking-information-card">
@@ -346,6 +367,7 @@ const BookingCheckout = () => {
                                   <div className="form-custom">
                                     <label className="form-label">Delivery Location</label>
                                     <div className="d-flex align-items-center">
+<<<<<<< HEAD
                                       {isLoaded &&
                                         <StandaloneSearchBox
                                           onLoad={(ref) => (inputRef.current = ref)}
@@ -366,6 +388,17 @@ const BookingCheckout = () => {
                                         </StandaloneSearchBox>
                                       }
 
+=======
+                                      <Field
+                                        type="text"
+                                        className="form-control mb-0"
+                                        value={bookingData?.StartAddress}
+                                        onChange={(e) => {
+                                          handleStartAddressChange(e.target.value);
+                                          setFieldValue('StartAddress', e.target.value);
+                                        }}
+                                      />
+>>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
                                     </div>
                                     {errors.StartAddress && <p style={{ color: 'red' }}>{errors.StartAddress}</p>}
 

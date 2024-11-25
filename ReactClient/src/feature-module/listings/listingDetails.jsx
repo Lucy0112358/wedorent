@@ -59,12 +59,24 @@ const listingDetails = () => {
   useEffect(() => {
     dispatch(setBookingData())
     if (paramsId) {
+<<<<<<< HEAD
       dispatch(getCar(paramsId));
       localStorage.setItem('carId', paramsId);
+=======
+      dispatch(getCar(paramsId))
+>>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
     }else {
       navigate(routes.listingList);
     }
   }, [paramsId]);
+<<<<<<< HEAD
+=======
+
+  useEffect(()=>{
+    handleDetails("carId", paramsId)
+  }, [bookingCar])
+  const bookingData = useSelector(getBookingData)
+>>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
 
   useEffect(()=>{
     handleDetails("carId", paramsId)

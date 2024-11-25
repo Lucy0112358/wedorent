@@ -34,8 +34,11 @@ namespace MqttService
             builder.Services.AddTransient<IEmailSender, EmailSender>();
 
             builder.Services.AddAutoMapper(typeof(CarProfile).Assembly);
+<<<<<<< HEAD
             builder.Services.AddAutoMapper(typeof(ReservationProfile).Assembly);
 
+=======
+>>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
             // Register PostgreSQL connection
             builder.Services.AddTransient<IDbConnection>(sp =>
             {

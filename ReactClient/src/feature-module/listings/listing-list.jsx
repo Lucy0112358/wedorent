@@ -483,7 +483,11 @@ const Listinglist = () => {
                               <span>180 Reviews</span>
                             </div> */}
                                   <h6>
+<<<<<<< HEAD
                                     From {car.prices[2].price}<span>֏/ Day</span>
+=======
+                                   From {car.prices[2].price}<span>֏/ Day</span>
+>>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
                                   </h6>
                                 </div>
                               </div>
