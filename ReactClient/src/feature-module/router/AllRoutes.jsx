@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {
   authenticationRoute,
   blogroutes,
@@ -14,8 +14,18 @@ import Progress from "../common/progressbar";
 import { all_routes } from "./all_routes";
 import { ToastContainer, toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
+import Login from "../authentication/login";
+import Cookies from "js-cookie";
 
 const AllRoutes = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if the user is logged in by reading the 'isLoggedIn' cookie
+    const loggedIn = Cookies.get("isLoggedIn") === "true";
+    setIsLoggedIn(loggedIn);
+  }, []);
+  
   const routes =all_routes
   const HeaderLayout = () => (
     <>

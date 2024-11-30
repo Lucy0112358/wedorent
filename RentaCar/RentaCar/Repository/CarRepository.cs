@@ -51,6 +51,15 @@ namespace RentaCar.Repository
             return GetAll<CarPricing>().ToList();
         }
 
+        public List<CarPricing> GetCarPricing(int carId)
+        {
+            // Define the WHERE clause and parameter
+            string whereClause = "CarId = @CarId";
+            var parameters = new { CarId = carId };
+
+            // Call the base method with filtering
+            return GetAll<CarPricing>(whereClause, parameters).ToList();
+        }
 
     }
 }

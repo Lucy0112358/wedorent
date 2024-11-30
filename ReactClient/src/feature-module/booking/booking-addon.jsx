@@ -3,18 +3,12 @@ import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import Breadcrumbs from "../common/breadcrumbs";
 import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../router/all_routes";
-import { getBookingData, getServiceTotal, setBookingData, setServiceTotal, setServiceTotalAdd, setServiceTotalRemove } from "../../core/data/redux/slice/bookingSlice";
+import { getBookingData, getBookingCar, getServiceTotal, setBookingData, setServiceTotal, setServiceTotalAdd, setServiceTotalRemove } from "../../core/data/redux/slice/bookingSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const BookingAddon = () => {
   const routes = all_routes;
-  const [showMore, setShowMore] = useState(false);
-
-  const handleToggle = () => {
-    setShowMore(!showMore);
-  };
   const navigate = useNavigate();
-
 
   const navigatePath = () => {
     navigate(routes.bookingDetail);
@@ -22,8 +16,75 @@ const BookingAddon = () => {
 
   //Booking part by me
   const bookingData = useSelector(getBookingData)
+  const bookingCar = useSelector(getBookingCar)
   const total = useSelector(getServiceTotal)
   const dispatch = useDispatch()
+
+
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  const handleDetails = (key, value) => {
+    let existAddonInfo = {
+      ...bookingData,
+      [key]: value
+    };
+
+    dispatch(setBookingData(existAddonInfo))
+  }
+  console.log(bookingData, "bookingData")
+  const handleAddService = (e, service) => {
+    e.preventDefault();
+    console.log(service, "service")
+
+    if (!bookingData?.serviceList) {
+      handleDetails('serviceList', { [service.id]: { "price": service.price, "title": service.title } });
+    } else {
+      if(!(bookingData?.serviceList.hasOwnProperty(service.id))){
+        let updatedServiceList = { ...bookingData.serviceList, [service.id]: { "price": service.price, "title": service.title }};
+      handleDetails('serviceList', updatedServiceList)
+
+      }
+    }
+
+    dispatch(setServiceTotalAdd(service.price))
+
+  }
+  const calculateDays = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const timeDiff = Math.abs(end - start);
+    return Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Convert to days
+  };
+
+  const getPrice = (days, prices = []) => {
+    for (let pricing of prices) {
+      if (days >= pricing.minDays && days <= pricing.maxDays) {
+        return pricing.price;
+      }
+    }
+    return null; // Return null if no price matches
+  };
+
+  // Calculate the number of days
+  const days = calculateDays(bookingData.StartDate, bookingData.EndDate);
+
+  // Find the corresponding price
+  const price = getPrice(days, bookingCar?.data.prices)*days;
+  const insurancePrice = price*0.15;
+  console.log(days)
+  console.log(insurancePrice)
+  const handleRemoveService = (e, service) => {
+    e.preventDefault();
+    if (!bookingData.serviceList) {
+      alert("No services selected")
+      return false;
+    } else {
+      let updatedServiceList = { ...bookingData.serviceList };
+      delete updatedServiceList[service.id]; 
+      handleDetails('serviceList', updatedServiceList)
+    }
+    dispatch(setServiceTotalRemove(service.price))
+  };
   const services = [
     {
       "id": 1,
@@ -57,71 +118,11 @@ const BookingAddon = () => {
       "title": "CASCO insurance",
       "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
       "iconName": "battery-check-icon.png",
-      "price": 20000,
+      "price": price*0.15,
       "createdAt": "2023-10-04T11:15:00",
       "modifiedAt": "2023-10-04T11:15:00"
     }
   ]
-
-  const [totalAmount, setTotalAmount] = useState(0);
-
-  const handleDetails = (key, value) => {
-    let existAddonInfo = {
-      ...bookingData,
-      [key]: value
-    };
-    
-    dispatch(setBookingData( existAddonInfo ))
-  }
-console.log(bookingData, "bookingData")
-  const handleAddService = (e, service) => {
-    e.preventDefault();
-    // let addInfo = {};
-    
-    if (!bookingData?.serviceList) {
-      handleDetails('serviceList', [service.id])
-      // addInfo.serviceList = [service.id]
-    } else {
-      if (!bookingData.serviceList.includes(service.id)) {
-        let existServices = [...bookingData.serviceList, service.id];
-        // addInfo.serviceList = existServices;
-        handleDetails('serviceList', existServices)
-      }
-    }
-    // let initialTotal = bookingData?.total || 0;
-    // let total = +(initialTotal + service.price).toFixed(2); 
-    // addInfo.total = total;
-    dispatch(setServiceTotalAdd(service.price))
-// debugger;
-    // handleDetails('total', total)
-  }
-  console.log(bookingData, "bookingDatabookingData")
-
-  const handleRemoveService = (e, service) => {
-    e.preventDefault();
-    if (!bookingData.serviceList) {
-      alert("No services selected")
-      return false;
-    } else {
-      let existServices = bookingData.serviceList.filter((item) => item !== service.id);
-      handleDetails('serviceList', existServices)
-
-      // dispatch(setBookingData({ key: 'serviceList', value: existServices }))
-    }
-    // let initialTotal = bookingData?.total || 0;
-    // let total = +(initialTotal - service.price).toFixed(2); 
-    dispatch(setServiceTotalRemove(service.price))
-
-    // handleDetails('total', total)
-
-    // setTotalAmount((prevTotal) => +(prevTotal - service.price).toFixed(2));
-  };
-
-
-  //End booking part
-
-
-
   return (
     <>
       <Breadcrumbs title="Checkout" subtitle="Checkout" />
@@ -207,8 +208,8 @@ console.log(bookingData, "bookingData")
                             />
                           </span>
                           <div className="care-more-info">
-                            <h5>Chevrolet Camaro</h5>
-                            <p>Miami St, Destin, FL 32550, USA</p>
+                            <h5>{bookingCar?.data?.model}</h5>
+                            <p>{bookingCar?.data?.engine}</p>
                             <Link to={routes.listingDetails}>
                               View Car Details
                             </Link>
@@ -231,33 +232,29 @@ console.log(bookingData, "bookingData")
                         <ul className="location-address-info">
                           <li>
                             <h6>Booking Type</h6>
-                            <p>Delivery</p>
+                            <p>{bookingData?.rent_type}</p>
                           </li>
                           <li>
-                            <h6>Rental Type</h6>
-                            <p>Days</p>
+                            <h6>Rental Duration</h6>
+                            <p>{days} Days</p>
                           </li>
                           <li>
                             <h6>Delivery Location &amp; time</h6>
-                            <p>1230 E Springs Rd, Los Angeles, CA, USA</p>
-                            <p>04/18/2024 - 14:00</p>
+                            <p>{bookingData?.StartAddress}</p>
+                            <p>{bookingData?.StartDate?.toDateString()}</p>
                           </li>
                           <li>
-                            <h6>Booking Type</h6>
-                            <p>
-                              Norwegian Caribbean Cruise Los Angeles, CA 90025
-                            </p>
-                            <p>04/27/2024 - 03:00</p>
+                            <h6>Return Location &amp; time</h6>
+                            <p>{bookingData?.EndAddress}</p>
+                            <p>{bookingData?.EndDate?.toDateString()}</p>
                           </li>
                         </ul>
                       </div>
                     </div>
-
-
                     <div className="total-rate-card">
                       <div className="vehicle-total-price">
                         <h5>Estimated Total</h5>
-                        <span>$3541</span>
+                        <span>{price + total}֏</span>
                       </div>
                     </div>
                   </div>
@@ -287,24 +284,23 @@ console.log(bookingData, "bookingData")
                                       <h6>{service.title}</h6>
                                     </div>
                                   </div>
-                                  <span className="adon-price">{service.price} ֏</span>
+                                  <span className="adon-price">{ service.price} ֏</span>
                                   {
-                                    !bookingData?.serviceList?.includes(service.id) ?
-                                      <>
-                                        <button 
-                                          onClick={(e) => handleAddService(e, service)} 
-                                          className="btn add-addon-btn">
-                                          <i className="bx bx-plus-circle me-2" />
-                                          Add
-                                        </button></> :
-                                      <>
-                                        <button 
+                                    bookingData?.serviceList && bookingData?.serviceList.hasOwnProperty(service.id) ? (
+                                      <button
                                         onClick={(e) => handleRemoveService(e, service)}
                                         className="btn btn-secondary remove-adon-btn">
-                                          <i className="bx bx-minus-circle me-2" />
-                                          Remove
-                                        </button>
-                                      </>
+                                        <i className="bx bx-minus-circle me-2" />
+                                        Remove
+                                      </button>
+                                    ) : (
+                                      <button
+                                        onClick={(e) => handleAddService(e, service)}
+                                        className="btn add-addon-btn">
+                                        <i className="bx bx-plus-circle me-2" />
+                                        Add
+                                      </button>
+                                    )
                                   }
                                 </div>
                                 <div>
@@ -315,277 +311,9 @@ console.log(bookingData, "bookingData")
                               </li>
                             ))
                           }
-                          {/* <li>
-                            <div className="adons-types">
-                              <div className="d-flex align-items-center adon-name-info">
-                                <span className="adon-icon">
-                                  <i className="bx bx-wifi" />
-                                </span>
-                                <div className="adon-name">
-                                  <h6>Wi-Fi Hotspot</h6>
-                                </div>
-                              </div>
-                              <span className="adon-price">$25</span>
-                              <Link
-                                to="#"
-                                className="btn btn-secondary remove-adon-btn"
-                              >
-                                <i className="bx bx-minus-circle me-2" />
-                                Remove
-                              </Link>
-                            </div>
-                            <div className="more-adon-info">
-                              <p>
-                                Provide GPS navigation devices as add-ons for
-                                customers who need assistance with directions
-                                and navigation during their rental period.
-                              </p>
-                            </div>
-                          </li> */}
-                          {/* <li>
-                            <div className="adons-types">
-                              <div className="d-flex align-items-center adon-name-info">
-                                <span className="adon-icon">
-                                  <i className="bx bx-radar" />
-                                </span>
-                                <div className="adon-name">
-                                  <h6>Additional Accessories</h6>
-                                  <Link
-                                    to="#"
-                                    className="d-inline-flex align-items-center adon-info-btn"
-                                  >
-                                    <i className="bx bx-info-circle me-2" />
-                                    More information{" "}
-                                    <i className="bx bx-chevron-down ms-2 arrow-icon" />
-                                  </Link>
-                                </div>
-                              </div>
-                              <span className="adon-price">$30</span>
-                              <Link to="#" className="btn add-addon-btn">
-                                <i className="bx bx-plus-circle me-2" />
-                                Add
-                              </Link>
-                            </div>
-                            <div className="more-adon-info">
-                              <p>
-                                Provide GPS navigation devices as add-ons
-                                for customers who need assistance with
-                                directions and navigation during their
-                                rental period.
-                              </p>
-                            </div>
-                          </li> */}
                         </ul>
                       </div>
                     </div>
-                    {/* <div className="booking-information-card">
-                      <div className="booking-info-head">
-                        <span>
-                          <i className="bx bx-user-pin" />
-                        </span>
-                        <h5>Driver details</h5>
-                      </div>
-                      <div className="booking-info-body">
-                        <ul className="booking-radio-btns">
-                          <li>
-                            <label className="booking_custom_check">
-                              <input
-                                type="radio"
-                                name="driver_type"
-                                id="self_driver"
-                                defaultChecked
-                              />
-                              <span className="booking_checkmark">
-                                <span className="checked-title">
-                                  Self Driver
-                                </span>
-                              </span>
-                            </label>
-                          </li>
-                          <li>
-                            <label className="booking_custom_check">
-                              <input
-                                type="radio"
-                                name="driver_type"
-                                id="acting_driver"
-                              />
-                              <span className="booking_checkmark">
-                                <span className="checked-title">
-                                  Acting Driver
-                                </span>
-                              </span>
-                            </label>
-                          </li>
-                        </ul>
-                        <div className="booking-timings self-driver-info">
-                          <div className="row">
-                            <div className="col-md-12">
-                              <div className="form-title-head">
-                                <h5>Driver details</h5>
-                              </div>
-                            </div>
-                            <div className="col-md-6">
-                              <div className="input-block date-widget">
-                                <label className="form-label">
-                                  First Name{" "}
-                                  <span className="text-danger"> *</span>
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Enter First Name"
-                                />
-                              </div>
-                            </div>
-                            <div className="col-md-6">
-                              <div className="input-block date-widget">
-                                <label className="form-label">
-                                  Last Name{" "}
-                                  <span className="text-danger"> *</span>
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Enter Last Name"
-                                />
-                              </div>
-                            </div>
-                            <div className="col-md-6">
-                              <div className="input-block date-widget">
-                                <label className="form-label">
-                                  Driver Age{" "}
-                                  <span className="text-danger"> *</span>
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Enter Age of Driver"
-                                />
-                              </div>
-                            </div>
-                            <div className="col-md-6">
-                              <div className="input-block date-widget">
-                                <label className="form-label">
-                                  Mobile Number{" "}
-                                  <span className="text-danger"> *</span>
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Enter Phone Number"
-                                />
-                              </div>
-                            </div>
-                            <div className="col-md-12">
-                              <div className="input-block m-0">
-                                <label className="custom_check d-inline-flex location-check m-0">
-                                  <span>
-                                    I Confirm Driver’s Age is above 20 years old
-                                  </span>
-                                  <input type="checkbox" name="remeber" />
-                                  <span className="checkmark" />
-                                </label>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="booking-timings acting-driver-info">
-                          <div className="form-title-head d-flex align-items-center justify-content-between">
-                            <h5>Drivers</h5>
-                            <span>Total : 15 Add-ons</span>
-                          </div>
-                          <ul className="acting-driver-list">
-                            <li>
-                              <div className="driver-profile-info">
-                                <span className="driver-profile">
-                                  <ImageWithBasePath
-                                    src="assets/img/drivers/driver-01.jpg"
-                                    alt="Img"
-                                  />
-                                </span>
-                                <div className="driver-name">
-                                  <h5>Adrian Rivald</h5>
-                                  <ul>
-                                    <li>No of Rides Completed : 25</li>
-                                    <li>Age : 32</li>
-                                  </ul>
-                                </div>
-                              </div>
-                              <Link to="#" className="btn select-driver-btn">
-                                <i className="bx bx-plus-circle me-2" />
-                                Select
-                              </Link>
-                            </li>
-                            <li>
-                              <div className="driver-profile-info">
-                                <span className="driver-profile">
-                                  <ImageWithBasePath
-                                    src="assets/img/drivers/driver-02.jpg"
-                                    alt="Img"
-                                  />
-                                </span>
-                                <div className="driver-name">
-                                  <h5>Ruban</h5>
-                                  <ul>
-                                    <li>No of Rides Completed : 32</li>
-                                    <li>Age : 36</li>
-                                  </ul>
-                                </div>
-                              </div>
-                              <Link
-                                to="#"
-                                className="btn remove-driver-btn btn-secondary"
-                              >
-                                <i className="bx bx-check-circle me-2" />
-                                Remove
-                              </Link>
-                            </li>
-                            <li>
-                              <div className="driver-profile-info">
-                                <span className="driver-profile">
-                                  <ImageWithBasePath
-                                    src="assets/img/drivers/driver-03.jpg"
-                                    alt="Img"
-                                  />
-                                </span>
-                                <div className="driver-name">
-                                  <h5>Kailate</h5>
-                                  <ul>
-                                    <li>No of Rides Completed : 65</li>
-                                    <li>Age : 40</li>
-                                  </ul>
-                                </div>
-                              </div>
-                              <Link to="#" className="btn select-driver-btn">
-                                <i className="bx bx-plus-circle me-2" />
-                                Select
-                              </Link>
-                            </li>
-                            <li>
-                              <div className="driver-profile-info">
-                                <span className="driver-profile">
-                                  <ImageWithBasePath
-                                    src="assets/img/drivers/driver-04.jpg"
-                                    alt="Img"
-                                  />
-                                </span>
-                                <div className="driver-name">
-                                  <h5>Rizwa</h5>
-                                  <ul>
-                                    <li>No of Rides Completed : 22</li>
-                                    <li>Age : 29</li>
-                                  </ul>
-                                </div>
-                              </div>
-                              <Link to="#" className="btn select-driver-btn">
-                                <i className="bx bx-plus-circle me-2" />
-                                Select
-                              </Link>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div> */}
                     <div className="booking-info-btns d-flex justify-content-end">
                       <Link
                         to={routes.bookingCheckout}
@@ -593,7 +321,7 @@ console.log(bookingData, "bookingData")
                       >
                         Back to Location &amp; Time
                       </Link>
-                      <button onClick={navigatePath}
+                      <button onClick={() =>  navigate(routes.bookingDetail)}
                         className="btn btn-primary continue-book-btn"
                         type="button"
                       >

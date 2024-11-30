@@ -279,10 +279,10 @@ export const usermodule = [
   //   path: routes.userBookingCancelled,
   //   element: <UserBookingCancelled />,
   // },
-  // {
-  //   path: routes.userBookings,
-  //   element: <UserBookings />,
-  // },
+  {
+    path: routes.userBookings,
+    element: <UserBookings />,
+  },
   // {
   //   path: routes.userBookingUpcoming,
   //   element: <UserBookingUpcoming />,

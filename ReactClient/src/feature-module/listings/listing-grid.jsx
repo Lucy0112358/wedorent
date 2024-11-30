@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Breadcrumbs from "../common/breadcrumbs";
 import { Link } from "react-router-dom";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
+import dayjs from "dayjs";
 import { TimePicker } from "antd";
 import Sliders from "rc-slider";
 import "rc-slider/assets/index.css";
@@ -16,8 +17,51 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCarsList, getCategories } from "../../core/data/redux/api/bookingApi";
 import { toast } from "react-toastify";
 import EmailModal from "./EmailModal";
+import { GoogleMap, useJsApiLoader, StandaloneSearchBox } from "@react-google-maps/api";
+
 
 const ListingGrid = () => {
+  const inputRef = useRef(null);
+  const handleOnPlacesChanged = () => {
+    const searchBox = inputRef.current;
+    if (searchBox) {
+      const places = searchBox.getPlaces() || [];
+      if (places && places?.length > 0) {
+        const filteredPlaces = places.filter((place) => {
+          // Check if the place's geometry is within Yerevan bounds
+          const location = place.geometry?.location;
+          if (location) {
+            const lat = location.lat();
+            const lng = location.lng();
+            return (
+              lat <= YEREVAN_BOUNDS.north &&
+              lat >= YEREVAN_BOUNDS.south &&
+              lng <= YEREVAN_BOUNDS.east &&
+              lng >= YEREVAN_BOUNDS.west
+            );
+          }
+          return false;
+        });
+
+        if (filteredPlaces?.length > 0) {
+          console.log("Filtered Place:", filteredPlaces[0]);
+        } else {
+          console.warn("No places found within Yerevan");
+        }
+      }
+    }
+  };
+  const YEREVAN_BOUNDS = {
+    north: 40.23,
+    south: 40.11,
+    east: 44.6,
+    west: 44.45,
+  };
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+    libraries: ["places"],
+  });
   const allCars = useSelector(getAllCars);
   const allCategories = useSelector(getAllCategories);
   const dispatch = useDispatch();
@@ -263,43 +307,129 @@ const ListingGrid = () => {
     <div className="listing-page">
 
       <Breadcrumbs title="Car Listings" subtitle="Listings" />
-      {/* Search */}
-      <div className="section-search page-search">
-        <section className="section popular-services popular-explore">
-          <div className="container">
-            <div className="search-box-banner">
-              <div className="listing-tabs-group">
-                <ul className="nav listing-buttons gap-3" data-bs-tabs="tabs" style={{ display: 'flex', flexWrap: 'wrap' }}>
-                  {allCategories.data?.map(category => (
-                    <li
-                      key={category.id}
-                      onClick={() => handleFilter(category.id)}
-                      style={{ marginRight: '10px' }}
-                    >
-                      <Link
-                        className="active"
-                        aria-current="true"
-                        data-bs-toggle="tab"
-                        to="#Carmazda"
-                        style={{ display: 'flex', alignItems: 'center' }}
+        {/* Search */}
+        <div className="section-search page-search">
+        <div className="container">
+          <div className="search-box-banner">
+            <form>
+              <ul className="align-items-center">
+                <li className="column-group-main">
+                  <div className="input-block">
+                    <label>Pickup Location</label>
+                    <div className="group-img">
+              {isLoaded && 
+                      <StandaloneSearchBox
+                        onLoad={(ref) => (inputRef.current = ref)}
+                        onPlacesChanged={handleOnPlacesChanged} 
+                        options={{
+                          bounds: YEREVAN_BOUNDS, // Restrict results to Yerevan bounds
+                          strictBounds: true, // Enforce bounds restriction
+                          componentRestrictions: { country: "am" }, // Restrict to Armenia
+                        }}
                       >
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Enter City, Airport, or Address"
+                          style={{
+                            boxSizing: "border-box",
+                            border: "1px solid transparent",
+                            width: "100%",
+                            height: "40px",
+                            padding: "12px",
+                            borderRadius: "4px",
+                          }}
+                        />
+                      </StandaloneSearchBox>
+              }
+
+                    
+                    </div>
+                  </div>
+                </li>
+                <li className="column-group-main">
+                  <div className="input-block">
+                    <label>Pickup Date</label>
+                  </div>
+                  <div className="input-block-wrapp">
+                    <div className="input-block date-widget">
+                      <div className="group-img">
+                        <Calendar
+                          value={date1}
+                          onChange={(e) => setDate1(e.value)}
+                          placeholder="04/11/2023"
+                        />
+                        {/* <input type="text" className="form-control datetimepicker" placeholder="04/11/2023" /> */}
                         <span>
-                          <ImageWithBasePath
-                            src="assets/img/icons/car-icon-01.svg"
-                            alt="Mazda"
-                          />
+                          <i className="feather icon-calendar"></i>
                         </span>
-                        {category.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+                      </div>
+                    </div>
+                    <div className="input-block time-widge">
+                      <div className="group-img">
+                        <TimePicker
+                          placeholder="11:00 AM"
+                          className="form-control timepicker"
+                          onChange={onChange}
+                          defaultValue={dayjs("00:00:00", "HH:mm:ss")}
+                        />
+                        <span>
+                          <i className="feather icon-clock"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li className="column-group-main">
+                  <div className="input-block">
+                    <label>Return Date</label>
+                  </div>
+                  <div className="input-block-wrapp">
+                    <div className="input-block date-widge">
+                      <div className="group-img">
+                        <Calendar
+                          value={date2}
+                          onChange={(e) => setDate2(e.value)}
+                          placeholder="04/11/2023"
+                        />
+                        <span>
+                          <i className="feather icon-calendar" />
+                        </span>
+                      </div>
+                    </div>
+                    <div className="input-block time-widge">
+                      <div className="group-img">
+                        <TimePicker
+                          placeholder="11:00 AM"
+                          className="form-control timepicker"
+                          onChange={onChange}
+                          defaultValue={dayjs("00:00:00", "HH:mm:ss")}
+                        />
+                        <span>
+                          <i className="feather icon-clock"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li className="column-group-last">
+                  <div className="input-block">
+                    <div className="search-btn">
+                      <button className="btn search-button" type="submit" onClick={() => navigate(routes.listingGrid)}>
+                        {" "}
+                        <i className="fa fa-search" aria-hidden="true" />
+                        Search
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </form>
           </div>
-        </section>
+        </div>
       </div>
       {/* /Search */}
+
       {/* Sort By */}
       <div className="sort-section">
         <div className="container">
@@ -309,7 +439,7 @@ const ListingGrid = () => {
               <div className="row d-flex align-items-center">
                 <div className="col-xl-4 col-lg-3 col-sm-12 col-12">
                   <div className="count-search">
-                    <p>Showing {allCars?.data.length} of 154 Cars</p>
+                    <p>Showing {allCars?.data?.length} Cars</p>
                   </div>
                 </div>
                 <div className="col-xl-8 col-lg-9 col-sm-12 col-12">
@@ -389,7 +519,7 @@ const ListingGrid = () => {
                               </div>
                             </Slider>
                           </div>
-                          <span className="featured-text">Toyota</span>
+                          <span className="featured-text">{car.brand}</span>
                         </div>
                         <div className="listing-content">
                           <div className="listing-features d-flex align-items-end justify-content-between">
@@ -410,8 +540,8 @@ const ListingGrid = () => {
                                 <i className="fas fa-star filled" />
                                 <i className="fas fa-star filled" />
                                 <i className="fas fa-star filled" />
-                                <i className="fas fa-star" />
-                                <span>(4.0) 138 Reviews</span>
+                                <i className="fas fa-star filled" />
+                                <span>(5.0) </span>
                               </div>
                             </div>
                             <div className="list-km">
@@ -420,7 +550,7 @@ const ListingGrid = () => {
                                   src="assets/img/icons/map-pin.svg"
                                   alt="author"
                                 />
-                                3.2m
+                              {car.category}
                               </span>
                             </div>
                           </div>
@@ -442,7 +572,7 @@ const ListingGrid = () => {
                                     alt="10 KM"
                                   />
                                 </span>
-                                <p>10 KM</p>
+                                <p>{car.color}</p>
                               </li>
                               <li>
                                 <span>
@@ -451,7 +581,7 @@ const ListingGrid = () => {
                                     alt="Petrol"
                                   />
                                 </span>
-                                <p>Petrol</p>
+                                <p>{car.fuelType}</p>
                               </li>
                             </ul>
                             <ul>
@@ -462,7 +592,7 @@ const ListingGrid = () => {
                                     alt="Power"
                                   />
                                 </span>
-                                <p>Power</p>
+                                <p>{car.label}</p>
                               </li>
                               <li>
                                 <span>
@@ -471,7 +601,7 @@ const ListingGrid = () => {
                                     alt='2018'
                                   />
                                 </span>
-                                <p>2018</p>
+                                <p>{car.year}</p>
                               </li>
                               <li>
                                 <span>
@@ -480,7 +610,7 @@ const ListingGrid = () => {
                                     alt="Persons"
                                   />
                                 </span>
-                                <p>5 Persons</p>
+                                <p>{car.seats} Persons</p>
                               </li>
                             </ul>
                           </div>
@@ -489,11 +619,11 @@ const ListingGrid = () => {
                               <span>
                                 <i className="feather icon-map-pin" />
                               </span>
-                              Washington
+                              Yerevan
                             </div>
                             <div className="listing-price">
                               <h6>
-                                {car?.prices[0].price} ֏ <span>/ Day</span>
+                               From {car?.prices[2].price} ֏ <span>/ Day</span>
                               </h6>
                             </div>
                           </div>
@@ -510,9 +640,9 @@ const ListingGrid = () => {
                           </div> */}
                           <EmailModal />
                         </div>
-                        <div className="feature-text">
+                        {/* <div className="feature-text">
                           <span className="bg-danger">Featured</span>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   ))}
@@ -521,6 +651,49 @@ const ListingGrid = () => {
           </div>
         </div>
       </section>
+      <div className="section-search page-search">
+        <section className="section popular-services popular-explore">
+          
+          <div className="container">
+            <div className="search-box-banner">
+            <div className="col-xl-4 col-lg-3 col-sm-12 col-12">
+                  <div className="count-search">
+                    <p>Filters</p>
+                  </div>
+                </div>
+              <div className="listing-tabs-group">
+                
+                <ul className="nav listing-buttons gap-3" data-bs-tabs="tabs" style={{ display: 'flex', flexWrap: 'wrap' }}>
+                  
+                  {allCategories.data?.map(category => (
+                    <li
+                      key={category.id}
+                      onClick={() => handleFilter(category.id)}
+                      style={{ marginRight: '10px' }}
+                    >
+                      <Link
+                        className="active"
+                        aria-current="true"
+                        data-bs-toggle="tab"
+                        to="#Carmazda"
+                        style={{ display: 'flex', alignItems: 'center' }}
+                      >
+                        <span>
+                          <ImageWithBasePath
+                            src="assets/img/icons/car-icon-01.svg"
+                            alt="Mazda"
+                          />
+                        </span>
+                        {category.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
       {/* /Car Grid View */}
     </div>
   );
