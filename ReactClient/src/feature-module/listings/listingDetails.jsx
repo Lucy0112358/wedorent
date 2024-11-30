@@ -59,30 +59,18 @@ const listingDetails = () => {
   useEffect(() => {
     dispatch(setBookingData())
     if (paramsId) {
-<<<<<<< HEAD
       dispatch(getCar(paramsId));
       localStorage.setItem('carId', paramsId);
-=======
-      dispatch(getCar(paramsId))
->>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
     }else {
       navigate(routes.listingList);
     }
   }, [paramsId]);
-<<<<<<< HEAD
-=======
 
   useEffect(()=>{
     handleDetails("carId", paramsId)
   }, [bookingCar])
   const bookingData = useSelector(getBookingData)
->>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
 
-  useEffect(()=>{
-    handleDetails("carId", paramsId)
-  }, [bookingCar])
-  
-  const bookingData = useSelector(getBookingData)
 
   const handleDetails = (key, value) => {
     let existBookingInfo = {
@@ -645,7 +633,7 @@ Delievery in Yerevan is free, but if you want the car in other cities, additiona
                                     Book
                                   </Link>
                                   <Link
-                                    to="#"
+                                   // to="#"
                                     data-bs-toggle="modal"
                                     data-bs-target="#enquiry"
                                     className="btn btn-theme"
@@ -713,7 +701,7 @@ Delievery in Yerevan is free, but if you want the car in other cities, additiona
                       return   <div className="rental-car-item">
                       <div className="listing-item pb-0">
                         <div className="listing-img">
-                          <Link to={routes.listingDetails}>
+                          <Link  to={routes.listingDetails.replace(':id', car.id)}>
                             <ImageWithBasePath
                               src="assets/img/cars/car-03.jpg"
                               className="img-fluid"
@@ -839,7 +827,7 @@ Delievery in Yerevan is free, but if you want the car in other cities, additiona
                           </div>
                           <div className="listing-button">
                             <Link
-                              to={routes.listingDetails}
+                              to={routes.listingDetails.replace(':id', car.id)}
                               className="btn btn-order"
                             >
                               <span>
@@ -857,10 +845,7 @@ Delievery in Yerevan is free, but if you want the car in other cities, additiona
                         </div>
                       </div>
                     </div>
-                    })}
-
-
-              
+                    })}              
                   </Slider>
                 </div>
               </div>

@@ -115,7 +115,7 @@ const Footer = () => {
               </div>
               <div className="col-lg-5">
                 <div className="footer-contact footer-widget">
-                  <h5 className="footer-title">Contact Info</h5>
+                  <h5 className="footer-title">Address</h5>
                   <div className="footer-contact-info">
                     <div className="update-form">
                       <form action="#">

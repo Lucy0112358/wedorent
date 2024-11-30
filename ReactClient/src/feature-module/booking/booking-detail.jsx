@@ -15,7 +15,8 @@ import * as Yup from "yup";
 import { Form } from 'formik';
 import { ErrorMessage } from 'formik';
 import { getCar } from "../../core/data/redux/api/bookingApi";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BookingDetail = () => {
   //Billing part
@@ -157,7 +158,6 @@ const BookingDetail = () => {
   };
 
   const handleSendAllBillingInfo = (e) => {
-    // e.preventDefault();
     let afterSendBookingInfo = bookingData;
 
     const formData = new FormData();
@@ -165,8 +165,25 @@ const BookingDetail = () => {
     formData.append("backPhoto", backPhoto);
     formData.append("allInfo", JSON.stringify(afterSendBookingInfo));
 
-    dispatch(sendBooking(formData));
-  };
+    dispatch(sendBooking(formData))
+      .then((response) => {
+        console.log("API Response:", response);
+
+        if (response?.meta?.requestStatus === "fulfilled") {
+          console.log("Success logic executed");
+          toast.success("Reservation submitted successfully! Please check your inbox.");
+          navigate(routes.homeOne);
+        } else {
+          console.warn("Error logic executed", response);
+          toast.error(`Error: ${response?.errorMessage || "Something went wrong."}`);
+        }
+      })
+      .catch((error) => {
+        console.error("Catch block executed", error);
+        toast.error(`Error: ${error.message || "Unexpected error occurred."}`);
+      });
+  }
+
 
   //End Booking part
 
@@ -364,6 +381,7 @@ const BookingDetail = () => {
 
                       console.log("Form values:", values);
                       console.log("Form errors:", errors);
+
                       return (
                         <Form>
                           <div className="booking-information-card">
@@ -658,7 +676,6 @@ const BookingDetail = () => {
                             <button
                               type="submit"
                               className="btn btn-primary continue-book-btn"
-                              disabled={isSubmitting}
                             >
                               Confirm & Pay Now
                             </button>
@@ -788,8 +805,9 @@ const BookingDetail = () => {
           </div>
         </div>
       </div>
+
     </div>
   );
 };
 
-export default BookingDetail;
+export default BookingDetail

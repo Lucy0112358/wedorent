@@ -41,7 +41,7 @@ function EmailModal() {
                     <span>
                         <i className="feather icon-calendar me-2" />
                     </span>
-                    Rent Now
+                    Enquire Us
                 </Link>
             </div>
 

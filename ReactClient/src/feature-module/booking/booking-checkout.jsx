@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React, { useState, useEffect, useRef } from "react";
-=======
-import React, { useState, useEffect } from "react";
->>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import Breadcrumbs from "../common/breadcrumbs";
 import { Calendar } from "primereact/calendar";
@@ -15,7 +11,6 @@ import dayjs from "dayjs";
 import { getCar } from "../../core/data/redux/api/bookingApi";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-<<<<<<< HEAD
 import { GoogleMap, useJsApiLoader, StandaloneSearchBox } from "@react-google-maps/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,29 +19,26 @@ import "react-toastify/dist/ReactToastify.css";
 const BookingCheckout = () => {
 
   const inputRef = useRef(null);
+  const inputRef1 = useRef(null);
 
 
   const YEREVAN_BOUNDS = {
     north: 40.23,
     south: 40.11,
     east: 44.6,
-    west: 44.45,
+    west: 44.38, 
   };
+  
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries: ["places"],
   });
-=======
-
-const BookingCheckout = () => {
->>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
   const routes = all_routes;
   const onChange = (time, timeString) => {
     console.log(time, timeString);
   };
 
-<<<<<<< HEAD
 
   useEffect(() => {
     if (bookingData.carId == null) {
@@ -55,14 +47,6 @@ const BookingCheckout = () => {
       handleBookingData('rent_type', "delivery");
       console.log(storedId)
       dispatch(getCar(storedId));
-=======
-  useEffect(() => {
-    if (bookingData.carId == null) {
-      //    bookingData.carId = getfrom LS
-      handleBookingData('carId', 1);
-      handleBookingData('rent_type', "delivery");
-      dispatch(getCar(1));
->>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
     }
   }, []);
 
@@ -72,21 +56,10 @@ const BookingCheckout = () => {
 
   const dispatch = useDispatch();
 
-  const handleEndAddressChange = (key, value) => {
-
+  const handleAddressChange = (key, value) => {
     let existBookingInfo = {
       ...bookingData,
       [key]: value,
-      sameLocation: false
-    };
-
-    dispatch(setBookingData(existBookingInfo))
-  };
-
-  const handleStartAddressChange = (value) => {
-    let existBookingInfo = {
-      ...bookingData,
-      StartAddress: value,
       sameLocation: false
     };
 
@@ -134,25 +107,6 @@ const BookingCheckout = () => {
     navigate(routes.bookingAddon);
   }
 
-  const handleSameLocation = (isChecked) => {
-    if (isChecked) {
-      let existBookingInfo = {
-        ...bookingData,
-        EndAddress: bookingData?.StartAddress,
-        sameLocation: true
-      };
-
-      dispatch(setBookingData(existBookingInfo))
-    } else {
-      let existBookingInfo = {
-        ...bookingData,
-        EndAddress: "",
-        sameLocation: false
-      };
-
-      dispatch(setBookingData(existBookingInfo))
-    }
-  };
 
 
   return (
@@ -275,9 +229,28 @@ const BookingCheckout = () => {
                   >
                     {({ values, handleChange, isSubmitting, setFieldValue, errors }) => {
                       console.log("Form errors:", errors);
-<<<<<<< HEAD
-                      const handleOnPlacesChanged = () => {
-                        const searchBox = inputRef.current;
+
+                      const handleSameLocation = (isChecked) => {
+                        if (isChecked) {
+                          let existBookingInfo = {
+                            ...bookingData,
+                            EndAddress: bookingData?.StartAddress,
+                            sameLocation: true
+                          };
+                          setFieldValue('EndAddress', bookingData.StartAddress)
+                          dispatch(setBookingData(existBookingInfo))
+                        } else {
+                          let existBookingInfo = {
+                            ...bookingData,
+                            EndAddress: "",
+                            sameLocation: false
+                          };
+                          setFieldValue('EndAddress', "")
+                          dispatch(setBookingData(existBookingInfo))
+                        }
+                      };
+                      const handleOnPlacesChanged1 = (key) => {
+                        const searchBox = inputRef1.current;
                         if (searchBox) {
                           const places = searchBox.getPlaces();
                           if (places && places.length > 0) {
@@ -295,21 +268,49 @@ const BookingCheckout = () => {
                               }
                               return false;
                             });
-                            console.log(filteredPlaces[0].formatted_address)
-                            handleStartAddressChange(filteredPlaces[0].formatted_address);
-                           setFieldValue('StartAddress', filteredPlaces[0].formatted_address);
-                            if (filteredPlaces.length > 0) {
-                             
+
                            
+                            if (filteredPlaces.length > 0) {
+                              handleAddressChange(key, filteredPlaces[length-1].formatted_address);
+                              setFieldValue(key, filteredPlaces[length-1].formatted_address);
                               console.log("Filtered Place:", filteredPlaces[0].formatted_address);
                             } else {
-                              console.warn("No places found within Yerevan");
+                              toast("To select a place outside Yerevan please contact us");
+
                             }
                           }
                         }
                       };
-=======
->>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
+
+                      const handleOnPlacesChanged = (key) => {
+                        const searchBox = inputRef.current;
+                        if (searchBox) {
+                          const places = searchBox.getPlaces();
+                          if (places && places.length > 0) {
+                            const filteredPlaces = places.filter((place) => {
+                              const location = place.geometry?.location;
+                              if (location) {
+                                const lat = location.lat();
+                                const lng = location.lng();
+                                return (
+                                  lat <= YEREVAN_BOUNDS.north &&
+                                  lat >= YEREVAN_BOUNDS.south &&
+                                  lng <= YEREVAN_BOUNDS.east &&
+                                  lng >= YEREVAN_BOUNDS.west
+                                );
+                              }
+                              return false;
+                            });                           
+                            if (filteredPlaces.length > 0) {
+                              handleAddressChange(key, filteredPlaces[length-1].formatted_address);
+                              setFieldValue(key, filteredPlaces[length-1].formatted_address);
+                              console.log("Filtered Place:", filteredPlaces[0].formatted_address);
+                            } else {
+                             toast("No places found within Yerevan");
+                            }
+                          }
+                        }
+                      };
                       return (
                         <Form>
                           <div className="booking-information-card">
@@ -367,12 +368,11 @@ const BookingCheckout = () => {
                                   <div className="form-custom">
                                     <label className="form-label">Delivery Location</label>
                                     <div className="d-flex align-items-center">
-<<<<<<< HEAD
                                       {isLoaded &&
                                         <StandaloneSearchBox
                                           onLoad={(ref) => (inputRef.current = ref)}
                                           onPlacesChanged={() => {
-                                            handleOnPlacesChanged();
+                                            handleOnPlacesChanged('StartAddress');
                                           }}
                                           options={{
                                             bounds: YEREVAN_BOUNDS,
@@ -383,27 +383,17 @@ const BookingCheckout = () => {
                                           <input
                                             type="text"
                                             className="form-control mb-0"
-                                           
+                                            placeholder="Enter delivery location"
+                                     
                                           />
                                         </StandaloneSearchBox>
                                       }
 
-=======
-                                      <Field
-                                        type="text"
-                                        className="form-control mb-0"
-                                        value={bookingData?.StartAddress}
-                                        onChange={(e) => {
-                                          handleStartAddressChange(e.target.value);
-                                          setFieldValue('StartAddress', e.target.value);
-                                        }}
-                                      />
->>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
                                     </div>
                                     {errors.StartAddress && <p style={{ color: 'red' }}>{errors.StartAddress}</p>}
 
                                   </div>
-                                  <div className="input-block m-0">
+                                  {/* <div className="input-block m-0">
                                     <label className="custom_check d-inline-flex location-check">
                                       <span>Return to same location</span>
                                       <input
@@ -415,19 +405,31 @@ const BookingCheckout = () => {
 
                                       <span className="checkmark" />
                                     </label>
-                                  </div>
+                                  </div> */}
                                   <div className="form-custom">
                                     <label className="form-label">Return Location</label>
                                     <div className="d-flex align-items-center">
-                                      <Field
-                                        type="text"
-                                        className="form-control mb-0"
-                                        value={bookingData?.EndAddress}
-                                        onChange={(e) => {
-                                          handleEndAddressChange('EndAddress', e.target.value);
-                                          setFieldValue('EndAddress', e.target.value);
-                                        }}
-                                      />
+                                     
+                                      {isLoaded &&
+                                        <StandaloneSearchBox
+                                          onLoad={(ref) => (inputRef1.current = ref)}
+                                          onPlacesChanged={() => {
+                                            handleOnPlacesChanged1('EndAddress');
+                                          }}
+                                          options={{
+                                            bounds: YEREVAN_BOUNDS,
+                                            strictBounds: true,
+                                            componentRestrictions: { country: "am" },
+                                          }}
+                                        >
+                                          <input
+                                            type="text"
+                                            className="form-control mb-0"
+                                            placeholder="Enter return location"
+                                     
+                                          />
+                                        </StandaloneSearchBox>
+                                      }
                                     </div>
                                     {errors.EndAddress && <p style={{ color: 'red' }}>{errors.EndAddress}</p>}
                                   </div>
@@ -616,7 +618,6 @@ const BookingCheckout = () => {
           </div>
         </div>
       </div >
-      <ToastContainer />
     </div >
   );
 };

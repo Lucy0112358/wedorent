@@ -17,9 +17,15 @@ import { getAllCategories, getAllCars } from "../../../core/data/redux/slice/boo
 import { useDispatch, useSelector } from "react-redux";
 import { getCarsList, getCategories } from "../../../core/data/redux/api/bookingApi";
 import { toast } from "react-toastify";
+import { useTranslation } from 'react-i18next';
 import { GoogleMap, useJsApiLoader, StandaloneSearchBox } from "@react-google-maps/api";
+import EmailModal from "../../listings/EmailModal";
 
 const HomeOne = () => {
+  const { t, i18n } = useTranslation();
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
   const inputRef = useRef(null);
   const handleOnPlacesChanged = () => {
     const searchBox = inputRef.current;
@@ -235,21 +241,18 @@ const HomeOne = () => {
             <div className="row align-items-center">
               <div className="col-lg-6" data-aos="fade-down" >
                 <h1>
-                  <span>Find Your Best</span> <br />
-                  Dream Car for Rental
+                  <span> {t('Find Your Best')}</span> <br />
+                  {t('Dream Car for Rental')}
                 </h1>
                 <p >
-                  Experience the ultimate in comfort, performance, and sophistication
-                  with our luxury car rentals. From sleek sedans and stylish coupes to
-                  spacious SUVs <br></br> and elegant convertibles, we offer a range of premium <br></br>
-                  vehicles to suit your preferences and lifestyle.
+                  {t('bannerDescription')}
                 </p>
                 <div className="view-all">
                   <Link
                     to={routes.listingGrid}
                     className="btn btn-view d-inline-flex align-items-center "
                   >
-                    View all Cars{" "}
+                    {t('allCarsButton')}
                     <span>
                       <i className="feather icon-arrow-right ms-2" />
                     </span>
@@ -279,7 +282,8 @@ const HomeOne = () => {
               <ul className="align-items-center">
                 <li className="column-group-main">
                   <div className="input-block">
-                    <label>Pickup Location</label>
+                    <label>   {t('pickupLocation')}
+                    </label>
                     <div className="group-img">
                       {isLoaded &&
                         <StandaloneSearchBox
@@ -294,7 +298,7 @@ const HomeOne = () => {
                           <input
                             type="text"
                             className="form-control"
-                            placeholder="Enter City, Airport, or Address"
+                            placeholder={t('addressPlaceholder')}
                             style={{
                               boxSizing: "border-box",
                               border: "1px solid transparent",
@@ -313,7 +317,8 @@ const HomeOne = () => {
                 </li>
                 <li className="column-group-main">
                   <div className="input-block">
-                    <label>Pickup Date</label>
+                    <label>   {t('pickupDate')}
+                    </label>
                   </div>
                   <div className="input-block-wrapp">
                     <div className="input-block date-widget">
@@ -346,7 +351,8 @@ const HomeOne = () => {
                 </li>
                 <li className="column-group-main">
                   <div className="input-block">
-                    <label>Return Date</label>
+                    <label>   {t('returnDate')}
+                    </label>
                   </div>
                   <div className="input-block-wrapp">
                     <div className="input-block date-widge">
@@ -382,7 +388,7 @@ const HomeOne = () => {
                       <button className="btn search-button" type="submit" onClick={() => navigate(routes.listingGrid)}>
                         {" "}
                         <i className="fa fa-search" aria-hidden="true" />
-                        Search
+                        {t('search')}
                       </button>
                     </div>
                   </div>
@@ -405,10 +411,9 @@ const HomeOne = () => {
         <div className="container">
           {/* Heading title*/}
           <div className="section-heading" data-aos="fade-down">
-            <h2>How It Works</h2>
+            <h2>  {t('howItWorks')} </h2>
             <p>
-              Booking a car rental is a straightforward process that typically
-              involves the following steps
+              {t('howItWorksDescription')}
             </p>
           </div>
           {/* /Heading title */}
@@ -427,12 +432,9 @@ const HomeOne = () => {
                     />
                   </div>
                   <div className="services-content">
-                    <h3>1. Pick the date and time</h3>
+                    <h3>1.  {t('dateAndTime')}</h3>
                     <p>
-                      Determine the date & location for your car rental.
-                      Consider factors such as your travel itinerary,
-                      pickup/drop-off locations (e.g., airport, city center),
-                      and duration of rental.
+                      {t('dateAndTimeDescription')}
                     </p>
                   </div>
                 </div>
@@ -450,11 +452,9 @@ const HomeOne = () => {
                     />
                   </div>
                   <div className="services-content">
-                    <h3>2. Check availability of the car</h3>
+                    <h3>2.  {t('checkAvailability')}</h3>
                     <p>
-                      Check the availability of your desired vehicle type for
-                      your chosen dates and location. Ensure that the rental
-                      rates, taxes, fees, and any additional charges.
+                      {t('checkAvailabilityDescription')}
                     </p>
                   </div>
                 </div>
@@ -472,12 +472,11 @@ const HomeOne = () => {
                     />
                   </div>
                   <div className="services-content">
-                    <h3>3. Pay the crypto (only with us), cash or card</h3>
+                    <h3>3.  {t('payCrypto')}</h3>
+
                     <p>
-                      Once you`&lsquo;`ve found car rental option, proceed to
-                      make a reservation. Provide the required information,
-                      including your details, driver`&lsquo;`s license, contact
-                      info, and payment details.
+                      {t('payCryptoDescription')}
+
                     </p>
                   </div>
                 </div>
@@ -492,7 +491,8 @@ const HomeOne = () => {
         <div className="container">
           {/* Heading title*/}
           <div className="section-heading" data-aos="fade-down">
-            <h2>Explore Our Cars</h2>
+            <h2>   {t('exploreOurCars')}
+            </h2>
 
           </div>
           {/* /Heading title */}
@@ -535,7 +535,7 @@ const HomeOne = () => {
                   <div className="col-lg-4 col-md-6 col-12" key={car.id} data-aos="fade-down">
                     <div className="listing-item">
                       <div className="listing-img">
-                        <Link to={routes.listingDetails}>
+                        <Link to={routes.listingDetails.replace(':id', car.id)}>
                           <ImageWithBasePath
                             src="assets/img/cars/car-02.jpg"
                             className="img-fluid"
@@ -565,7 +565,7 @@ const HomeOne = () => {
                             />
                           </Link>
                           <h3 className="listing-title">
-                            <Link to={routes.listingDetails}>{car.model}</Link>
+                            <Link to={routes.listingDetails.replace(':id', car.id)}>{car.model}</Link>
                           </h3>
                           <div className="list-rating">
                             <i className="fas fa-star filled" />
@@ -585,7 +585,7 @@ const HomeOne = () => {
                                   alt="Auto"
                                 />
                               </span>
-                              <p>Auto</p>
+                              <p>{car.engine}</p>
                             </li>
                             <li>
                               <span>
@@ -632,7 +632,7 @@ const HomeOne = () => {
                                   alt="Persons"
                                 />
                               </span>
-                              <p>{car.seats} Persons</p>
+                              <p>{car.seats}  {t('Persons')}</p>
                             </li>
                           </ul>
                         </div>
@@ -645,13 +645,13 @@ const HomeOne = () => {
                           </div>
                           <div className="listing-price">
                             <h6>
-                              {car.prices[0].price}֏ <span>/ Day</span>
+                              {car.prices[0].price}֏ <span>/ {t('Day')} </span>
                             </h6>
                           </div>
                         </div>
-                        <div className="listing-button">
+                        {/* <div className="listing-button">
                           <Link
-                            to={routes.listingDetails}
+                           to={routes.listingDetails.replace(':id', car.id)}
                             className="btn btn-order"
                           >
                             <span>
@@ -659,7 +659,11 @@ const HomeOne = () => {
                             </span>
                             Rent Now
                           </Link>
+                        </div> */}
+                        <div className="listing-button">
+                          <EmailModal />
                         </div>
+
                       </div>
                     </div>
                   </div>
@@ -677,9 +681,9 @@ const HomeOne = () => {
         <div className="container">
           {/* Heading title*/}
           <div className="section-heading" data-aos="fade-down">
-            <h2>Recommended Tours</h2>
+            <h2>{t('tours')} </h2>
             <p>
-              Here are some fun tours
+              {t('toursDescription')}
             </p>
           </div>
           {/* /Heading title */}
@@ -779,7 +783,7 @@ const HomeOne = () => {
                                     alt="Persons"
                                   />
                                 </span>
-                                <p>5 Persons</p>
+                                <p>5   {t('Persons')} </p>
                               </li>
                             </ul>
                           </div>
@@ -811,7 +815,7 @@ const HomeOne = () => {
               to={routes.listingGrid}
               className="btn btn-view d-inline-flex align-items-center"
             >
-              Go to all Cars{" "}
+              {t('allCarsButton')}
               <span>
                 <i className="feather icon-arrow-right ms-2" />
               </span>
@@ -833,10 +837,11 @@ const HomeOne = () => {
         <div className="container">
           {/* Heading title*/}
           <div className="section-heading" data-aos="fade-down">
-            <h2>Why Choose Us</h2>
+            <h2>
+              {t('whyUs')}
+            </h2>
             <p>
-              Lorem Ipsum has been the industry standard dummy text ever since
-              the 1500s,
+              {t('whyUsDescription')}
             </p>
           </div>
           {/* /Heading title */}
@@ -855,11 +860,9 @@ const HomeOne = () => {
                       />
                     </div>
                     <div className="choose-content">
-                      <h4>Easy &amp; Fast Booking</h4>
+                      <h4> {t('easyBooking')}</h4>
                       <p>
-                        Completely carinate e business testing process whereas
-                        fully researched customer service. Globally extensive
-                        content with quality.
+                        {t('easyBookingDescription')}
                       </p>
                     </div>
                   </div>
@@ -878,11 +881,9 @@ const HomeOne = () => {
                       />
                     </div>
                     <div className="choose-content">
-                      <h4>Many Pickup Location</h4>
+                      <h4> {t('manyPickupLocation')}</h4>
                       <p>
-                        Enthusiastically magnetic initiatives with
-                        cross-platform sources. Dynamically target testing
-                        procedures through effective.
+                        {t('manyPickupLocationDescription')}
                       </p>
                     </div>
                   </div>
@@ -901,10 +902,9 @@ const HomeOne = () => {
                       />
                     </div>
                     <div className="choose-content">
-                      <h4>Customer Satisfaction</h4>
+                      <h4> {t('customerSatisfaction')}</h4>
                       <p>
-                        Globally user centric method interactive. Seamlessly
-                        revolutionize unique portals corporate collaboration.
+                        {t('customerSatisfactionDescription')}
                       </p>
                     </div>
                   </div>
@@ -920,9 +920,9 @@ const HomeOne = () => {
         <div className="container">
           {/* Heading title*/}
           <div className="section-heading" data-aos="fade-down">
-            <h2 className="title text-white">What People say about us? </h2>
+            <h2 className="title text-white"> {t('peopleSay')} </h2>
             <p className="description text-white">
-              Discover what our customers have think about us
+              {t('peopleSayDescription')}
             </p>
           </div>
           {/* /Heading title */}
@@ -981,8 +981,9 @@ const HomeOne = () => {
         <div className="container">
           {/* Heading title*/}
           <div className="section-heading" data-aos="fade-down">
-            <h2>Frequently Asked Questions </h2>
-            <p>Find answers to your questions from our previous answers</p>
+            <h2>            {t('FAQ')}
+            </h2>
+            <p> {t('FAQDescription')}</p>
           </div>
           {/* /Heading title */}
           <div className="faq-info">
@@ -994,15 +995,12 @@ const HomeOne = () => {
                   to="#faqOne"
                   aria-expanded="true"
                 >
-                  How old do I need to be to rent a car?
+                   {t('FAQ1')}
                 </Link>
               </h4>
               <div id="faqOne" className="card-collapse collapse show">
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
+                {t('answer1')}
                 </p>
               </div>
             </div>
@@ -1014,15 +1012,12 @@ const HomeOne = () => {
                   to="#faqTwo"
                   aria-expanded="false"
                 >
-                  What documents do I need to rent a car?
+                   {t('FAQ2')}
                 </Link>
               </h4>
               <div id="faqTwo" className="card-collapse collapse">
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
+                {t('answer2')}
                 </p>
               </div>
             </div>
@@ -1034,15 +1029,12 @@ const HomeOne = () => {
                   to="#faqThree"
                   aria-expanded="false"
                 >
-                  What types of vehicles are available for rent?
+                   {t('FAQ3')}
                 </Link>
               </h4>
               <div id="faqThree" className="card-collapse collapse">
                 <p>
-                  We offer a diverse fleet of vehicles to suit every need,
-                  including compact cars, sedans, SUVs and luxury vehicles. You
-                  can browse our selection online or contact us for assistance
-                  in choosing the right vehicle for you
+                {t('answer3')}
                 </p>
               </div>
             </div>
@@ -1054,19 +1046,16 @@ const HomeOne = () => {
                   to="#faqFour"
                   aria-expanded="false"
                 >
-                  Can I rent a car with a debit card?
+                   {t('FAQ4')}
                 </Link>
               </h4>
               <div id="faqFour" className="card-collapse collapse">
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
+                {t('answer4')}
                 </p>
               </div>
             </div>
-            <div className="faq-card bg-white" data-aos="fade-down">
+            {/* <div className="faq-card bg-white" data-aos="fade-down">
               <h4 className="faq-title">
                 <Link
                   className="collapsed"
@@ -1125,7 +1114,7 @@ const HomeOne = () => {
                   laboris nisi ut aliquip ex ea commodo consequat.
                 </p>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>

@@ -21,9 +21,15 @@ namespace RentaCar.Controllers
         [HttpPost]
         public async void Post([FromBody] EmailRequest emailRequest)
         {
-            var receiver = "wedorentacar@gmail.com";
+            var receiver = "lusinehsahakian@gmail.com";
 
-            await _emailService.SendEmailAsync(receiver, emailRequest.Name, emailRequest.Phone);
+            if (emailRequest == null) BadRequest("Invalid email request.");
+
+            string message = emailRequest.Name == null && emailRequest.Phone == null
+                ? $"Email: {emailRequest.Email}"
+                : $"Email: {emailRequest.Email}\nName: {emailRequest.Name ?? "Name not provided"}\nPhone: {emailRequest.Phone ?? "Phone not provided"}";
+
+            await _emailService.SendEmailAsync(receiver, "Client from WeDoRentaCar", message);
 
         }
 

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using RentaCar.ApplicationModels;
 using RentaCar.DataModels;
+using RentaCar.Email;
 using RentaCar.Entity;
 using RentaCar.Enums;
 using RentaCar.Exceptionss;
 using RentaCar.Repository;
-using System.Transactions;
 
 namespace RentaCar.Usecase.Services
 {
@@ -14,12 +14,15 @@ namespace RentaCar.Usecase.Services
         public CarRepository _carRepository;
         public ReservationRepository _reservationRepository;
         private readonly IMapper _mapper;
+        public readonly IEmailSender _emailService;
 
-        public ReservationService(CarRepository carRepository, ReservationRepository reservationRepository, IMapper mapper)
+
+        public ReservationService(CarRepository carRepository, ReservationRepository reservationRepository, IMapper mapper, IEmailSender emailService)
         {
             this._carRepository = carRepository;
             this._reservationRepository = reservationRepository;
             this._mapper = mapper;
+            this._emailService = emailService;
         }
 
         /// <summary>
@@ -89,7 +92,7 @@ namespace RentaCar.Usecase.Services
                     Surname = request.LastName,
                     Email = request.Email,
                     Phone = request.Phone,
-
+                    LicenceNumber = request.DrivingLicence
                 };
 
                 customer = _reservationRepository.AddCustomer(customer);
@@ -107,6 +110,13 @@ namespace RentaCar.Usecase.Services
                 };
 
                 reservation = _reservationRepository.AddReservation(reservation);
+
+            
+            if(reservation.Id > 0)
+            {
+                var message = $"Dear {customer.Name}, your booking is successfully completed. We will be gladly waiting for you on {reservation.StartDate} at {reservation.StartAddress}";
+                 _emailService.SendEmailAsync(customer.Email, "Car booking confirmation", message);
+            }
 
                 return true;           
             

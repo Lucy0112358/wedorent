@@ -439,11 +439,7 @@ const ListingGrid = () => {
               <div className="row d-flex align-items-center">
                 <div className="col-xl-4 col-lg-3 col-sm-12 col-12">
                   <div className="count-search">
-<<<<<<< HEAD
                     <p>Showing {allCars?.data?.length} Cars</p>
-=======
-                    <p>Showing {allCars?.data.length} Cars</p>
->>>>>>> 6977c71eb6aabed611355f7275508f0c383a6d42
                   </div>
                 </div>
                 <div className="col-xl-8 col-lg-9 col-sm-12 col-12">

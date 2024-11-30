@@ -19,6 +19,72 @@ const BookingAddon = () => {
   const bookingCar = useSelector(getBookingCar)
   const total = useSelector(getServiceTotal)
   const dispatch = useDispatch()
+
+
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  const handleDetails = (key, value) => {
+    let existAddonInfo = {
+      ...bookingData,
+      [key]: value
+    };
+
+    dispatch(setBookingData(existAddonInfo))
+  }
+  console.log(bookingData, "bookingData")
+  const handleAddService = (e, service) => {
+    e.preventDefault();
+    console.log(service, "service")
+
+    if (!bookingData?.serviceList) {
+      handleDetails('serviceList', { [service.id]: { "price": service.price, "title": service.title } });
+    } else {
+      if(!(bookingData?.serviceList.hasOwnProperty(service.id))){
+        let updatedServiceList = { ...bookingData.serviceList, [service.id]: { "price": service.price, "title": service.title }};
+      handleDetails('serviceList', updatedServiceList)
+
+      }
+    }
+
+    dispatch(setServiceTotalAdd(service.price))
+
+  }
+  const calculateDays = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const timeDiff = Math.abs(end - start);
+    return Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Convert to days
+  };
+
+  const getPrice = (days, prices = []) => {
+    for (let pricing of prices) {
+      if (days >= pricing.minDays && days <= pricing.maxDays) {
+        return pricing.price;
+      }
+    }
+    return null; // Return null if no price matches
+  };
+
+  // Calculate the number of days
+  const days = calculateDays(bookingData.StartDate, bookingData.EndDate);
+
+  // Find the corresponding price
+  const price = getPrice(days, bookingCar?.data.prices)*days;
+  const insurancePrice = price*0.15;
+  console.log(days)
+  console.log(insurancePrice)
+  const handleRemoveService = (e, service) => {
+    e.preventDefault();
+    if (!bookingData.serviceList) {
+      alert("No services selected")
+      return false;
+    } else {
+      let updatedServiceList = { ...bookingData.serviceList };
+      delete updatedServiceList[service.id]; 
+      handleDetails('serviceList', updatedServiceList)
+    }
+    dispatch(setServiceTotalRemove(service.price))
+  };
   const services = [
     {
       "id": 1,
@@ -52,55 +118,11 @@ const BookingAddon = () => {
       "title": "CASCO insurance",
       "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
       "iconName": "battery-check-icon.png",
-      "price": 20000,
+      "price": price*0.15,
       "createdAt": "2023-10-04T11:15:00",
       "modifiedAt": "2023-10-04T11:15:00"
     }
   ]
-
-  const [totalAmount, setTotalAmount] = useState(0);
-
-  const handleDetails = (key, value) => {
-    let existAddonInfo = {
-      ...bookingData,
-      [key]: value
-    };
-
-    dispatch(setBookingData(existAddonInfo))
-  }
-  console.log(bookingData, "bookingData")
-  const handleAddService = (e, service) => {
-    e.preventDefault();
-    console.log(service, "service")
-
-    if (!bookingData?.serviceList) {
-      handleDetails('serviceList', { [service.id]: { "price": service.price, "title": service.title } });
-    } else {
-      if(!(bookingData?.serviceList.hasOwnProperty(service.id))){
-        let updatedServiceList = { ...bookingData.serviceList, [service.id]: { "price": service.price, "title": service.title }};
-      handleDetails('serviceList', updatedServiceList)
-
-      }
-    }
-
-    dispatch(setServiceTotalAdd(service.price))
-
-  }
-  console.log(bookingData, "bookingDatabookingData")
-
-  const handleRemoveService = (e, service) => {
-    e.preventDefault();
-    if (!bookingData.serviceList) {
-      alert("No services selected")
-      return false;
-    } else {
-      let updatedServiceList = { ...bookingData.serviceList };
-      delete updatedServiceList[service.id]; 
-      handleDetails('serviceList', updatedServiceList)
-    }
-    dispatch(setServiceTotalRemove(service.price))
-  };
-
   return (
     <>
       <Breadcrumbs title="Checkout" subtitle="Checkout" />
@@ -213,8 +235,8 @@ const BookingAddon = () => {
                             <p>{bookingData?.rent_type}</p>
                           </li>
                           <li>
-                            <h6>Rental Type</h6>
-                            <p>Days</p>
+                            <h6>Rental Duration</h6>
+                            <p>{days} Days</p>
                           </li>
                           <li>
                             <h6>Delivery Location &amp; time</h6>
@@ -229,12 +251,10 @@ const BookingAddon = () => {
                         </ul>
                       </div>
                     </div>
-
-
                     <div className="total-rate-card">
                       <div className="vehicle-total-price">
                         <h5>Estimated Total</h5>
-                        <span>{bookingCar?.data?.prices[2].price + total}֏</span>
+                        <span>{price + total}֏</span>
                       </div>
                     </div>
                   </div>
@@ -264,7 +284,7 @@ const BookingAddon = () => {
                                       <h6>{service.title}</h6>
                                     </div>
                                   </div>
-                                  <span className="adon-price">{service.price} ֏</span>
+                                  <span className="adon-price">{ service.price} ֏</span>
                                   {
                                     bookingData?.serviceList && bookingData?.serviceList.hasOwnProperty(service.id) ? (
                                       <button
