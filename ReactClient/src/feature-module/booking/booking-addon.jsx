@@ -86,18 +86,10 @@ const BookingAddon = () => {
     dispatch(setServiceTotalRemove(service.price))
   };
   const services = [
+   
     {
       "id": 1,
-      "title": "Personal driver",
-      "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
-      "iconName": "car-wash-icon.png",
-      "price": 20000,
-      "createdAt": "2023-10-01T10:30:00",
-      "modifiedAt": "2023-10-01T10:30:00"
-    },
-    {
-      "id": 2,
-      "title": "Car seat",
+      "title": "Child booster",
       "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
       "iconName": "oil-change-icon.png",
       "price": 5000,
@@ -105,18 +97,18 @@ const BookingAddon = () => {
       "modifiedAt": "2023-10-02T09:00:00"
     },
     {
-      "id": 3,
-      "title": "Airport pick up",
+      "id": 2,
+      "title": "Child seat",
       "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
       "iconName": "tire-rotation-icon.png",
-      "price": 20000,
+      "price": 10000,
       "createdAt": "2023-10-03T08:45:00",
       "modifiedAt": "2023-10-03T08:45:00"
     },
     {
-      "id": 4,
-      "title": "CASCO insurance",
-      "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
+      "id": 3,
+      "title": "Insurance Full + WiFi",
+      "description": "Get full insurance including CASCO and free wifi in the car",
       "iconName": "battery-check-icon.png",
       "price": price*0.15,
       "createdAt": "2023-10-04T11:15:00",
