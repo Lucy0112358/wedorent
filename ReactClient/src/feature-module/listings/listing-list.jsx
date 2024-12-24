@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Breadcrumbs from "../common/breadcrumbs";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
-import { Dropdown } from "primereact/dropdown";
+import { useTranslation } from 'react-i18next';
 import { Calendar } from "primereact/calendar";
 import { TimePicker } from "antd";
 import { Link } from "react-router-dom";
@@ -161,10 +161,13 @@ const Listinglist = () => {
       },
     ],
   };
+  const { t } = useTranslation();
 
   return (
     <div className="listing-page">
-      <Breadcrumbs title="Car Listings" subtitle="Listings" />
+      <Breadcrumbs title={t('carListings')}
+        subtitle={t('carListings')}
+        home={t('home')} />
       {/* Search */}
 
       <div className="section-search page-search">
@@ -174,22 +177,23 @@ const Listinglist = () => {
               <ul className="align-items-center">
                 <li className="column-group-main">
                   <div className="input-block">
-                    <label>Pickup Location</label>
+                    <label>   {t('pickupLocation')}
+                    </label>
                     <div className="group-img">
                       {isLoaded &&
                         <StandaloneSearchBox
                           onLoad={(ref) => (inputRef.current = ref)}
                           onPlacesChanged={handleOnPlacesChanged}
                           options={{
-                            bounds: YEREVAN_BOUNDS, // Restrict results to Yerevan bounds
-                            strictBounds: true, // Enforce bounds restriction
-                            componentRestrictions: { country: "am" }, // Restrict to Armenia
+                            bounds: YEREVAN_BOUNDS,
+                            strictBounds: true,
+                            componentRestrictions: { country: "am" },
                           }}
                         >
                           <input
                             type="text"
                             className="form-control"
-                            placeholder="Enter City, Airport, or Address"
+                            placeholder={t('addressPlaceholder')}
                             style={{
                               boxSizing: "border-box",
                               border: "1px solid transparent",
@@ -208,7 +212,8 @@ const Listinglist = () => {
                 </li>
                 <li className="column-group-main">
                   <div className="input-block">
-                    <label>Pickup Date</label>
+                    <label>   {t('pickupDate')}
+                    </label>
                   </div>
                   <div className="input-block-wrapp">
                     <div className="input-block date-widget">
@@ -241,7 +246,8 @@ const Listinglist = () => {
                 </li>
                 <li className="column-group-main">
                   <div className="input-block">
-                    <label>Return Date</label>
+                    <label>   {t('returnDate')}
+                    </label>
                   </div>
                   <div className="input-block-wrapp">
                     <div className="input-block date-widge">
@@ -277,7 +283,7 @@ const Listinglist = () => {
                       <button className="btn search-button" type="submit" onClick={() => navigate(routes.listingGrid)}>
                         {" "}
                         <i className="fa fa-search" aria-hidden="true" />
-                        Search
+                        {t('search')}
                       </button>
                     </div>
                   </div>
@@ -333,7 +339,7 @@ const Listinglist = () => {
               <div className="row d-flex align-items-center">
                 <div className="col-xl-4 col-lg-3 col-sm-12 col-12">
                   <div className="count-search">
-                    <p>Showing {allCars?.data?.length} Cars</p>
+                    <p>  {t('showing')} {allCars?.data?.length}   {t('cars')}</p>
                   </div>
                 </div>
                 <div className="col-xl-8 col-lg-9 col-sm-12 col-12">
@@ -446,19 +452,6 @@ const Listinglist = () => {
                                 </div>
                               </Slider>
                             </div>
-                            {/* <div className="fav-item justify-content-end">
-                              <span className="img-count">
-                                <i className="feather icon-image" />
-                                04
-                              </span>
-                              <Link
-                                to="#"
-                                className={`fav-icon ${activeHearts.heart1 ? "selected" : ""}`}
-                                onClick={() => toggleLike("heart1")}
-                              >
-                                <i className="feather icon-heart" />
-                              </Link>
-                            </div> */}
                           </div>
                           <div className="bloglist-content w-100">
                             <div className="card-body">
@@ -470,20 +463,12 @@ const Listinglist = () => {
                                     </Link>
                                   </h3>
                                   <h6>
-                                    Category : <span>{car.category}</span>
+                                      {t('category')} : <span>{car.category}</span>
                                   </h6>
                                 </div>
                                 <div className="blog-list-rate">
-                                  {/* <div className="list-rating">
-                              <i className="fas fa-star filled" />
-                              <i className="fas fa-star filled" />
-                              <i className="fas fa-star filled" />
-                              <i className="fas fa-star filled" />
-                              <i className="fas fa-star" />
-                              <span>180 Reviews</span>
-                            </div> */}
                                   <h6>
-                                   From {car.prices[2].price}<span>֏/ Day</span>
+                                  {t('from')} {car.prices[2].price}<span>֏/  {t('day')}</span>
                                   </h6>
                                 </div>
                               </div>
@@ -548,98 +533,24 @@ const Listinglist = () => {
                               <div className="blog-list-head list-head-bottom d-flex">
                                 <div className="blog-list-title">
                                   <div className="title-bottom">
-                                    {/* <div className="car-list-icon">
-                                <ImageWithBasePath
-                                  src="assets/img/profiles/avatar-14.jpg"
-                                  alt="user"
-                                />
-                              </div> */}
                                     <div className="address-info">
                                       <h6>
                                         <i className="feather icon-map-pin" />
-                                        Yerevan, Armenia
+                                        {t('address')}
                                       </h6>
                                     </div>
-                                    {/* <div className="list-km">
-                                <span className="km-count">
-                                  <ImageWithBasePath
-                                    src="assets/img/icons/map-pin.svg"
-                                    alt="author"
-                                  />
-                                  3.2m
-                                </span>
-                              </div> */}
                                   </div>
                                 </div>
-                                {/* <div className="listing-button">
-                                  <Link
-                                    to={routes.listingDetails}
-                                    className="btn btn-order"
-                                  >
-                                    <span>
-                                      <i className="feather icon-calendar me-2" />
-                                    </span>
-                                    Rent Now
-                                  </Link>
-                                </div> */}
                                 <EmailModal />
                               </div>
                             </div>
                           </div>
-                          {/* <div className="feature-text">
-                            <span className="bg-danger">Featured</span>
-                          </div> */}
                         </div>
                       </div>
                     </div>
                   </div>
                 ))}
-
-
-
-
               </div>
-              {/*Pagination*/}
-              {/* <div className="blog-pagination">
-                <nav>
-                  <ul className="pagination page-item justify-content-center">
-                    <li className="previtem">
-                      <Link className="page-link" to="#">
-                        <i className="fas fa-regular fa-arrow-left me-2" /> Prev
-                      </Link>
-                    </li>
-                    <li className="justify-content-center pagination-center">
-                      <div className="page-group">
-                        <ul>
-                          <li className="page-item">
-                            <Link className="page-link" to="#">
-                              1
-                            </Link>
-                          </li>
-                          <li className="page-item">
-                            <Link className="active page-link" to="#">
-                              2{" "}
-                              <span className="visually-hidden">(current)</span>
-                            </Link>
-                          </li>
-                          <li className="page-item">
-                            <Link className="page-link" to="#">
-                              3
-                            </Link>
-                          </li>
-                        </ul>
-                      </div>
-                    </li>
-                    <li className="nextlink">
-                      <Link className="page-link" to="#">
-                        Next{" "}
-                        <i className="fas fa-regular fa-arrow-right ms-2" />
-                      </Link>
-                    </li>
-                  </ul>
-                </nav>
-              </div> */}
-              {/*/Pagination*/}
             </div>
           </div>
         </div>
@@ -651,7 +562,7 @@ const Listinglist = () => {
             <div className="search-box-banner">
               <div className="col-xl-4 col-lg-3 col-sm-12 col-12">
                 <div className="count-search">
-                  <p>Filters</p>
+                  <p>  {t('filter')}</p>
                 </div>
               </div>
               <div className="listing-tabs-group">

@@ -21,7 +21,7 @@ namespace RentaCar.Controllers
         [HttpPost]
         public async void Post([FromBody] EmailRequest emailRequest)
         {
-            var receiver = "lusinehsahakian@gmail.com";
+            var receiver = "wedorentcar@gmail.com";
 
             if (emailRequest == null) BadRequest("Invalid email request.");
 

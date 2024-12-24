@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import Breadcrumbs from "../common/breadcrumbs";
 import { Link } from "react-router-dom";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
-import { Dropdown } from "primereact/dropdown";
+import { useTranslation } from 'react-i18next';
 import { Calendar } from "primereact/calendar";
 import dayjs from "dayjs";
 import { TimePicker } from "antd";
@@ -21,6 +21,7 @@ import { GoogleMap, useJsApiLoader, StandaloneSearchBox } from "@react-google-ma
 
 
 const ListingGrid = () => {
+  const { t } = useTranslation();
   const inputRef = useRef(null);
   const handleOnPlacesChanged = () => {
     const searchBox = inputRef.current;
@@ -305,131 +306,135 @@ const ListingGrid = () => {
 
   return (
     <div className="listing-page">
-
-      <Breadcrumbs title="Car Listings" subtitle="Listings" />
-        {/* Search */}
-        <div className="section-search page-search">
-        <div className="container">
-          <div className="search-box-banner">
-            <form>
-              <ul className="align-items-center">
-                <li className="column-group-main">
-                  <div className="input-block">
-                    <label>Pickup Location</label>
-                    <div className="group-img">
-              {isLoaded && 
-                      <StandaloneSearchBox
-                        onLoad={(ref) => (inputRef.current = ref)}
-                        onPlacesChanged={handleOnPlacesChanged} 
-                        options={{
-                          bounds: YEREVAN_BOUNDS, // Restrict results to Yerevan bounds
-                          strictBounds: true, // Enforce bounds restriction
-                          componentRestrictions: { country: "am" }, // Restrict to Armenia
-                        }}
-                      >
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Enter City, Airport, or Address"
-                          style={{
-                            boxSizing: "border-box",
-                            border: "1px solid transparent",
-                            width: "100%",
-                            height: "40px",
-                            padding: "12px",
-                            borderRadius: "4px",
-                          }}
-                        />
-                      </StandaloneSearchBox>
-              }
-
-                    
-                    </div>
-                  </div>
-                </li>
-                <li className="column-group-main">
-                  <div className="input-block">
-                    <label>Pickup Date</label>
-                  </div>
-                  <div className="input-block-wrapp">
-                    <div className="input-block date-widget">
-                      <div className="group-img">
-                        <Calendar
-                          value={date1}
-                          onChange={(e) => setDate1(e.value)}
-                          placeholder="04/11/2023"
-                        />
-                        {/* <input type="text" className="form-control datetimepicker" placeholder="04/11/2023" /> */}
-                        <span>
-                          <i className="feather icon-calendar"></i>
-                        </span>
+    <Breadcrumbs title={t('carListings')}
+        subtitle={t('carListings')}
+        home={t('home')} />
+       {/* Search */}
+    
+          <div className="section-search page-search">
+            <div className="container">
+              <div className="search-box-banner">
+                <form>
+                  <ul className="align-items-center">
+                    <li className="column-group-main">
+                      <div className="input-block">
+                        <label>   {t('pickupLocation')}
+                        </label>
+                        <div className="group-img">
+                          {isLoaded &&
+                            <StandaloneSearchBox
+                              onLoad={(ref) => (inputRef.current = ref)}
+                              onPlacesChanged={handleOnPlacesChanged}
+                              options={{
+                                bounds: YEREVAN_BOUNDS,
+                                strictBounds: true,
+                                componentRestrictions: { country: "am" },
+                              }}
+                            >
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder={t('addressPlaceholder')}
+                                style={{
+                                  boxSizing: "border-box",
+                                  border: "1px solid transparent",
+                                  width: "100%",
+                                  height: "40px",
+                                  padding: "12px",
+                                  borderRadius: "4px",
+                                }}
+                              />
+                            </StandaloneSearchBox>
+                          }
+    
+    
+                        </div>
                       </div>
-                    </div>
-                    <div className="input-block time-widge">
-                      <div className="group-img">
-                        <TimePicker
-                          placeholder="11:00 AM"
-                          className="form-control timepicker"
-                          onChange={onChange}
-                          defaultValue={dayjs("00:00:00", "HH:mm:ss")}
-                        />
-                        <span>
-                          <i className="feather icon-clock"></i>
-                        </span>
+                    </li>
+                    <li className="column-group-main">
+                      <div className="input-block">
+                        <label>   {t('pickupDate')}
+                        </label>
                       </div>
-                    </div>
-                  </div>
-                </li>
-                <li className="column-group-main">
-                  <div className="input-block">
-                    <label>Return Date</label>
-                  </div>
-                  <div className="input-block-wrapp">
-                    <div className="input-block date-widge">
-                      <div className="group-img">
-                        <Calendar
-                          value={date2}
-                          onChange={(e) => setDate2(e.value)}
-                          placeholder="04/11/2023"
-                        />
-                        <span>
-                          <i className="feather icon-calendar" />
-                        </span>
+                      <div className="input-block-wrapp">
+                        <div className="input-block date-widget">
+                          <div className="group-img">
+                            <Calendar
+                              value={date1}
+                              onChange={(e) => setDate1(e.value)}
+                              placeholder="04/11/2023"
+                            />
+                            {/* <input type="text" className="form-control datetimepicker" placeholder="04/11/2023" /> */}
+                            <span>
+                              <i className="feather icon-calendar"></i>
+                            </span>
+                          </div>
+                        </div>
+                        <div className="input-block time-widge">
+                          <div className="group-img">
+                            <TimePicker
+                              placeholder="11:00 AM"
+                              className="form-control timepicker"
+                              onChange={onChange}
+                              defaultValue={dayjs("00:00:00", "HH:mm:ss")}
+                            />
+                            <span>
+                              <i className="feather icon-clock"></i>
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="input-block time-widge">
-                      <div className="group-img">
-                        <TimePicker
-                          placeholder="11:00 AM"
-                          className="form-control timepicker"
-                          onChange={onChange}
-                          defaultValue={dayjs("00:00:00", "HH:mm:ss")}
-                        />
-                        <span>
-                          <i className="feather icon-clock"></i>
-                        </span>
+                    </li>
+                    <li className="column-group-main">
+                      <div className="input-block">
+                        <label>   {t('returnDate')}
+                        </label>
                       </div>
-                    </div>
-                  </div>
-                </li>
-                <li className="column-group-last">
-                  <div className="input-block">
-                    <div className="search-btn">
-                      <button className="btn search-button" type="submit" onClick={() => navigate(routes.listingGrid)}>
-                        {" "}
-                        <i className="fa fa-search" aria-hidden="true" />
-                        Search
-                      </button>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </form>
+                      <div className="input-block-wrapp">
+                        <div className="input-block date-widge">
+                          <div className="group-img">
+                            <Calendar
+                              value={date2}
+                              onChange={(e) => setDate2(e.value)}
+                              placeholder="04/11/2023"
+                            />
+                            <span>
+                              <i className="feather icon-calendar" />
+                            </span>
+                          </div>
+                        </div>
+                        <div className="input-block time-widge">
+                          <div className="group-img">
+                            <TimePicker
+                              placeholder="11:00 AM"
+                              className="form-control timepicker"
+                              onChange={onChange}
+                              defaultValue={dayjs("00:00:00", "HH:mm:ss")}
+                            />
+                            <span>
+                              <i className="feather icon-clock"></i>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li className="column-group-last">
+                      <div className="input-block">
+                        <div className="search-btn">
+                          <button className="btn search-button" type="submit" onClick={() => navigate(routes.listingGrid)}>
+                            {" "}
+                            <i className="fa fa-search" aria-hidden="true" />
+                            {t('search')}
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </form>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      {/* /Search */}
-
+          {/* /Search */}
       {/* Sort By */}
       <div className="sort-section">
         <div className="container">
@@ -439,7 +444,7 @@ const ListingGrid = () => {
               <div className="row d-flex align-items-center">
                 <div className="col-xl-4 col-lg-3 col-sm-12 col-12">
                   <div className="count-search">
-                    <p>Showing {allCars?.data?.length} Cars</p>
+                    <p>  {t('showing')} {allCars?.data?.length}   {t('cars')}</p>
                   </div>
                 </div>
                 <div className="col-xl-8 col-lg-9 col-sm-12 col-12">
@@ -531,7 +536,7 @@ const ListingGrid = () => {
                                 />
                               </Link>
                               <h3 className="listing-title">
-                              <Link to={routes.listingDetails.replace(':id', car.id)}>
+                                <Link to={routes.listingDetails.replace(':id', car.id)}>
                                   {car.model}
                                 </Link>
                               </h3>
@@ -550,7 +555,7 @@ const ListingGrid = () => {
                                   src="assets/img/icons/map-pin.svg"
                                   alt="author"
                                 />
-                              {car.category}
+                                {car.category}
                               </span>
                             </div>
                           </div>
@@ -619,31 +624,16 @@ const ListingGrid = () => {
                               <span>
                                 <i className="feather icon-map-pin" />
                               </span>
-                              Yerevan
+                              {t('address')}
                             </div>
                             <div className="listing-price">
                               <h6>
-                               From {car?.prices[2].price} ֏ <span>/ Day</span>
+                                {t('from')} {car.prices[2].price}<span>֏/  {t('day')}</span>
                               </h6>
                             </div>
                           </div>
-                          {/* <div className="listing-button">
-                            <Link
-                             // to={routes.listingDetails}
-                              className="btn btn-order"
-                            >
-                              <span>
-                                <i className="feather icon-calendar me-2" />
-                              </span>
-                              Rent Now
-                            </Link>
-                          </div> */}
                           <EmailModal />
-                        </div>
-                        {/* <div className="feature-text">
-                          <span className="bg-danger">Featured</span>
-                        </div> */}
-                      </div>
+                        </div>                                            </div>
                     </div>
                   ))}
               </div>
@@ -653,18 +643,18 @@ const ListingGrid = () => {
       </section>
       <div className="section-search page-search">
         <section className="section popular-services popular-explore">
-          
+
           <div className="container">
             <div className="search-box-banner">
-            <div className="col-xl-4 col-lg-3 col-sm-12 col-12">
-                  <div className="count-search">
-                    <p>Filters</p>
-                  </div>
+              <div className="col-xl-4 col-lg-3 col-sm-12 col-12">
+                <div className="count-search">
+                <p>  {t('filter')}</p>
                 </div>
+              </div>
               <div className="listing-tabs-group">
-                
+
                 <ul className="nav listing-buttons gap-3" data-bs-tabs="tabs" style={{ display: 'flex', flexWrap: 'wrap' }}>
-                  
+
                   {allCategories.data?.map(category => (
                     <li
                       key={category.id}

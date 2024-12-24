@@ -1,8 +1,10 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { all_routes } from "../router/all_routes";
+import { useTranslation } from 'react-i18next';
 
 const Breadcrumbs = (props) => {
+    const { t } = useTranslation();
   const routes = all_routes;
   const location = useLocation();
   let addButton = null;
@@ -34,7 +36,7 @@ const Breadcrumbs = (props) => {
               <nav aria-label="breadcrumb" className="page-breadcrumb">
                 <ol className="breadcrumb">
                   <li className="breadcrumb-item">
-                    <Link to={routes.homeOne}>Home</Link>
+                    <Link to={routes.homeOne}>{t('home')}</Link>
                   </li>
                   <li className="breadcrumb-item">
                     <Link to="#">{props.subtitle}</Link>
@@ -77,7 +79,7 @@ const Breadcrumbs = (props) => {
               <nav aria-label="breadcrumb" className="page-breadcrumb">
                 <ol className="breadcrumb">
                   <li className="breadcrumb-item">
-                    <Link to={routes.homeOne}>Home</Link>
+                    <Link to={routes.homeOne}>{t('home')}</Link>
                   </li>
                   <li className="breadcrumb-item active" aria-current="page">
                     {props.subtitle}

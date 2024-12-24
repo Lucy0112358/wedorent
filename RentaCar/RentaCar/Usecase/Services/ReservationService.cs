@@ -68,7 +68,7 @@ namespace RentaCar.Usecase.Services
                 {
                     result.CarModel = carModel;
                     result.CarBrand = carModel;
-                    
+
                 }
 
                 return result;
@@ -86,40 +86,40 @@ namespace RentaCar.Usecase.Services
         public bool ReserveACar(ReservationRequest request)
         {
 
-                var customer = new Customer
-                {
-                    Name = request.FirstName,
-                    Surname = request.LastName,
-                    Email = request.Email,
-                    Phone = request.Phone,
-                    LicenceNumber = request.DrivingLicence
-                };
+            var customer = new Customer
+            {
+                Name = request.FirstName,
+                Surname = request.LastName,
+                Email = request.Email,
+                Phone = request.Phone,
+                LicenceNumber = request.DrivingLicence
+            };
 
-                customer = _reservationRepository.AddCustomer(customer);
+            customer = _reservationRepository.AddCustomer(customer);
 
-                var reservation = new Reservation
-                {
-                    CustomerId = customer.Id,
-                    //TotalAmount = CalculateTotalAmount(request.Services),
-                    ReservationStatusId = (int)ReservationStatusEnum.Upcoming,
-                    StartDate = request.StartDate,
-                    EndDate = request.EndDate,
-                    StartAddress = request.StartAddress,
-                    EndAddress = request.EndAddress,
-                    CarId = request.CarId
-                };
+            var reservation = new Reservation
+            {
+                CustomerId = customer.Id,
+                //TotalAmount = CalculateTotalAmount(request.Services),
+                ReservationStatusId = (int)ReservationStatusEnum.Upcoming,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                StartAddress = request.StartAddress,
+                EndAddress = request.EndAddress,
+                CarId = request.CarId
+            };
 
-                reservation = _reservationRepository.AddReservation(reservation);
+            reservation = _reservationRepository.AddReservation(reservation);
 
-            
-            if(reservation.Id > 0)
+
+            if (reservation.Id > 0)
             {
                 var message = $"Dear {customer.Name}, your booking is successfully completed. We will be gladly waiting for you on {reservation.StartDate} at {reservation.StartAddress}";
-                 _emailService.SendEmailAsync(customer.Email, "Car booking confirmation", message);
+                _emailService.SendEmailAsync(customer.Email, "Car booking confirmation", message);
             }
 
-                return true;           
-            
+            return true;
+
         }
 
 

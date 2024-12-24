@@ -46,5 +46,17 @@
     "FAQ3": "What types of vehicles are available for rent?",
     "answer3": "You can find the whole list of cars in the corresponding section",
     "FAQ4": "Can I rent a car with a debit card?",
-    "answer4": "Yes, you can pay with card, cash, or crypto"
+    "answer4": "Yes, you can pay with card, cash, or crypto",
+
+    "carListings": "Car Listings",
+    "home": "Home",
+    "listings": "Listings",
+    "showing": "Showing",  
+    "category": "Category",
+    "filter": "Filter",
+    "cars":  "cars",
+    "address": "Yerevan, Armenia",
+    "from": "From",
+      "day": "day"
 }
+
