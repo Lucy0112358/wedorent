@@ -600,8 +600,8 @@ Delievery in Yerevan is free, but if you want the car in other cities, additiona
                   <div className="price-list">
                     {bookingCar?.data?.prices.map(priceList => {
                      return <div className="price-item">
-                      <p>From {priceList.minDays} to {priceList.maxDays} days per day</p>
-                      <h6>{priceList.price}֏</h6>
+                      <p>{priceList.minDays}-{priceList.maxDays} days</p>
+                      <h6>{priceList.price} ֏/day</h6>
                     </div>
                     })}
                     
@@ -614,9 +614,7 @@ Delievery in Yerevan is free, but if you want the car in other cities, additiona
                   </div>
                 </div>
                 <div className="review-sec mt-0">
-                  {/* <div className="review-header">
-                    <h4>Check Availability</h4>
-                  </div> */}
+                 
                   <div className="location-content">
 
                     <div className="tab-content">
