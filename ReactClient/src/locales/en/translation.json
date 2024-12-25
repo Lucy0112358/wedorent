@@ -80,7 +80,7 @@
 "gallery": "Gallery",
 "policies": "Policies",
 "cancel": "Cancellation Charges",
-"charges": "Взимается плата за аннулирование ",
+"charges": "Cancellation charges will be applied",
 "policy": "Policy",
 "outsideYerevan": "Delievery in Yerevan is free, but if you want the car in other cities, additional charges apply, contact us for more ",
 "whatsapp": "Chat Via Whatsapp",
@@ -88,5 +88,6 @@
 "interested": "You may be interested in",
 "rent": "Rent Now",
 "enquire": "Enquire us",
-"availability": "Availability Details"
+"availability": "Availability Details",
+"pricing": "Pricing Details"
 }

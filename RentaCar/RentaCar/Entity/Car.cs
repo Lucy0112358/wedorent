@@ -18,6 +18,7 @@
         public decimal? WeddingPrice { get; set; } 
         public bool Transfer { get; set; }
         public bool WithDriver { get; set; }
+        public string Image { get; set; }
         public DateTime CreatedAt { get; set; }
         public List<CarPricing> Prices { get; set; }
     }
