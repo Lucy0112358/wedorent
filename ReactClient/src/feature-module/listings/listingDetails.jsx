@@ -8,9 +8,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Aos from "aos";
 import { all_routes } from "../router/all_routes";
-import { Dropdown } from "primereact/dropdown";
-import { TimePicker } from "antd";
-import dayjs from "dayjs";
+import { useTranslation } from 'react-i18next';
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,6 +18,7 @@ import { useParams } from 'react-router-dom';
 import { getCar } from "../../core/data/redux/api/bookingApi";
 
 const listingDetails = () => {
+    const { t, i18n } = useTranslation();
   const allCars = useSelector(getAllCars);
   const routes = all_routes;
   const [date1, setDate1] = useState(null);
@@ -217,10 +216,10 @@ const settings2 = {
               <nav aria-label="breadcrumb" className="page-breadcrumb">
                 <ol className="breadcrumb">
                   <li className="breadcrumb-item">
-                    <Link to={routes.homeOne}>Home</Link>
+                    <Link to={routes.homeOne}> {t('home')}</Link>
                   </li>
                   <li className="breadcrumb-item">
-                    <Link to={routes.listingGrid}>Cars</Link>
+                    <Link to={routes.listingGrid}> {t('cars')}</Link>
                   </li>
                   <li className="breadcrumb-item active" aria-current="page">
                     {bookingCar.data?.model}
@@ -241,20 +240,20 @@ const settings2 = {
                   <ul>
                     <li className="del-airport">
                       <i className="fa-solid fa-check" />
-                      Airport delivery
+                      {t('airoport')}
                     </li>
                     <li className="del-home">
                       <i className="fa-solid fa-check" />
-                      Home delivery
+                      {t('house')}
                     </li>
                   </ul>
                 </div>
-
+<img src={bookingCar.data?.image} />
                
-                  <div className="slider detail-bigimg">
+                  {/* <div className="slider detail-bigimg">
                   <Slider {...settings1}>
                     <div className="product-img">
-                    <ImageWithBasePath src="assets/img/cars/slider-01.jpg" alt="Slider" />
+                    <ImageWithBasePath src="https://firebasestorage.googleapis.com/v0/b/aca-finals.appspot.com/o/Jeans%2Fproduct1.1.jpg?alt=media&token=50dcf7f4-4de8-4eeb-ac43-b742b40ebcc8" alt="Slider" />
                     </div>
                     <div className="product-img">
                     <ImageWithBasePath src="assets/img/cars/slider-02.jpg" alt="Slider" />
@@ -303,13 +302,13 @@ const settings2 = {
                       />
                     </div>
                     </Slider>
-                  </div>
+                  </div> */}
                
               </div>
               <>
                 <div className="review-sec pb-0">
                   <div className="review-header">
-                    <h4>Extra Service</h4>
+                    <h4> {t('extraService')}</h4>
                   </div>
                   <div className="lisiting-service">
                     <div className="row">
@@ -321,7 +320,7 @@ const settings2 = {
                           />
                         </div>
                         <div className="service-info">
-                          <p>Full insurance</p>
+                          <p>{t('fullInsurance')}</p>
                         </div>
                       </div>
                       <div className="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
@@ -332,7 +331,7 @@ const settings2 = {
                           />
                         </div>
                         <div className="service-info">
-                          <p>Wi-Fi Hotspot</p>
+                          <p>{t('wifi')}</p>
                         </div>
                       </div>
                       <div className="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
@@ -343,7 +342,7 @@ const settings2 = {
                           />
                         </div>
                         <div className="service-info">
-                          <p>Child Safety Seats</p>
+                          <p>{t('childSeat')}</p>
                         </div>
                       </div>
                       <div className="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
@@ -354,7 +353,7 @@ const settings2 = {
                           />
                         </div>
                         <div className="service-info">
-                          <p>Fuel Options</p>
+                          <p>{t('fuelOpyions')}</p>
                         </div>
                       </div>
                       <div className="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
@@ -365,7 +364,7 @@ const settings2 = {
                           />
                         </div>
                         <div className="service-info">
-                          <p>Child booster</p>
+                          <p>{t('booster')}</p>
                         </div>
                       </div>
                       <div className="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
@@ -376,7 +375,7 @@ const settings2 = {
                           />
                         </div>
                         <div className="service-info">
-                          <p>Free delivery in Yerevan</p>
+                          <p>{t('house')}</p>
                         </div>
                       </div>
                     </div>
@@ -386,7 +385,7 @@ const settings2 = {
                 {/* Specifications */}
                 <div className="review-sec specification-card ">
                   <div className="review-header">
-                    <h4>Specifications</h4>
+                    <h4>{t('specifications')}</h4>
                   </div>
                   <div className="card-body">
                     <div className="lisiting-featues">
@@ -399,7 +398,7 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>Brand </span>
+                            <span>{t('brand')} </span>
                             <h6> {bookingCar?.data?.brand}</h6>
                           </div>
                         </div>
@@ -411,7 +410,7 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>Model </span>
+                            <span>{t('model')} </span>
                             <h6> {bookingCar?.data?.model}</h6>
                           </div>
                         </div>
@@ -423,7 +422,7 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>Label </span>
+                            <span>{t('label')} </span>
                             <h6> {bookingCar?.data?.label}</h6>
                           </div>
                         </div>
@@ -435,7 +434,7 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>Fuel Type </span>
+                            <span>{t('fuelOpyions')} </span>
                             <h6> {bookingCar?.data?.fuelType}</h6>
                           </div>
                         </div>
@@ -447,7 +446,7 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>Tag </span>
+                            <span>{t('tag')} </span>
                             <h6>{bookingCar?.data?.tag}</h6>
                           </div>
                         </div>
@@ -459,7 +458,7 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>Year</span>
+                            <span>{t('year')}</span>
                             <h6> 2018</h6>
                           </div>
                         </div>
@@ -471,7 +470,7 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>Transmission </span>
+                            <span>{t('transmission')} </span>
                             <h6> {bookingCar?.data?.engine}</h6>
                           </div>
                         </div>
@@ -483,7 +482,7 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>Color </span>
+                            <span>{t('color')} </span>
                             <h6> {bookingCar?.data?.color}</h6>
                           </div>
                         </div>
@@ -495,7 +494,7 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>Door </span>
+                            <span>{t('door')} </span>
                             <h6> {bookingCar?.data?.doors}</h6>
                           </div>
                         </div>
@@ -507,7 +506,7 @@ const settings2 = {
                             />
                           </div>
                           <div className="featues-info">
-                            <span>Seats </span>
+                            <span>{t('seats')} </span>
                             <h6> {bookingCar?.data?.seats}</h6>
                           </div>
                         </div>
@@ -521,7 +520,7 @@ const settings2 = {
                 {/* Gallery */}
                 <div className="review-sec mb-0 pb-0">
                   <div className="review-header">
-                    <h4>Gallery</h4>
+                    <h4>{t('gallery')}</h4>
                   </div>
                   <div className="gallery-list">
                     <div className="d-flex">
@@ -565,22 +564,22 @@ const settings2 = {
                 {/* Policies */}
                 <div className="review-sec">
                   <div className="review-header">
-                    <h4>Policies</h4>
+                    <h4>{t('policies')}</h4>
                   </div>
                   <div className="policy-list">
                     <div className="policy-item">
                       <div className="policy-info">
-                        <h6>Cancellation Charges</h6>
+                        <h6>{t('cancel')}</h6>
                         <p>
-                          Cancellation charges will be applied 
+                        {t('charges')}
                         </p>
                       </div>
                     </div>
                     <div className="policy-item">
                       <div className="policy-info">
-                        <h6>Policy</h6>
+                        <h6> {t('policy')}</h6>
                         <p>
-Delievery in Yerevan is free, but if you want the car in other cities, additional charges apply, contact us for more 
+                        {t('outsideYerevan')}
                         </p>
                       </div>
                     </div>
@@ -595,28 +594,26 @@ Delievery in Yerevan is free, but if you want the car in other cities, additiona
               <div className="stickybar">
                 <div className="review-sec mt-0">
                   <div className="review-header">
-                    <h4>Pricing Details</h4>
+                    <h4> {t('pricing')}</h4>
                   </div>
                   <div className="price-list">
                     {bookingCar?.data?.prices.map(priceList => {
                      return <div className="price-item">
-                      <p>From {priceList.minDays} to {priceList.maxDays} days per day</p>
-                      <h6>{priceList.price}֏</h6>
+                      <p>{priceList.minDays}-{priceList.maxDays} {t('Day')}</p>
+                      <h6>{priceList.price} ֏/{t('Day')}</h6>
                     </div>
                     })}
                     
                     <div className="message-btn">
                     <Link to="https://wa.me/+37444773300" className="chat-link">
                       <i className="fa-brands fa-whatsapp" />
-                      Chat Via Whatsapp
+                      {t('whatsapp')}
                     </Link>
                   </div>                    
                   </div>
                 </div>
                 <div className="review-sec mt-0">
-                  {/* <div className="review-header">
-                    <h4>Check Availability</h4>
-                  </div> */}
+                 
                   <div className="location-content">
 
                     <div className="tab-content">
@@ -630,7 +627,7 @@ Delievery in Yerevan is free, but if you want the car in other cities, additiona
                                     to={routes.bookingCheckout}
                                     className="btn btn-primary check-available w-100"
                                   >
-                                    Book
+                                      {t('book')}
                                   </Link>
                                   <Link
                                    // to="#"
@@ -693,7 +690,7 @@ Delievery in Yerevan is free, but if you want the car in other cities, additiona
             <div className="col-md-12">
               <div className="details-car-grid">
                 <div className="details-slider-heading">
-                  <h3>You May be Interested in</h3>
+                  <h3>  {t('interested')}</h3>
                 </div>
                 <div className="rental-deal-slider details-car owl-carousel">
                   <Slider {...settings}>
@@ -808,7 +805,7 @@ Delievery in Yerevan is free, but if you want the car in other cities, additiona
                                     alt="Persons"
                                   />
                                 </span>
-                                <p>{car.seats} Persons</p>
+                                <p>{car.seats}  {t('Persons')}</p>
                               </li>
                             </ul>
                           </div>
@@ -817,11 +814,11 @@ Delievery in Yerevan is free, but if you want the car in other cities, additiona
                               <span>
                                 <i className="feather-map-pin" />
                               </span>
-                              Yerevan, Armenia
+                              {t('address')}
                             </div>
                             <div className="listing-price">
                               <h6>
-                               From {car?.prices[0].price} <span>/ Day</span>
+                              {t('from')} {car?.prices[0].price} <span>/  {t('Day')}</span>
                               </h6>
                             </div>
                           </div>
@@ -833,7 +830,7 @@ Delievery in Yerevan is free, but if you want the car in other cities, additiona
                               <span>
                                 <i className="feather-calendar me-2" />
                               </span>
-                              Rent Now
+                              {t('rent')}
                             </Link>
                             {/* <div className="feature-text">
                           <span className="bg-danger">Featured</span>

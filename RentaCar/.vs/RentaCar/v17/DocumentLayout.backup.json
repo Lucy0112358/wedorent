@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|c:\\users\\baghd\\onedrive\\desktop\\wedorent\\rentacar\\rentacar\\usecase\\services\\reservationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|solutionrelative:rentacar\\usecase\\services\\reservationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|c:\\users\\baghd\\onedrive\\desktop\\wedorent\\rentacar\\rentacar\\controllers\\emailcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|solutionrelative:rentacar\\controllers\\emailcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|c:\\users\\baghd\\onedrive\\desktop\\wedorent\\rentacar\\rentacar\\email\\emailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|solutionrelative:rentacar\\email\\emailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|c:\\users\\baghd\\onedrive\\desktop\\wedorent\\rentacar\\rentacar\\controllers\\emailcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|solutionrelative:rentacar\\controllers\\emailcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|c:\\users\\baghd\\onedrive\\desktop\\wedorent\\rentacar\\rentacar\\usecase\\services\\reservationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|solutionrelative:rentacar\\usecase\\services\\reservationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|c:\\users\\baghd\\onedrive\\desktop\\wedorent\\rentacar\\rentacar\\rentacar.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{4C0E952B-5714-4366-92EB-98B6857B8B1B}|RentaCar\\RentaCar.csproj|solutionrelative:rentacar\\rentacar.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,40 +30,52 @@
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "RentaCar.csproj",
+              "DocumentMoniker": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\RentaCar.csproj",
+              "RelativeDocumentMoniker": "RentaCar\\RentaCar.csproj",
+              "ToolTip": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\RentaCar.csproj",
+              "RelativeToolTip": "RentaCar\\RentaCar.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-12-17T19:27:20.759Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
               "Title": "EmailSender.cs",
               "DocumentMoniker": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Email\\EmailSender.cs",
               "RelativeDocumentMoniker": "RentaCar\\Email\\EmailSender.cs",
               "ToolTip": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Email\\EmailSender.cs",
               "RelativeToolTip": "RentaCar\\Email\\EmailSender.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAABLAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAgAAABLAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-26T18:01:26.591Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "EmailController.cs",
               "DocumentMoniker": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Controllers\\EmailController.cs",
               "RelativeDocumentMoniker": "RentaCar\\Controllers\\EmailController.cs",
               "ToolTip": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Controllers\\EmailController.cs",
               "RelativeToolTip": "RentaCar\\Controllers\\EmailController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAARAAAAAAAAAA==",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwBcAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-26T17:03:15.793Z"
+              "WhenOpened": "2024-11-26T17:03:15.793Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "ReservationService.cs",
               "DocumentMoniker": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Usecase\\Services\\ReservationService.cs",
               "RelativeDocumentMoniker": "RentaCar\\Usecase\\Services\\ReservationService.cs",
               "ToolTip": "C:\\Users\\baghd\\OneDrive\\Desktop\\wedorent\\RentaCar\\RentaCar\\Usecase\\Services\\ReservationService.cs",
               "RelativeToolTip": "RentaCar\\Usecase\\Services\\ReservationService.cs",
-              "ViewState": "AgIAAGwAAAAAAAAAAAAowHQAAAArAAAAAAAAAA==",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAAwFcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-25T14:36:20.689Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-25T14:36:20.689Z"
             }
           ]
         }

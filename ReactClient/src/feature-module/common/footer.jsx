@@ -156,7 +156,7 @@ const Footer = () => {
               <div className="row align-items-center">
                 <div className="col-md-6">
                   <div className="copyright-text">
-                    <p>© {new Date().getFullYear()} WeDo Rent a car. All Rights Reserved <a href={"https://wedorentacar.com/authentication/login"}>admin</a>.</p>
+                    <p>© {new Date().getFullYear()} WeDo Rent a car. All Rights Reserved.</p>
                   </div>
                 </div>
                 <div className="col-md-6">
