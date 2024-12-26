@@ -183,13 +183,13 @@ const listingDetails = () => {
  
   const settings1 = {
     dots: false,
-    arrows: true,
-    infinite: true,
+    arrows: false,
+    infinite: false,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    asNavFor: nav2 || undefined, // Link to the second slider
-    ref: (slider) => (sliderRef1.current = slider), // Assign the slider ref
+  //  asNavFor: nav2 || undefined, // Link to the second slider
+   // ref: (slider) => (sliderRef1.current = slider), // Assign the slider ref
    
 };
 
@@ -248,14 +248,13 @@ const settings2 = {
                     </li>
                   </ul>
                 </div>
-<img src={bookingCar.data?.image} />
                
-                  {/* <div className="slider detail-bigimg">
+                 <div className="slider detail-bigimg">
                   <Slider {...settings1}>
                     <div className="product-img">
-                    <ImageWithBasePath src="https://firebasestorage.googleapis.com/v0/b/aca-finals.appspot.com/o/Jeans%2Fproduct1.1.jpg?alt=media&token=50dcf7f4-4de8-4eeb-ac43-b742b40ebcc8" alt="Slider" />
+                    <ImageWithBasePath src={bookingCar.data?.image}  alt="Slider" />
                     </div>
-                    <div className="product-img">
+                    <div style={{display: "none"}} className="product-img">
                     <ImageWithBasePath src="assets/img/cars/slider-02.jpg" alt="Slider" />
                     </div>
                     <div className="product-img">
@@ -269,8 +268,9 @@ const settings2 = {
                     </div>
                     </Slider>
                   </div>
+               
                   <div className="slider slider-nav-thumbnails">
-                  <Slider {...settings2}>
+                  {/* <Slider {...settings2}>
                     <div>
                     <ImageWithBasePath
                         src="assets/img/cars/slider-thum-01.jpg"
@@ -301,8 +301,8 @@ const settings2 = {
                         alt="product image"
                       />
                     </div>
-                    </Slider>
-                  </div> */}
+                    </Slider> */}
+                  </div> 
                
               </div>
               <>

@@ -127,13 +127,13 @@ const Listinglist = () => {
   };
 
   const settings = {
-    dots: true,
+    dots: false,
     nav: true,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: true,
+    arrows: false,
     responsive: [
       {
         breakpoint: 1000,
@@ -417,7 +417,7 @@ const Listinglist = () => {
                                 <div className="slide-images">
                                   <Link>
                                     <ImageWithBasePath
-                                      src="assets/img/car-list-1.jpg"
+                                      src={car.image}
                                       className="img-fluid"
                                       alt="Toyota"
                                     />
@@ -444,7 +444,7 @@ const Listinglist = () => {
                                 <div className="slide-images">
                                   <Link to={routes.listingDetails.replace(':id', car.id)}>
                                     <ImageWithBasePath
-                                      src="assets/img/car-list-1.jpg"
+                                      src={car.image}
                                       className="img-fluid"
                                       alt="Toyota"
                                     />
