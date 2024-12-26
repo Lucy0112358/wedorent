@@ -79,8 +79,7 @@
               "RelativeToolTip": "RentaCar\\Controllers\\EmailController.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAQwBcAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-26T17:03:15.793Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-26T17:03:15.793Z"
             },
             {
               "$type": "Document",
@@ -92,8 +91,7 @@
               "RelativeToolTip": "RentaCar\\Usecase\\Services\\ReservationService.cs",
               "ViewState": "AgIAAFYAAAAAAAAAAAAAwFcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-25T14:36:20.689Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-25T14:36:20.689Z"
             }
           ]
         }
