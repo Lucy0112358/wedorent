@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Breadcrumbs from "../common/breadcrumbs";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import { Link, useNavigate } from "react-router-dom";
-import { Calendar } from "primereact/calendar";
+import EmailModal from "./EmailModal";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -629,7 +629,7 @@ const settings2 = {
                                   >
                                       {t('book')}
                                   </Link>
-                                  <Link
+                                  {/* <Link
                                    // to="#"
                                     data-bs-toggle="modal"
                                     data-bs-target="#enquiry"
@@ -637,6 +637,7 @@ const settings2 = {
                                   >
                                     Enquire Us
                                   </Link>
+                                  <EmailModal /> */}
                                 </div>
                               </div>
                             </li>
@@ -700,7 +701,7 @@ const settings2 = {
                         <div className="listing-img">
                           <Link  to={routes.listingDetails.replace(':id', car.id)}>
                             <ImageWithBasePath
-                              src="assets/img/cars/car-03.jpg"
+                               src={car?.image}
                               className="img-fluid"
                               alt="Audi"
                             />
@@ -717,7 +718,7 @@ const settings2 = {
                         <div className="listing-content">
                           <div className="listing-features d-flex align-items-end justify-content-between">
                             <div className="list-rating">
-                              <Link
+                              {/* <Link
                                 to="#"
                                 className="author-img"
                               >
@@ -725,9 +726,9 @@ const settings2 = {
                                   src="assets/img/profiles/avatar-03.jpg"
                                   alt="author"
                                 />
-                              </Link>
+                              </Link> */}
                               <h3 className="listing-title">
-                                <Link to={routes.listingDetails}>
+                                <Link to={routes.listingDetails.replace(':id', car.id)}>
                                  {car.model}
                                 </Link>
                               </h3>

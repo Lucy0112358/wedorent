@@ -19,7 +19,6 @@ import { getCarsList, getCategories } from "../../../core/data/redux/api/booking
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 import { GoogleMap, useJsApiLoader, StandaloneSearchBox } from "@react-google-maps/api";
-import EmailModal from "../../listings/EmailModal";
 
 const HomeOne = () => {
   const { t, i18n } = useTranslation();
@@ -326,7 +325,7 @@ const HomeOne = () => {
                         <Calendar
                           value={date1}
                           onChange={(e) => setDate1(e.value)}
-                          placeholder="04/11/2023"
+                          placeholder={dayjs().format("MM/DD/YYYY")}
                         />
                         {/* <input type="text" className="form-control datetimepicker" placeholder="04/11/2023" /> */}
                         <span>
@@ -360,7 +359,7 @@ const HomeOne = () => {
                         <Calendar
                           value={date2}
                           onChange={(e) => setDate2(e.value)}
-                          placeholder="04/11/2023"
+                          placeholder={dayjs().format("MM/DD/YYYY")}
                         />
                         <span>
                           <i className="feather icon-calendar" />
@@ -537,9 +536,9 @@ const HomeOne = () => {
                       <div className="listing-img">
                         <Link to={routes.listingDetails.replace(':id', car.id)}>
                           <ImageWithBasePath
-                            src="assets/img/cars/car-02.jpg"
+                           src={car?.image}
                             className="img-fluid"
-                            alt="KIA"
+                            alt="Car"
                           />
                         </Link>
                         <div
@@ -558,12 +557,12 @@ const HomeOne = () => {
                       </div>
                       <div className="listing-content">
                         <div className="listing-features">
-                          <Link to="#" className="author-img">
+                          {/* <Link to="#" className="author-img">
                             <ImageWithBasePath
                               src="assets/img/profiles/avatar-02.jpg"
                               alt="author"
                             />
-                          </Link>
+                          </Link> */}
                           <h3 className="listing-title">
                             <Link to={routes.listingDetails.replace(':id', car.id)}>{car.model}</Link>
                           </h3>
@@ -649,7 +648,7 @@ const HomeOne = () => {
                             </h6>
                           </div>
                         </div>
-                        {/* <div className="listing-button">
+                        <div className="listing-button">
                           <Link
                            to={routes.listingDetails.replace(':id', car.id)}
                             className="btn btn-order"
@@ -659,10 +658,10 @@ const HomeOne = () => {
                             </span>
                             Rent Now
                           </Link>
-                        </div> */}
-                        <div className="listing-button">
-                          <EmailModal />
                         </div>
+                        {/* <div className="listing-button">
+                          <EmailModal />
+                        </div> */}
 
                       </div>
                     </div>
