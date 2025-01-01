@@ -306,135 +306,135 @@ const ListingGrid = () => {
 
   return (
     <div className="listing-page">
-    <Breadcrumbs title={t('carListings')}
+      <Breadcrumbs title={t('carListings')}
         subtitle={t('carListings')}
         home={t('home')} />
-       {/* Search */}
-    
-          <div className="section-search page-search">
-            <div className="container">
-              <div className="search-box-banner">
-                <form>
-                  <ul className="align-items-center">
-                    <li className="column-group-main">
-                      <div className="input-block">
-                        <label>   {t('pickupLocation')}
-                        </label>
-                        <div className="group-img">
-                          {isLoaded &&
-                            <StandaloneSearchBox
-                              onLoad={(ref) => (inputRef.current = ref)}
-                              onPlacesChanged={handleOnPlacesChanged}
-                              options={{
-                                bounds: YEREVAN_BOUNDS,
-                                strictBounds: true,
-                                componentRestrictions: { country: "am" },
-                              }}
-                            >
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder={t('addressPlaceholder')}
-                                style={{
-                                  boxSizing: "border-box",
-                                  border: "1px solid transparent",
-                                  width: "100%",
-                                  height: "40px",
-                                  padding: "12px",
-                                  borderRadius: "4px",
-                                }}
-                              />
-                            </StandaloneSearchBox>
-                          }
-    
-    
-                        </div>
+      {/* Search */}
+
+      <div className="section-search page-search">
+        <div className="container">
+          <div className="search-box-banner">
+            <form>
+              <ul className="align-items-center">
+                <li className="column-group-main">
+                  <div className="input-block">
+                    <label>   {t('pickupLocation')}
+                    </label>
+                    <div className="group-img">
+                      {isLoaded &&
+                        <StandaloneSearchBox
+                          onLoad={(ref) => (inputRef.current = ref)}
+                          onPlacesChanged={handleOnPlacesChanged}
+                          options={{
+                            bounds: YEREVAN_BOUNDS,
+                            strictBounds: true,
+                            componentRestrictions: { country: "am" },
+                          }}
+                        >
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder={t('addressPlaceholder')}
+                            style={{
+                              boxSizing: "border-box",
+                              border: "1px solid transparent",
+                              width: "100%",
+                              height: "40px",
+                              padding: "12px",
+                              borderRadius: "4px",
+                            }}
+                          />
+                        </StandaloneSearchBox>
+                      }
+
+
+                    </div>
+                  </div>
+                </li>
+                <li className="column-group-main">
+                  <div className="input-block">
+                    <label>   {t('pickupDate')}
+                    </label>
+                  </div>
+                  <div className="input-block-wrapp">
+                    <div className="input-block date-widget">
+                      <div className="group-img">
+                        <Calendar
+                          value={date1}
+                          onChange={(e) => setDate1(e.value)}
+                           placeholder={dayjs().format("MM/DD/YYYY")}
+                        />
+                        {/* <input type="text" className="form-control datetimepicker" placeholder="04/11/2023" /> */}
+                        <span>
+                          <i className="feather icon-calendar"></i>
+                        </span>
                       </div>
-                    </li>
-                    <li className="column-group-main">
-                      <div className="input-block">
-                        <label>   {t('pickupDate')}
-                        </label>
+                    </div>
+                    <div className="input-block time-widge">
+                      <div className="group-img">
+                        <TimePicker
+                          placeholder="11:00 AM"
+                          className="form-control timepicker"
+                          onChange={onChange}
+                          defaultValue={dayjs("00:00:00", "HH:mm:ss")}
+                        />
+                        <span>
+                          <i className="feather icon-clock"></i>
+                        </span>
                       </div>
-                      <div className="input-block-wrapp">
-                        <div className="input-block date-widget">
-                          <div className="group-img">
-                            <Calendar
-                              value={date1}
-                              onChange={(e) => setDate1(e.value)}
-                              placeholder="04/11/2023"
-                            />
-                            {/* <input type="text" className="form-control datetimepicker" placeholder="04/11/2023" /> */}
-                            <span>
-                              <i className="feather icon-calendar"></i>
-                            </span>
-                          </div>
-                        </div>
-                        <div className="input-block time-widge">
-                          <div className="group-img">
-                            <TimePicker
-                              placeholder="11:00 AM"
-                              className="form-control timepicker"
-                              onChange={onChange}
-                              defaultValue={dayjs("00:00:00", "HH:mm:ss")}
-                            />
-                            <span>
-                              <i className="feather icon-clock"></i>
-                            </span>
-                          </div>
-                        </div>
+                    </div>
+                  </div>
+                </li>
+                <li className="column-group-main">
+                  <div className="input-block">
+                    <label>   {t('returnDate')}
+                    </label>
+                  </div>
+                  <div className="input-block-wrapp">
+                    <div className="input-block date-widge">
+                      <div className="group-img">
+                        <Calendar
+                          value={date2}
+                          onChange={(e) => setDate2(e.value)}
+                          placeholder={dayjs().format("MM/DD/YYYY")}
+                        />
+                        <span>
+                          <i className="feather icon-calendar" />
+                        </span>
                       </div>
-                    </li>
-                    <li className="column-group-main">
-                      <div className="input-block">
-                        <label>   {t('returnDate')}
-                        </label>
+                    </div>
+                    <div className="input-block time-widge">
+                      <div className="group-img">
+                        <TimePicker
+                          placeholder="11:00 AM"
+                          className="form-control timepicker"
+                          onChange={onChange}
+                          defaultValue={dayjs("00:00:00", "HH:mm:ss")}
+                        />
+                        <span>
+                          <i className="feather icon-clock"></i>
+                        </span>
                       </div>
-                      <div className="input-block-wrapp">
-                        <div className="input-block date-widge">
-                          <div className="group-img">
-                            <Calendar
-                              value={date2}
-                              onChange={(e) => setDate2(e.value)}
-                              placeholder="04/11/2023"
-                            />
-                            <span>
-                              <i className="feather icon-calendar" />
-                            </span>
-                          </div>
-                        </div>
-                        <div className="input-block time-widge">
-                          <div className="group-img">
-                            <TimePicker
-                              placeholder="11:00 AM"
-                              className="form-control timepicker"
-                              onChange={onChange}
-                              defaultValue={dayjs("00:00:00", "HH:mm:ss")}
-                            />
-                            <span>
-                              <i className="feather icon-clock"></i>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li className="column-group-last">
-                      <div className="input-block">
-                        <div className="search-btn">
-                          <button className="btn search-button" type="submit" onClick={() => navigate(routes.listingGrid)}>
-                            {" "}
-                            <i className="fa fa-search" aria-hidden="true" />
-                            {t('search')}
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                </form>
-              </div>
-            </div>
+                    </div>
+                  </div>
+                </li>
+                <li className="column-group-last">
+                  <div className="input-block">
+                    <div className="search-btn">
+                      <button className="btn search-button" type="submit" onClick={() => navigate(routes.listingGrid)}>
+                        {" "}
+                        <i className="fa fa-search" aria-hidden="true" />
+                        {t('search')}
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </form>
           </div>
-          {/* /Search */}
+        </div>
+      </div>
+      {/* /Search */}
       {/* Sort By */}
       <div className="sort-section">
         <div className="container">
@@ -489,7 +489,7 @@ const ListingGrid = () => {
                               <div className="slide-images">
                                 <Link to={routes.listingDetails}>
                                   <ImageWithBasePath
-                                    src="assets/img/cars/car-01.jpg"
+                                    src={car?.image}
                                     className="img-fluid"
                                     alt="Toyota"
                                   />
@@ -529,12 +529,12 @@ const ListingGrid = () => {
                         <div className="listing-content">
                           <div className="listing-features d-flex align-items-end justify-content-between">
                             <div className="list-rating">
-                              <Link to="#" className="author-img">
+                              {/* <Link to="#" className="author-img">
                                 <ImageWithBasePath
                                   src="assets/img/profiles/avatar-04.jpg"
                                   alt="author"
                                 />
-                              </Link>
+                              </Link> */}
                               <h3 className="listing-title">
                                 <Link to={routes.listingDetails.replace(':id', car.id)}>
                                   {car.model}
@@ -632,8 +632,19 @@ const ListingGrid = () => {
                               </h6>
                             </div>
                           </div>
-                          <EmailModal />
-                        </div>                                            </div>
+                          <div className="listing-button">
+                            <Link
+                              to={routes.listingDetails.replace(':id', car.id)}
+                              className="btn btn-order"
+                            >
+                              <span>
+                                <i className="feather icon-calendar me-2" />
+                              </span>
+                              Rent Now
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   ))}
               </div>
@@ -648,7 +659,7 @@ const ListingGrid = () => {
             <div className="search-box-banner">
               <div className="col-xl-4 col-lg-3 col-sm-12 col-12">
                 <div className="count-search">
-                <p>  {t('filter')}</p>
+                  <p>  {t('filter')}</p>
                 </div>
               </div>
               <div className="listing-tabs-group">

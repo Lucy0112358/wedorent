@@ -221,7 +221,7 @@ const Listinglist = () => {
                         <Calendar
                           value={date1}
                           onChange={(e) => setDate1(e.value)}
-                          placeholder="04/11/2023"
+                           placeholder={dayjs().format("MM/DD/YYYY")}
                         />
                         {/* <input type="text" className="form-control datetimepicker" placeholder="04/11/2023" /> */}
                         <span>
@@ -255,7 +255,7 @@ const Listinglist = () => {
                         <Calendar
                           value={date2}
                           onChange={(e) => setDate2(e.value)}
-                          placeholder="04/11/2023"
+                          placeholder={dayjs().format("MM/DD/YYYY")}
                         />
                         <span>
                           <i className="feather icon-calendar" />
@@ -463,12 +463,12 @@ const Listinglist = () => {
                                     </Link>
                                   </h3>
                                   <h6>
-                                      {t('category')} : <span>{car.category}</span>
+                                    {t('category')} : <span>{car.category}</span>
                                   </h6>
                                 </div>
                                 <div className="blog-list-rate">
                                   <h6>
-                                  {t('from')} {car.prices[2].price}<span>֏/  {t('day')}</span>
+                                    {t('from')} {car.prices[2].price}<span>֏/  {t('day')}</span>
                                   </h6>
                                 </div>
                               </div>
@@ -541,7 +541,17 @@ const Listinglist = () => {
                                     </div>
                                   </div>
                                 </div>
-                                <EmailModal />
+                                <div className="listing-button">
+                                  <Link
+                                    to={routes.listingDetails.replace(':id', car.id)}
+                                    className="btn btn-order"
+                                  >
+                                    <span>
+                                      <i className="feather icon-calendar me-2" />
+                                    </span>
+                                    Rent Now
+                                  </Link>
+                                </div>
                               </div>
                             </div>
                           </div>
