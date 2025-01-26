@@ -466,11 +466,11 @@ const BookingDetail = () => {
                                   /> */}
                                     <Dropdown
                                       onChange={(e) => {
-                                        setSelectedCountryHandle(e.value); // Custom handler function
-                                        setFieldValue("selectedCountry", e.value); // Update Formik value
+                                        setSelectedCountryHandle(e.value); 
+                                        setFieldValue("selectedCountry", e.value); 
                                       }}
                                       className="w-100"
-                                      value={values.selectedCountry} // Current selected value from Formik
+                                      value={values.selectedCountry} 
                                       options={[
                                         "Armenia",
                                         "Russia",

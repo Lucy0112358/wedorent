@@ -106,24 +106,7 @@ const listingDetails = () => {
   // };
   const [open, setOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const images = [
-    {
-      thumb: "assets/img/gallery/gallery-thumb-01.jpg",
-      big: "/assets/img/gallery/gallery-big-01.jpg",
-    },
-    {
-      thumb: "assets/img/gallery/gallery-thumb-02.jpg",
-      big: "/assets/img/gallery/gallery-big-02.jpg",
-    },
-    {
-      thumb: "assets/img/gallery/gallery-thumb-03.jpg",
-      big: "/assets/img/gallery/gallery-big-03.jpg",
-    },
-    {
-      thumb: "assets/img/gallery/gallery-thumb-04.jpg",
-      big: "/assets/img/gallery/gallery-big-04.jpg",
-    },
-  ];
+ 
  
   const settings = {
     dots: false,
@@ -517,49 +500,7 @@ const settings2 = {
                 </div>
                 {/* Specifications */}
               
-                {/* Gallery */}
-                <div className="review-sec mb-0 pb-0">
-                  <div className="review-header">
-                    <h4>{t('gallery')}</h4>
-                  </div>
-                  <div className="gallery-list">
-                    <div className="d-flex">
-                      <Lightbox
-                        open={open}
-                        close={() => setOpen(false)}
-                        slides={images.map((image) => ({ src: image.big }))}
-                        index={currentIndex}
-                        onIndexChange={(index) => setCurrentIndex(index)}
-                      />
-                      {images.map((image, index) => (
-                        <div key={index}>
-                          {" "}
-                          <ul>
-                            <li>
-                              <div className="gallery-widget">
-                                <Link
-                                  to="#"
-                                  data-fancybox="gallery"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    openLightbox(index);
-                                  }}
-                                >
-                                  <ImageWithBasePath
-                                    className="img-fluid"
-                                    alt="Image"
-                                    src={image.thumb}
-                                  />
-                                </Link>
-                              </div>
-                            </li>
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                {/* /Gallery */}            
+             
               
                 {/* Policies */}
                 <div className="review-sec">
@@ -586,7 +527,7 @@ const settings2 = {
                   </div>
                 </div>
                 {/* /Policies */}
-              
+            
            
               </>
             </div>

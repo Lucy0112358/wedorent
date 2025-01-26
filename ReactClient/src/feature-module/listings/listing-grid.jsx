@@ -128,180 +128,24 @@ const ListingGrid = () => {
   };
 
   const settings1 = {
-    dots: true,
-    nav: true,
-    infinite: true,
+    dots: false,
+    nav: false,
+    infinite: false,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: true,
+    arrows: false,
     responsive: [
       {
         breakpoint: 1000,
         settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 700,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 550,
-        settings: {
           slidesToShow: 1,
         },
       },
-      {
-        breakpoint: 0,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
+      
     ],
   };
-  const settings2 = {
-    dots: true,
-    nav: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: true,
-    responsive: [
-      {
-        breakpoint: 1000,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 700,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 550,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-      {
-        breakpoint: 0,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
-  const settings3 = {
-    dots: true,
-    nav: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: true,
-    responsive: [
-      {
-        breakpoint: 1000,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 700,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 550,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-      {
-        breakpoint: 0,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
-  const settings4 = {
-    dots: true,
-    nav: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: true,
-    responsive: [
-      {
-        breakpoint: 1000,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 700,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 550,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-      {
-        breakpoint: 0,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
-  const settings5 = {
-    dots: true,
-    nav: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: true,
-    responsive: [
-      {
-        breakpoint: 1000,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 700,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 550,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-      {
-        breakpoint: 0,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
+ 
 
 
   return (
@@ -311,7 +155,7 @@ const ListingGrid = () => {
         home={t('home')} />
       {/* Search */}
 
-      <div className="section-search page-search">
+      {/* <div className="section-search page-search">
         <div className="container">
           <div className="search-box-banner">
             <form>
@@ -364,7 +208,6 @@ const ListingGrid = () => {
                           onChange={(e) => setDate1(e.value)}
                            placeholder={dayjs().format("MM/DD/YYYY")}
                         />
-                        {/* <input type="text" className="form-control datetimepicker" placeholder="04/11/2023" /> */}
                         <span>
                           <i className="feather icon-calendar"></i>
                         </span>
@@ -433,7 +276,8 @@ const ListingGrid = () => {
             </form>
           </div>
         </div>
-      </div>
+      </div>  */}
+      
       {/* /Search */}
       {/* Sort By */}
       <div className="sort-section">
@@ -498,7 +342,7 @@ const ListingGrid = () => {
                               <div className="slide-images">
                                 <Link to={routes.listingDetails}>
                                   <ImageWithBasePath
-                                    src="assets/img/cars/car-01-slide1.jpg"
+                                    src={car?.image}
                                     className="img-fluid"
                                     alt="Toyota"
                                   />
@@ -507,7 +351,7 @@ const ListingGrid = () => {
                               <div className="slide-images">
                                 <Link to={routes.listingDetails}>
                                   <ImageWithBasePath
-                                    src="assets/img/cars/car-01-slide2.jpg"
+                                    src={car?.image}
                                     className="img-fluid"
                                     alt="Toyota"
                                   />
@@ -516,7 +360,7 @@ const ListingGrid = () => {
                               <div className="slide-images">
                                 <Link to={routes.listingDetails}>
                                   <ImageWithBasePath
-                                    src="assets/img/cars/car-01-slide3.jpg"
+                                    src={car?.image}
                                     className="img-fluid"
                                     alt="Toyota"
                                   />
@@ -537,7 +381,7 @@ const ListingGrid = () => {
                               </Link> */}
                               <h3 className="listing-title">
                                 <Link to={routes.listingDetails.replace(':id', car.id)}>
-                                  {car.model}
+                                  {car.model + ","} {car.brand}
                                 </Link>
                               </h3>
                               <div className="list-rating">

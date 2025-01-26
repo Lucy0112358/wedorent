@@ -4,6 +4,7 @@ import { Calendar } from "primereact/calendar";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import { Dropdown } from "primereact/dropdown";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import dayjs from "dayjs";
@@ -60,6 +61,10 @@ const HomeOne = () => {
     east: 44.6,
     west: 44.45,
   };
+  // const setSelectedCountryHandle = (value) => {
+  //   setSelectedCountry(value);
+  //   handleDetails("selectedCountry", value.name);
+  // };
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
@@ -335,15 +340,50 @@ const HomeOne = () => {
                     </div>
                     <div className="input-block time-widge">
                       <div className="group-img">
-                        <TimePicker
+                        <Dropdown
+                          onChange={(e) => {
+                            // setSelectedCountryHandle(e.value); 
+
+                          }}
+                          className="w-100"
+                          //  value={values.selectedCountry}
+                          options={[
+                            "00:00",
+                            "01:00",
+                            "02:00",
+                            "03:00",
+                            "04:00",
+                            "05:00",
+                            "06:00",
+                            "07:00",
+                            "08:00",
+                            "09:00",
+                            "10:00",
+                            "11:00",
+                            "12:00",
+                            "13:00",
+                            "14:00",
+                            "15:00",
+                            "16:00",
+                            "17:00",
+                            "18:00",
+                            "19:00",
+                            "20:00",
+                            "21:00",
+                            "22:00",
+                            "23:00"
+                          ]}
+                          placeholder="Select Time"
+                        />
+                        {/* <TimePicker
                           placeholder="11:00 AM"
                           className="form-control timepicker"
                           onChange={onChange}
                           defaultValue={dayjs("00:00:00", "HH:mm:ss")}
-                        />
-                        <span>
+                        /> */}
+                        {/* <span>
                           <i className="feather icon-clock"></i>
-                        </span>
+                        </span> */}
                       </div>
                     </div>
                   </div>
@@ -368,15 +408,41 @@ const HomeOne = () => {
                     </div>
                     <div className="input-block time-widge">
                       <div className="group-img">
-                        <TimePicker
-                          placeholder="11:00 AM"
-                          className="form-control timepicker"
-                          onChange={onChange}
-                          defaultValue={dayjs("00:00:00", "HH:mm:ss")}
+                        <Dropdown
+                          onChange={(e) => {
+                            // setSelectedCountryHandle(e.value); 
+
+                          }}
+                          className="w-100"
+                          //  value={values.selectedCountry}
+                          options={[
+                            "00:00",
+                            "01:00",
+                            "02:00",
+                            "03:00",
+                            "04:00",
+                            "05:00",
+                            "06:00",
+                            "07:00",
+                            "08:00",
+                            "09:00",
+                            "10:00",
+                            "11:00",
+                            "12:00",
+                            "13:00",
+                            "14:00",
+                            "15:00",
+                            "16:00",
+                            "17:00",
+                            "18:00",
+                            "19:00",
+                            "20:00",
+                            "21:00",
+                            "22:00",
+                            "23:00"
+                          ]}
+                          placeholder="Select Time"
                         />
-                        <span>
-                          <i className="feather icon-clock"></i>
-                        </span>
                       </div>
                     </div>
                   </div>
@@ -536,7 +602,7 @@ const HomeOne = () => {
                       <div className="listing-img">
                         <Link to={routes.listingDetails.replace(':id', car.id)}>
                           <ImageWithBasePath
-                           src={car?.image}
+                            src={car?.image}
                             className="img-fluid"
                             alt="Car"
                           />
@@ -650,7 +716,7 @@ const HomeOne = () => {
                         </div>
                         <div className="listing-button">
                           <Link
-                           to={routes.listingDetails.replace(':id', car.id)}
+                            to={routes.listingDetails.replace(':id', car.id)}
                             className="btn btn-order"
                           >
                             <span>
@@ -994,12 +1060,12 @@ const HomeOne = () => {
                   to="#faqOne"
                   aria-expanded="true"
                 >
-                   {t('FAQ1')}
+                  {t('FAQ1')}
                 </Link>
               </h4>
               <div id="faqOne" className="card-collapse collapse show">
                 <p>
-                {t('answer1')}
+                  {t('answer1')}
                 </p>
               </div>
             </div>
@@ -1011,12 +1077,12 @@ const HomeOne = () => {
                   to="#faqTwo"
                   aria-expanded="false"
                 >
-                   {t('FAQ2')}
+                  {t('FAQ2')}
                 </Link>
               </h4>
               <div id="faqTwo" className="card-collapse collapse">
                 <p>
-                {t('answer2')}
+                  {t('answer2')}
                 </p>
               </div>
             </div>
@@ -1028,12 +1094,12 @@ const HomeOne = () => {
                   to="#faqThree"
                   aria-expanded="false"
                 >
-                   {t('FAQ3')}
+                  {t('FAQ3')}
                 </Link>
               </h4>
               <div id="faqThree" className="card-collapse collapse">
                 <p>
-                {t('answer3')}
+                  {t('answer3')}
                 </p>
               </div>
             </div>
@@ -1045,12 +1111,12 @@ const HomeOne = () => {
                   to="#faqFour"
                   aria-expanded="false"
                 >
-                   {t('FAQ4')}
+                  {t('FAQ4')}
                 </Link>
               </h4>
               <div id="faqFour" className="card-collapse collapse">
                 <p>
-                {t('answer4')}
+                  {t('answer4')}
                 </p>
               </div>
             </div>
