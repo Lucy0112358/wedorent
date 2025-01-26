@@ -14,6 +14,7 @@ import * as Yup from "yup";
 import { GoogleMap, useJsApiLoader, StandaloneSearchBox } from "@react-google-maps/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Dropdown } from "primereact/dropdown";
 
 
 const BookingCheckout = () => {
@@ -26,9 +27,9 @@ const BookingCheckout = () => {
     north: 40.23,
     south: 40.11,
     east: 44.6,
-    west: 44.38, 
+    west: 44.38,
   };
-  
+
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
@@ -269,10 +270,10 @@ const BookingCheckout = () => {
                               return false;
                             });
 
-                           
+
                             if (filteredPlaces.length > 0) {
-                              handleAddressChange(key, filteredPlaces[length-1].formatted_address);
-                              setFieldValue(key, filteredPlaces[length-1].formatted_address);
+                              handleAddressChange(key, filteredPlaces[length - 1].formatted_address);
+                              setFieldValue(key, filteredPlaces[length - 1].formatted_address);
                               console.log("Filtered Place:", filteredPlaces[0].formatted_address);
                             } else {
                               toast("To select a place outside Yerevan please contact us");
@@ -300,20 +301,20 @@ const BookingCheckout = () => {
                                 );
                               }
                               return false;
-                            });                           
+                            });
                             if (filteredPlaces.length > 0) {
-                              handleAddressChange(key, filteredPlaces[length-1].formatted_address);
-                              setFieldValue(key, filteredPlaces[length-1].formatted_address);
+                              handleAddressChange(key, filteredPlaces[length - 1].formatted_address);
+                              setFieldValue(key, filteredPlaces[length - 1].formatted_address);
                               console.log("Filtered Place:", filteredPlaces[0].formatted_address);
                             } else {
-                             toast("No places found within Yerevan");
+                              toast("No places found within Yerevan");
                             }
                           }
                         }
                       };
                       return (
                         <Form>
-                          <div className="booking-information-card">
+                          {/* <div className="booking-information-card">
                             <div className="booking-info-head">
                               <span>
                                 <i className="bx bxs-car-garage" />
@@ -354,8 +355,8 @@ const BookingCheckout = () => {
                                 </li>
                               </ul>
                             </div>
-                          </div>
-                          {bookingData?.rent_type === "delivery" && (
+                          </div> */}
+                         
                             <>
                               <div className="booking-information-card delivery-location">
                                 <div className="booking-info-head">
@@ -384,7 +385,7 @@ const BookingCheckout = () => {
                                             type="text"
                                             className="form-control mb-0"
                                             placeholder="Enter delivery location"
-                                     
+
                                           />
                                         </StandaloneSearchBox>
                                       }
@@ -409,7 +410,7 @@ const BookingCheckout = () => {
                                   <div className="form-custom">
                                     <label className="form-label">Return Location</label>
                                     <div className="d-flex align-items-center">
-                                     
+
                                       {isLoaded &&
                                         <StandaloneSearchBox
                                           onLoad={(ref) => (inputRef1.current = ref)}
@@ -426,7 +427,7 @@ const BookingCheckout = () => {
                                             type="text"
                                             className="form-control mb-0"
                                             placeholder="Enter return location"
-                                     
+
                                           />
                                         </StandaloneSearchBox>
                                       }
@@ -436,56 +437,9 @@ const BookingCheckout = () => {
                                 </div>
                               </div>
                             </>
-                          )}
+                    
 
-                          {bookingData?.rent_type === "pickup" && (
-                            <>
-                              <div className="booking-information-card pickup-location">
-                                <div className="booking-info-head">
-                                  <span>
-                                    <i className="bx bxs-car-garage" />
-                                  </span>
-                                  <h5>Location</h5>
-                                </div>
-                                <div className="booking-info-body">
-                                  <div className="form-custom">
-                                    <label className="form-label">Pickup Location</label>
-                                    <div className="d-flex align-items-center">
-                                      <input
-                                        type="text"
-                                        className="form-control mb-0"
-                                        value={bookingData?.StartAddress}
-                                        onChange={(e) => handleBookingData("StartAddress", e.target.value)}
-                                      />
-                                    </div>
-                                  </div>
-                                  <div className="input-block m-0">
-                                    <label className="custom_check d-inline-flex location-check">
-                                      <span>Return to same location</span>
-                                      <input
-                                        type="checkbox"
-                                        name="remember"
-                                        checked={bookingData?.sameLocation}
-                                        onChange={(e) => handleBookingData("sameLocation", e.target.checked)}
-                                      />
-                                      <span className="checkmark" />
-                                    </label>
-                                  </div>
-                                  <div className="form-custom">
-                                    <label className="form-label">Return Location</label>
-                                    <div className="d-flex align-items-center">
-                                      <input
-                                        type="text"
-                                        onChange={(e) => handleBookingData("EndAddress", e.target.value)}
-                                        value={bookingData?.EndAddress}
-                                        className="form-control mb-0"
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </>
-                          )}
+
 
                           <div className="booking-information-card booking-type-card">
                             <div className="booking-info-head">
@@ -526,18 +480,41 @@ const BookingCheckout = () => {
                                     <div className="input-block time-widge">
                                       <label className="form-label">Start Time</label>
                                       <div className="group-img style-custom">
-                                        <TimePicker
-                                          placeholder="Choose Time"
-                                          className="form-control timepicker"
-                                          defaultValue={dayjs(
-                                            bookingData?.pickerOne || "00:00:00",
-                                            "HH:mm:ss"
-                                          )}
-                                          onChange={pickerOne}
+                                        <Dropdown
+                                          onChange={(e) => {
+                                            // setSelectedCountryHandle(e.value); 
+
+                                          }}
+                                          className="w-100"
+                                          //  value={values.selectedCountry}
+                                          options={[
+                                            "00:00",
+                                            "01:00",
+                                            "02:00",
+                                            "03:00",
+                                            "04:00",
+                                            "05:00",
+                                            "06:00",
+                                            "07:00",
+                                            "08:00",
+                                            "09:00",
+                                            "10:00",
+                                            "11:00",
+                                            "12:00",
+                                            "13:00",
+                                            "14:00",
+                                            "15:00",
+                                            "16:00",
+                                            "17:00",
+                                            "18:00",
+                                            "19:00",
+                                            "20:00",
+                                            "21:00",
+                                            "22:00",
+                                            "23:00"
+                                          ]}
+                                          placeholder="Select Time"
                                         />
-                                        <span className="input-cal-icon">
-                                          <i className="bx bx-time" />
-                                        </span>
                                       </div>
                                     </div>
                                   </div>
@@ -571,18 +548,41 @@ const BookingCheckout = () => {
                                         Return Time
                                       </label>
                                       <div className="group-img style-custom">
-                                        <TimePicker
-                                          placeholder="Choose Time"
-                                          className="form-control timepicker"
-                                          defaultValue={dayjs(
-                                            bookingData?.pickerTwo || "00:00:00",
-                                            "HH:mm:ss"
-                                          )}
-                                          onChange={pickerTwo}
+                                      <Dropdown
+                                          onChange={(e) => {
+                                            // setSelectedCountryHandle(e.value); 
+
+                                          }}
+                                          className="w-100"
+                                          //  value={values.selectedCountry}
+                                          options={[
+                                            "00:00",
+                                            "01:00",
+                                            "02:00",
+                                            "03:00",
+                                            "04:00",
+                                            "05:00",
+                                            "06:00",
+                                            "07:00",
+                                            "08:00",
+                                            "09:00",
+                                            "10:00",
+                                            "11:00",
+                                            "12:00",
+                                            "13:00",
+                                            "14:00",
+                                            "15:00",
+                                            "16:00",
+                                            "17:00",
+                                            "18:00",
+                                            "19:00",
+                                            "20:00",
+                                            "21:00",
+                                            "22:00",
+                                            "23:00"
+                                          ]}
+                                          placeholder="Select Time"
                                         />
-                                        <span className="input-cal-icon">
-                                          <i className="bx bx-time" />
-                                        </span>
                                       </div>
                                     </div>
                                   </div>

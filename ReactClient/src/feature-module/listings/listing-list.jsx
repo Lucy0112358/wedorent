@@ -170,7 +170,7 @@ const Listinglist = () => {
         home={t('home')} />
       {/* Search */}
 
-      <div className="section-search page-search">
+      {/* <div className="section-search page-search">
         <div className="container">
           <div className="search-box-banner">
             <form>
@@ -223,7 +223,6 @@ const Listinglist = () => {
                           onChange={(e) => setDate1(e.value)}
                            placeholder={dayjs().format("MM/DD/YYYY")}
                         />
-                        {/* <input type="text" className="form-control datetimepicker" placeholder="04/11/2023" /> */}
                         <span>
                           <i className="feather icon-calendar"></i>
                         </span>
@@ -292,9 +291,9 @@ const Listinglist = () => {
             </form>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* /Search */}
-      <div className="section-search page-search">
+      {/* <div className="section-search page-search">
         <section className="section popular-services popular-explore">
           <div className="container">
             <div className="search-box-banner">
@@ -328,7 +327,7 @@ const Listinglist = () => {
             </div>
           </div>
         </section>
-      </div>
+      </div> */}
       {/* /Search */}
 
       {/* Sort By */}
@@ -415,7 +414,7 @@ const Listinglist = () => {
                             <div className="img-slider listing-page-slider">
                               <Slider {...settings}>
                                 <div className="slide-images">
-                                  <Link>
+                                  <Link  to={routes.listingDetails.replace(':id', car.id)}>
                                     <ImageWithBasePath
                                       src={car.image}
                                       className="img-fluid"
@@ -424,18 +423,18 @@ const Listinglist = () => {
                                   </Link>
                                 </div>
                                 <div className="slide-images">
-                                  <Link to={routes.listingDetails.replace(':id', car.id)}>
+                                  <Link  to={routes.listingDetails.replace(':id', car.id)}>
                                     <ImageWithBasePath
-                                      src="assets/img/car-list-1.jpg"
+                                      src={car.image}
                                       className="img-fluid"
                                       alt="Toyota"
                                     />
                                   </Link>
                                 </div>
                                 <div className="slide-images">
-                                  <Link to={routes.listingDetails.replace(':id', car.id)}>
+                                  <Link  to={routes.listingDetails.replace(':id', car.id)}>
                                     <ImageWithBasePath
-                                      src="assets/img/car-list-1.jpg"
+                                      src={car.image}
                                       className="img-fluid"
                                       alt="Toyota"
                                     />
@@ -459,7 +458,7 @@ const Listinglist = () => {
                                 <div className="blog-list-title">
                                   <h3>
                                     <Link to={routes.listingDetails.replace(':id', car.id)}>
-                                      {car.model}
+                                    {car.model + ","} {car.brand}
                                     </Link>
                                   </h3>
                                   <h6>
